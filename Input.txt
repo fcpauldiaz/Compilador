@@ -1,0 +1,22 @@
+class Program{}
+
+class Program {
+	int cont;
+	boolean banderas
+	int suma
+;
+	char funca(int abc,boolean check, boolean exit)
+	{
+		char temp;
+		if (50 >= temp)
+		{
+			temp = 20
+			funca2(temp);
+		}
+		return 5;
+	}
+	char funca2 (int param1, int param2){
+		return a1;	
+	}
+}
+

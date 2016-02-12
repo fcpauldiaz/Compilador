@@ -9,7 +9,6 @@ import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,6 +22,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 /**
@@ -282,22 +282,23 @@ public class ANTGui extends javax.swing.JFrame {
        
        CommonTokenStream tokens = new CommonTokenStream( lexer);
        programParser parser = new programParser(tokens);
-       programParser.ProgramContext result = parser.program();
+       ParseTree result = parser.program();
        //System.out.println(tokens.getTokens().toString());
       // System.out.println(parser.program().getText());
-      
+           // System.out.println(result.getParent().getText());
        
-        lexer.removeErrorListeners();
-        lexer.addErrorListener(DescriptiveErrorListener.INSTANCE);
+        
         parser.removeErrorListeners();
         parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
             
 
         // Specify our entry point
         programParser.ProgramContext contexto = parser.program();
-
+        
         // Walk it and attach our listener
         ParseTreeWalker walker = new ParseTreeWalker();
+        programBaseVisitor vis = new programBaseVisitor();
+        
         ANTLRListener listener = new ANTLRListener();
         walker.DEFAULT.walk(listener, contexto);
         Trees.inspect(contexto, parser);
@@ -306,31 +307,17 @@ public class ANTGui extends javax.swing.JFrame {
         int errorsCount = parser.getNumberOfSyntaxErrors();
         if(errorsCount == 0){
           System.out.println("Parseo Exitoso");
-        }
-           
        
-        if (DescriptiveErrorListener.linea!=0){
-            JTextArea textArea = new JTextArea(
-                                    "Error línea: "+DescriptiveErrorListener.linea+
-                                    "\n"+"Columna: " + DescriptiveErrorListener.columna+
-                                    "\n" +"Mensaje: " + DescriptiveErrorListener.mensaje);
-            JScrollPane scrollPane = new JScrollPane(textArea);  
-            textArea.setLineWrap(true);  
-            textArea.setWrapStyleWord(true); 
-            scrollPane.setPreferredSize( new Dimension( 500, 500 ) );
-        JOptionPane.showMessageDialog(this, scrollPane);
-        DescriptiveErrorListener.linea=0;
-        }
-        else{
             JTextArea textArea = new JTextArea("Parseo Exitoso"+ "\n"+
                                     contexto.toStringTree(parser)
                                     );
             JScrollPane scrollPane = new JScrollPane(textArea);  
             textArea.setLineWrap(true);  
             textArea.setWrapStyleWord(true); 
-            scrollPane.setPreferredSize( new Dimension( 500, 500 ) );
-        JOptionPane.showMessageDialog(this, scrollPane);
+            scrollPane.setPreferredSize( new Dimension( 250, 250 ) );
+            JOptionPane.showMessageDialog(this, scrollPane);
         }
+        
          } catch (RecognitionException e) {
             e.printStackTrace();
             System.out.println("LIl");

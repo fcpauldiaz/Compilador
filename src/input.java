@@ -18,9 +18,9 @@ class Program {
      }
    
     void bubbleSort(int array[]){
-        int largo;
+        int largo
         int i;
-        int j;
+        int j
         int temp;
         largo = array.length;
         i = 0;
@@ -86,6 +86,14 @@ class Program {
 
 
 }
+
+
+
+
+
+
+
+
 
 
 

@@ -11,10 +11,10 @@ fragment LETTER: ('a'..'z'|'A'..'Z') ;
 fragment DIGIT : '0'..'9' ;
 ID : LETTER( LETTER | DIGIT)* ;
 NUM: DIGIT(DIGIT)* ; 
-CHAR: '\'' ('!'..'~' )|'\t'|'\\'|'\"' |EOF '\'';  
-STRING: '\"' ( ('!'..'~') |'\t'|'\\'|'\"' |EOF )* '\"';
+CHAR: '\'' ('!'..'~' )|'\t'|'\\'|'\"'  '\'';  
+STRING: '\"' ( ('!'..'~') |'\t'|'\\'|'\"' )* '\"';
 FLOAT: DIGIT (DIGIT)* '.' DIGIT (DIGIT)*;
-WS : [ \t\r\n\f]+ -> skip ; 
+WS : [ \t\r\n]+ -> skip ; 
 COMMENTS: '//' ~('\r' | '\n' )*  -> skip;
 
 // ********** PARSER SPECIFICATION*****************

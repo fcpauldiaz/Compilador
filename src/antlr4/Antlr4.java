@@ -5,6 +5,7 @@
 
 package antlr4;
 
+import java.util.ArrayList;
 import org.antlr.v4.Tool;
 
 /**
@@ -13,6 +14,9 @@ import org.antlr.v4.Tool;
  */
 public class Antlr4 {
 
+    public static ArrayList<String> mensajeError = new ArrayList();
+    public static String erroresAcum = "";
+    
     /**
      * @param args the command line arguments
      */

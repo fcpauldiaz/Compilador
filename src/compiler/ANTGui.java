@@ -281,7 +281,8 @@ public class ANTGui extends javax.swing.JFrame {
        CharStream cs =  new ANTLRInputStream(leerArchivo(inputFile));
        
        programLexer lexer = new programLexer(cs);
-       
+       lexer.removeErrorListeners();
+        lexer.addErrorListener(DescriptiveErrorListener.INSTANCE);
        CommonTokenStream tokens = new CommonTokenStream( lexer);
        programParser parser = new programParser(tokens);
        ParseTree tree = parser.program();

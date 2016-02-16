@@ -6,13 +6,22 @@
 
 package compiler;
 
+
+import GUI.ToolbarFrame;
+import static GUI.ToolbarFrame.outputTextPane;
 import java.awt.Color;
 import java.awt.Container;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.RecognitionException;
@@ -33,26 +42,36 @@ public class DescriptiveErrorListener extends BaseErrorListener {
                             String msg, RecognitionException e)
     {
         
-        List<String> stack = ((Parser)recognizer).getRuleInvocationStack();
-        Collections.reverse(stack);
-        StringBuilder buf = new StringBuilder();
-        buf.append("<html>");
-        buf.append("reglas afectadas: ").append(stack).append("<br>");
-        buf.append("línea ").append(line).append(":").append(charPositionInLine).append(" en ").append(offendingSymbol).append(": ").append(msg).append(System.getProperty("line.separator"));
-        buf.append("</html>");
-        JDialog dialog = new JDialog();
-        dialog.setSize(600,100);
-        Container contentPane = dialog.getContentPane(); 
-        contentPane.setSize(600,100);
-        JLabel label = new JLabel(buf.toString());
-        label.setSize(600,100);
-        contentPane.add(label); 
-        contentPane.setBackground(Color.white); dialog.setTitle("Error de Sintaxis");
-        dialog.setLocationRelativeTo(null); 
-        dialog.setModal(true);
-        dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
-        dialog.setVisible(true);
-
        
+       List<String> stack = ((Parser)recognizer).getRuleInvocationStack(); Collections.reverse(stack);
+        System.err.println("rule stack: "+stack);
+        System.err.println("linea "+line+":"+charPositionInLine+" at "+
+        offendingSymbol+": "+msg);
+        String rule = "rule stack: "+stack;
+        String mensaje = "linea "+line+":"+charPositionInLine+" at "+
+        offendingSymbol+": "+msg + "\n\r";
+       // String anterior = MainPanel.outputPanel.getTextPane().getText();
+        //MainPanel.outputPanel.setTextPane(anterior + mensaje);
+        //OutputStream redirect = System.err;
+	//PrintStream myPrintStream = new PrintStream(redirect);
+	
+        SimpleAttributeSet set = new SimpleAttributeSet();
+        StyleConstants.setForeground(set, Color.red);
+        ToolbarFrame.outputTextPane.setCharacterAttributes(set, true);
+       
+
+        //**ToolbarFrame************** escribe la palabra error con un estilo diferente *******
+        StyleConstants.setBold(set, true);
+        String texto_error = "\nAn error has occurred. ¡Check the log!";
+        mensaje += ToolbarFrame.outputTextPane.getText()+"\r\n";
+            Document doc = outputTextPane.getStyledDocument();
+            outputTextPane.setCharacterAttributes(set, true);
+
+            try {
+                doc.insertString(doc.getLength(), texto_error, set);
+            } catch (BadLocationException ex) {
+                //Logger.getLogger(DocumentEditorView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+             ToolbarFrame.outputTextPane.setText(mensaje);
     }
 }

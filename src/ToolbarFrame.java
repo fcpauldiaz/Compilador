@@ -1,4 +1,8 @@
 
+import antlr4.programLexer;
+import antlr4.programParser;
+import static compiler.ANTGui.leerArchivo;
+import compiler.DescriptiveErrorListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedWriter;
@@ -15,6 +19,12 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+import org.antlr.v4.gui.Trees;
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 
 public class ToolbarFrame extends JFrame {
@@ -25,6 +35,7 @@ public class ToolbarFrame extends JFrame {
     public    static    JButton save_button;
     public    static    JMenuItem savemenuItem;
     public    static    String title_text = "COMPILER IDE";
+    public    static    File archivoSeleccionado;
     private   String    last_path = "";
     private   JTabbedPane tp = new JTabbedPane();
     
@@ -182,39 +193,39 @@ public class ToolbarFrame extends JFrame {
         //*********************** JToolBar ************************
         toolBar = new JToolBar();
         JButton btn = toolBar.add(actionNew);
-        btn.setToolTipText("New file");
+        btn.setToolTipText("Nuevo Archivo");
         //-----------------------------
         btn = toolBar.add(actionOpen);
-        btn.setToolTipText("Open file");
+        btn.setToolTipText("Abrir archivo");
         //-----------------------------
         save_button = toolBar.add(actionSave);
-        save_button.setToolTipText("Save file");
+        save_button.setToolTipText("Guardar archivo");
         //save_button.setEnabled(false);
         //-----------------------------
         toolBar.addSeparator();
         btn = toolBar.add(actionClose);
-        btn.setToolTipText("Close tab");
+        btn.setToolTipText("Cerrar tab");
         //-----------------------------
         toolBar.addSeparator();
         toolBar.addSeparator();
         //-----------------------------
         btn = toolBar.add(actionCut);
-        btn.setToolTipText("Cut");
+        btn.setToolTipText("Cortar");
         //-----------------------------
         btn = toolBar.add(actionCopy);
-        btn.setToolTipText("Copy");
+        btn.setToolTipText("Copiar");
         //-----------------------------
         btn = toolBar.add(actionPaste);
-        btn.setToolTipText("Paste");
+        btn.setToolTipText("Pegar");
         //-----------------------------
         btn = toolBar.add(actionSearch);
-        btn.setToolTipText("Search");
+        btn.setToolTipText("Buscar");
         //-----------------------------
         toolBar.addSeparator();
         toolBar.addSeparator();
         //-----------------------------
         btn = toolBar.add(actionParse);
-        btn.setToolTipText("Parse");
+        btn.setToolTipText("Compilar");
         //*********************************************************
         return menuBar;
     }
@@ -283,20 +294,8 @@ public class ToolbarFrame extends JFrame {
     * creates an empty file
     *****************************************/
     private void newFile() {
-        /*
-        if(this.panelList.get(this.tp.getSelectedIndex()).modified){
-            boolean cancel = save_before();
-            if(cancel)
-                return;
-        }
-        System.out.println("new file");
-        this.panelList.get(this.tp.getSelectedIndex()).file = new File("untitled.txt");
-        this.panelList.get(this.tp.getSelectedIndex()).getTextPanel().setText("");
-        this.panelList.get(this.tp.getSelectedIndex()).hasSaved = false;
-        setModified(false);
-         *
-         */
-        System.out.println("new file");
+
+        System.out.println("Nuevo archivo");
         this.panelList.add(new MainPanel());
         this.tp.addTab(this.panelList.getLast().file.getName(), this.panelList.getLast());
         this.tp.setSelectedIndex(this.panelList.size()-1);
@@ -309,7 +308,7 @@ public class ToolbarFrame extends JFrame {
     *****************************************/
     private boolean save_before() {
 
-        int a = JOptionPane.showConfirmDialog(this,"The text in the file has changed.\nDo you want to save it?","The text in the file changed",JOptionPane.YES_NO_CANCEL_OPTION);
+        int a = JOptionPane.showConfirmDialog(this,"El contenido de este archivo ha cambiado.\nDesea Guardarlo?","Modificaciones",JOptionPane.YES_NO_CANCEL_OPTION);
         if(a == JOptionPane.CANCEL_OPTION){
             //System.out.println("cancel");
             return true;
@@ -357,7 +356,7 @@ public class ToolbarFrame extends JFrame {
                 return;
         }
 
-        System.out.println("open file");
+        System.out.println("abriendo archivo");
         JFileChooser jfc;
         if(this.last_path.isEmpty()){
             jfc = new JFileChooser();
@@ -378,7 +377,7 @@ public class ToolbarFrame extends JFrame {
                 //System.out.println("last path: "+this.file.getParent());
             }
         } catch (Exception exp) {
-            JOptionPane.showMessageDialog(this,"File loading error:\n"+exp.getMessage(),"File loading error",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,"Error cargando el archivo:\n"+exp.getMessage(),"Error archivo",JOptionPane.ERROR_MESSAGE);
             return;
         }
         this.panelList.get(this.tp.getSelectedIndex()).hasSaved = true;
@@ -474,12 +473,48 @@ public class ToolbarFrame extends JFrame {
         }
         this.panelList.get(this.tp.getSelectedIndex()).tp2.setSelectedIndex(0);
         JTextPane outputTextPane = this.panelList.get(this.tp.getSelectedIndex()).getOutputPanel().getTextPane();
-        JTree treePane = this.panelList.get(this.tp.getSelectedIndex()).getTreePanel().getTree();
+        //JTree treePane = this.panelList.get(this.tp.getSelectedIndex()).getTreePanel().getTree();
+         File current_file = this.panelList.get(this.tp.getSelectedIndex()).file;
+        CharStream cs =  new ANTLRInputStream(leerArchivo(current_file));
+       
+       programLexer lexer = new programLexer(cs);
+       
+       CommonTokenStream tokens = new CommonTokenStream( lexer);
+       programParser parser = new programParser(tokens);
+       ParseTree tree = parser.program();
+       
+       //System.out.println(tokens.getTokens().toString());
+      // System.out.println(parser.program().getText());
+           // System.out.println(result.getParent().getText());
+       
+        
+        parser.removeErrorListeners();
+        parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
+            
+
+        // Specify our entry point
+        programParser.ProgramContext contexto = parser.program();
+        //programParser.DeclarationContext declaration = parser.declaration();
+       
+        
+        // Walk it and attach our listener
+        ParseTreeWalker walker = new ParseTreeWalker();
+      
+        
+       // ANTLRListener listener = new ANTLRListener();
+       // walker.DEFAULT.walk(listener, contexto);
+        Trees.inspect(contexto, parser);
+
+        
+        int errorsCount = parser.getNumberOfSyntaxErrors();
+            System.out.println(errorsCount);
+        if(errorsCount == 0)
+          System.out.println("Parseo Exitoso");
         
         
        // DecafParser parser = new DecafParser();
         
-        
+        /*
         //System.out.println("Path completo del archivo usado: "+ this.file.getAbsolutePath());
         parser.Parse(this.panelList.get(this.tp.getSelectedIndex()).file.getAbsolutePath());
         //si no hubo un error, generar el arbol en jtree
@@ -551,7 +586,7 @@ public class ToolbarFrame extends JFrame {
             //------------------------------------------------------------------
         }
 
-
+*/
     }
 
     /*****************************************

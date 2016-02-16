@@ -26,7 +26,7 @@ public class MainPanel extends JPanel{
     private JSplitPane	      splitPaneH;
     private JTabbedPane       tp1;
     public  JTabbedPane       tp2;
-    private TreePanel         treePanel = new TreePanel();
+   // private TreePanel         treePanel = new TreePanel();
     private OutputPanel       outputPanel = new OutputPanel();
     private GrammarPanel      grammarPanel = new GrammarPanel();
     private TextPanel         textPanel = new TextPanel();
@@ -75,13 +75,13 @@ public class MainPanel extends JPanel{
         this.tp1 = new JTabbedPane();
         this.tp2 = new JTabbedPane();
 
-        this.tp1.addTab("Tree",Main.iconTree, this.getTreePanel(),"");
-        this.tp1.addTab("Intermediate code",Main.iconConstruction, intermediatePanel,"");
+       // this.tp1.addTab("Tree",Main.iconTree, this.getTreePanel(),"");
+       // this.tp1.addTab("Intermediate code",Main.iconConstruction, intermediatePanel,"");
         this.tp2.addTab("Output", this.getOutputPanel());
         this.tp2.addTab("Grammar", this.getGrammarPanel());
-        this.tp2.addTab("Symbol Table", this.getSimbolTablePanel());
-        this.tp2.addTab("Method Table", this.getMethodTablePanel());
-        this.tp2.addTab("Struct Table", this.getStructTablePanel());
+        this.tp2.addTab("Tabla Símboos", this.getSimbolTablePanel());
+        //this.tp2.addTab("Method Table", this.getMethodTablePanel());
+        //this.tp2.addTab("Struct Table", this.getStructTablePanel());
 
         this.add(splitPaneV, BorderLayout.CENTER);
 
@@ -95,9 +95,9 @@ public class MainPanel extends JPanel{
     /*****************************************
      * @return the treePanel
      *****************************************/
-    public TreePanel getTreePanel() {
+   /* public TreePanel getTreePanel() {
         return treePanel;
-    }
+    }*/
 
     /*****************************************
      * @return the outputPanel

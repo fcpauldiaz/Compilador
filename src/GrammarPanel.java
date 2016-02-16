@@ -60,6 +60,10 @@ class GrammarPanel extends JPanel{
 
         while(!done){
             
+            if (grammar_text.length()==3598){
+                System.out.println("STOP");
+            }
+            
             if(grammar_text.startsWith("\"")){
                 //*************************************************
                 String regex="\""+"([^\\\"])*"+"\"";
@@ -67,9 +71,17 @@ class GrammarPanel extends JPanel{
                 String to_print = Main.expect(regex, grammar_text);
                 //*************************************************
                 set = new SimpleAttributeSet();
-                StyleConstants.setForeground(set, new Color(225,168,15));//orange
-                Document doc = pane.getStyledDocument();
-                pane.setCharacterAttributes(set, true);
+                if (to_print.isEmpty()){
+                    to_print = " ";
+                    StyleConstants.setForeground(set, Color.BLACK);//black
+                }
+                else{
+                   
+                    StyleConstants.setForeground(set, new Color(225,168,15));//orange
+                }
+                    Document doc = pane.getStyledDocument();
+                    pane.setCharacterAttributes(set, true);
+                
                 try {
                     doc.insertString(doc.getLength(), to_print, set);
                     grammar_text = grammar_text.substring(to_print.length());
@@ -97,14 +109,52 @@ class GrammarPanel extends JPanel{
                 }
                 //*************************************************
             }
-            else if(grammar_text.startsWith("//")){
+             else if(grammar_text.startsWith("!")){
                 //*************************************************
-                String regex="//"+"([^\\\n])*"+"[\\\n]";
+                String regex="!"+"([^\\\n])*"+"[\\\n]";
                 //*************************************************
                 String to_print = Main.expect(regex, grammar_text);
                 //*************************************************
                 set = new SimpleAttributeSet();
                 StyleConstants.setForeground(set, Color.gray);
+                Document doc = pane.getStyledDocument();
+                pane.setCharacterAttributes(set, true);
+                try {
+                    doc.insertString(doc.getLength(), to_print, set);
+                    grammar_text = grammar_text.substring(to_print.length());
+                } catch (Exception ex) {
+                    done = true;
+                }
+                //*************************************************
+            }
+            else if (grammar_text.startsWith("<")){
+                //*************************************************
+                String regex="<"+"([^>])*"+">";
+                //*************************************************
+                String to_print = Main.expect(regex, grammar_text);
+                //*************************************************
+                set = new SimpleAttributeSet();
+                StyleConstants.setBold(set, true);
+                StyleConstants.setForeground(set, Color.BLUE);
+                Document doc = pane.getStyledDocument();
+                pane.setCharacterAttributes(set, true);
+                try {
+                    doc.insertString(doc.getLength(), to_print, set);
+                    grammar_text = grammar_text.substring(to_print.length());
+                } catch (Exception ex) {
+                    done = true;
+                }
+                //*************************************************
+            }
+            else if (grammar_text.startsWith("{")){
+                //*************************************************
+                String regex="\\{"+"([^\\}])*"+"\\}";
+                //*************************************************
+                String to_print = Main.expect(regex, grammar_text);
+                //*************************************************
+                set = new SimpleAttributeSet();
+                StyleConstants.setBold(set, true);
+                StyleConstants.setForeground(set, new Color(29,148,23));//green
                 Document doc = pane.getStyledDocument();
                 pane.setCharacterAttributes(set, true);
                 try {

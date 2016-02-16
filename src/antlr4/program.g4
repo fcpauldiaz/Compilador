@@ -2,7 +2,6 @@
 grammar program;
 
 //*********************LEXER SPECIFICATION **************
-CLASS :   'class' ;
 STRUCT :  'struct' ;
 TRUE :    'true' ;
 FALSE :   'false' ;
@@ -17,14 +16,14 @@ BOOLEAN : 'boolean' ;
 
 fragment LETTER : ('a'..'z'|'A'..'Z') ;
 fragment DIGIT :'0'..'9' ;
-fragment ASCII : (' ' ..'~') | '\\' | '\'' | '"' | '\t' | '\n' ;
-
+fragment ASCII : (' ' ..'~') | '\\' | '\'' | '\"' | '\t' | '\n' ;
+//* \'
 ID : LETTER ( LETTER | DIGIT )* ;
 NUM : DIGIT ( DIGIT )* ;
 Char : '\'' ASCII '\'';
 
 
-WSD : 
+WS : 
     [\t\r\n\f ]+ -> skip
     ;
 
@@ -37,7 +36,7 @@ COMMENT
 //************** PARSER SPECIFICATION **************
 
 program
-	: CLASS ID '{' (declaration | methodDeclaration)* '}' 
+	: 'class' 'Program' '{' (declaration)* '}' 
 	;
 
 declaration

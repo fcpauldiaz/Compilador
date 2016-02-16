@@ -1,4 +1,30 @@
-class Program{}
+class Program {
+     
+    int test(int numTest, int numTest2){
+         return numTest%numTest2;
+     }
+     
+     struct hello
+    {
+       int z; 
+    }
+    
+    int operacion(){
+    return 3+5*2;
+
+     }
+   
+    
+    void main(){
+
+    	int num1;
+    	int num2;
+    }
+
+
+}
+
+
 class Program {
      
      int test(int numTest, int numTest2){
@@ -7,17 +33,15 @@ class Program {
      
      struct hello
     {
-        string goodbye;
+       int z; 
     }
     
     int operacion(){
-    float var;
-    var = 2.2;
     return 3+5*2;
 
      }
    
-    void bubbleSort(int array[]){
+    void bubbleSort(int array){
         int largo;
         int i;
         int j;
@@ -67,18 +91,15 @@ class Program {
     	int num2;
         int res;
         int resultTest;
-        int numerosDesordenados[10];
-        string str;
+      
+       
     	num1 = 25;
     	
     	num2 = 25;
     	res = num1 + num2;
-    	str = "a";
-        str = str + "b";
+    	
         
         resultTest = test(2,4);
-        hello.goodbye = "lol";
-        bubbleSort(numerosDesordenados);
         
 
         return res ;
@@ -86,12 +107,6 @@ class Program {
 
 
 }
-
-
-
-
-
-
 
 
 

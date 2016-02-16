@@ -417,7 +417,7 @@ public class ANTGui extends javax.swing.JFrame {
                 FileWriter fw = new FileWriter(archivo);
                 BufferedWriter bw = new BufferedWriter(fw);
                
-                bw.write(output+"\r\n");
+                bw.write(output);
             
 
                 bw.close();

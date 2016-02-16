@@ -110,7 +110,7 @@ public class Type {
             type = type+"[]";
         }
         if(this.isStructure()){
-            type = "struct:"+type;
+            type = "struct:" + type;
         }
         return type;
     }

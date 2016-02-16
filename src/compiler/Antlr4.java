@@ -3,7 +3,7 @@
 * Pablo Diaz 13203
 */
 
-package antlr4;
+package compiler;
 
 import java.util.ArrayList;
 import org.antlr.v4.Tool;

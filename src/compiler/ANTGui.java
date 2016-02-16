@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package antlr4;
+package compiler;
 
+import antlr4.programLexer;
+import antlr4.programParser;
 import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

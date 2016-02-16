@@ -4,7 +4,10 @@
 * Pablo Díaz 13203
 */
 
-package antlr4;
+package compiler;
+
+import antlr4.programBaseVisitor;
+import antlr4.programParser;
 
 
 /**

@@ -4,7 +4,7 @@
 * Pablo Díaz 13203
 */
 
-package antlr4;
+package compiler;
 
 /**
  *

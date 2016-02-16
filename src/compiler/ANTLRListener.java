@@ -4,8 +4,10 @@
 * Pablo Díaz 13203
 */
 
-package antlr4;
+package compiler;
 
+import antlr4.programBaseListener;
+import antlr4.programParser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ErrorNode;

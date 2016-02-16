@@ -17,25 +17,37 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterStructDeclaration(@NotNull programParser.StructDeclarationContext ctx) { }
+	@Override public void enterParameterId(@NotNull programParser.ParameterIdContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitStructDeclaration(@NotNull programParser.StructDeclarationContext ctx) { }
+	@Override public void exitParameterId(@NotNull programParser.ParameterIdContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMethodDeclaration(@NotNull programParser.MethodDeclarationContext ctx) { }
+	@Override public void enterStatementReturn(@NotNull programParser.StatementReturnContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMethodDeclaration(@NotNull programParser.MethodDeclarationContext ctx) { }
+	@Override public void exitStatementReturn(@NotNull programParser.StatementReturnContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVarDeclarationStructId(@NotNull programParser.VarDeclarationStructIdContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarDeclarationStructId(@NotNull programParser.VarDeclarationStructIdContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -65,6 +77,30 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterUnaryExprNot(@NotNull programParser.UnaryExprNotContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnaryExprNot(@NotNull programParser.UnaryExprNotContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRelationExprAddExpr(@NotNull programParser.RelationExprAddExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRelationExprAddExpr(@NotNull programParser.RelationExprAddExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterRel_op(@NotNull programParser.Rel_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -77,13 +113,25 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLiteral(@NotNull programParser.LiteralContext ctx) { }
+	@Override public void enterExpressionAndExpr(@NotNull programParser.ExpressionAndExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitLiteral(@NotNull programParser.LiteralContext ctx) { }
+	@Override public void exitExpressionAndExpr(@NotNull programParser.ExpressionAndExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatementLocation(@NotNull programParser.StatementLocationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatementLocation(@NotNull programParser.StatementLocationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -113,109 +161,25 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarType(@NotNull programParser.VarTypeContext ctx) { }
+	@Override public void enterCond_op_or(@NotNull programParser.Cond_op_orContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVarType(@NotNull programParser.VarTypeContext ctx) { }
+	@Override public void exitCond_op_or(@NotNull programParser.Cond_op_orContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMethodType(@NotNull programParser.MethodTypeContext ctx) { }
+	@Override public void enterExpressionCondOpOr(@NotNull programParser.ExpressionCondOpOrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMethodType(@NotNull programParser.MethodTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterUniExpr(@NotNull programParser.UniExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitUniExpr(@NotNull programParser.UniExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterSumExpr(@NotNull programParser.SumExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitSumExpr(@NotNull programParser.SumExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterParameter(@NotNull programParser.ParameterContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitParameter(@NotNull programParser.ParameterContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterArg(@NotNull programParser.ArgContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArg(@NotNull programParser.ArgContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterStatement(@NotNull programParser.StatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitStatement(@NotNull programParser.StatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterCond_op1(@NotNull programParser.Cond_op1Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitCond_op1(@NotNull programParser.Cond_op1Context ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterFloat_literal(@NotNull programParser.Float_literalContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFloat_literal(@NotNull programParser.Float_literalContext ctx) { }
+	@Override public void exitExpressionCondOpOr(@NotNull programParser.ExpressionCondOpOrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -233,49 +197,49 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpr2(@NotNull programParser.Expr2Context ctx) { }
+	@Override public void enterDeclarationStructDeclaration(@NotNull programParser.DeclarationStructDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpr2(@NotNull programParser.Expr2Context ctx) { }
+	@Override public void exitDeclarationStructDeclaration(@NotNull programParser.DeclarationStructDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExprRel(@NotNull programParser.ExprRelContext ctx) { }
+	@Override public void enterAndExprCondOpAnd(@NotNull programParser.AndExprCondOpAndContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExprRel(@NotNull programParser.ExprRelContext ctx) { }
+	@Override public void exitAndExprCondOpAnd(@NotNull programParser.AndExprCondOpAndContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArrayCall(@NotNull programParser.ArrayCallContext ctx) { }
+	@Override public void enterVarDeclarationId(@NotNull programParser.VarDeclarationIdContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArrayCall(@NotNull programParser.ArrayCallContext ctx) { }
+	@Override public void exitVarDeclarationId(@NotNull programParser.VarDeclarationIdContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOp_plusmin(@NotNull programParser.Op_plusminContext ctx) { }
+	@Override public void enterAndExprEqExpr(@NotNull programParser.AndExprEqExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOp_plusmin(@NotNull programParser.Op_plusminContext ctx) { }
+	@Override public void exitAndExprEqExpr(@NotNull programParser.AndExprEqExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -293,145 +257,541 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterCond_op2(@NotNull programParser.Cond_op2Context ctx) { }
+	@Override public void enterValueMethodCall(@NotNull programParser.ValueMethodCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitCond_op2(@NotNull programParser.Cond_op2Context ctx) { }
+	@Override public void exitValueMethodCall(@NotNull programParser.ValueMethodCallContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParameterType(@NotNull programParser.ParameterTypeContext ctx) { }
+	@Override public void enterVarDeclarationStructArray(@NotNull programParser.VarDeclarationStructArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParameterType(@NotNull programParser.ParameterTypeContext ctx) { }
+	@Override public void exitVarDeclarationStructArray(@NotNull programParser.VarDeclarationStructArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpression(@NotNull programParser.ExpressionContext ctx) { }
+	@Override public void enterVarTypeStructDeclaration(@NotNull programParser.VarTypeStructDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExpression(@NotNull programParser.ExpressionContext ctx) { }
+	@Override public void exitVarTypeStructDeclaration(@NotNull programParser.VarTypeStructDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExprEq(@NotNull programParser.ExprEqContext ctx) { }
+	@Override public void enterVarTypeStruct(@NotNull programParser.VarTypeStructContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExprEq(@NotNull programParser.ExprEqContext ctx) { }
+	@Override public void exitVarTypeStruct(@NotNull programParser.VarTypeStructContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterValor(@NotNull programParser.ValorContext ctx) { }
+	@Override public void enterValueExprWithParent(@NotNull programParser.ValueExprWithParentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitValor(@NotNull programParser.ValorContext ctx) { }
+	@Override public void exitValueExprWithParent(@NotNull programParser.ValueExprWithParentContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArg_exp(@NotNull programParser.Arg_expContext ctx) { }
+	@Override public void enterValueLocation(@NotNull programParser.ValueLocationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArg_exp(@NotNull programParser.Arg_expContext ctx) { }
+	@Override public void exitValueLocation(@NotNull programParser.ValueLocationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDeclaration(@NotNull programParser.DeclarationContext ctx) { }
+	@Override public void enterUnaryExprCast(@NotNull programParser.UnaryExprCastContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDeclaration(@NotNull programParser.DeclarationContext ctx) { }
+	@Override public void exitUnaryExprCast(@NotNull programParser.UnaryExprCastContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarDeclaration(@NotNull programParser.VarDeclarationContext ctx) { }
+	@Override public void enterMethodTypeChar(@NotNull programParser.MethodTypeCharContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVarDeclaration(@NotNull programParser.VarDeclarationContext ctx) { }
+	@Override public void exitMethodTypeChar(@NotNull programParser.MethodTypeCharContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterString_literal(@NotNull programParser.String_literalContext ctx) { }
+	@Override public void enterMinusplus_op(@NotNull programParser.Minusplus_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitString_literal(@NotNull programParser.String_literalContext ctx) { }
+	@Override public void exitMinusplus_op(@NotNull programParser.Minusplus_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOp_divmul(@NotNull programParser.Op_divmulContext ctx) { }
+	@Override public void enterParameterTypeChar(@NotNull programParser.ParameterTypeCharContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOp_divmul(@NotNull programParser.Op_divmulContext ctx) { }
+	@Override public void exitParameterTypeChar(@NotNull programParser.ParameterTypeCharContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExprMul(@NotNull programParser.ExprMulContext ctx) { }
+	@Override public void enterMultExprUnary(@NotNull programParser.MultExprUnaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitExprMul(@NotNull programParser.ExprMulContext ctx) { }
+	@Override public void exitMultExprUnary(@NotNull programParser.MultExprUnaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArg_comma(@NotNull programParser.Arg_commaContext ctx) { }
+	@Override public void enterUnaryExprMinus(@NotNull programParser.UnaryExprMinusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArg_comma(@NotNull programParser.Arg_commaContext ctx) { }
+	@Override public void exitUnaryExprMinus(@NotNull programParser.UnaryExprMinusContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParamsParameter(@NotNull programParser.ParamsParameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParamsParameter(@NotNull programParser.ParamsParameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVarDeclarationArray(@NotNull programParser.VarDeclarationArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarDeclarationArray(@NotNull programParser.VarDeclarationArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatementWhile(@NotNull programParser.StatementWhileContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatementWhile(@NotNull programParser.StatementWhileContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMethodCall(@NotNull programParser.MethodCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethodCall(@NotNull programParser.MethodCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStructDeclaration(@NotNull programParser.StructDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStructDeclaration(@NotNull programParser.StructDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMethodDeclaration(@NotNull programParser.MethodDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethodDeclaration(@NotNull programParser.MethodDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEqExprRelationExpr(@NotNull programParser.EqExprRelationExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEqExprRelationExpr(@NotNull programParser.EqExprRelationExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVarTypeInt(@NotNull programParser.VarTypeIntContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarTypeInt(@NotNull programParser.VarTypeIntContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterValueLiteral(@NotNull programParser.ValueLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitValueLiteral(@NotNull programParser.ValueLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatementBlock(@NotNull programParser.StatementBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatementBlock(@NotNull programParser.StatementBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMethodTypeVoid(@NotNull programParser.MethodTypeVoidContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethodTypeVoid(@NotNull programParser.MethodTypeVoidContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParameterTypeInt(@NotNull programParser.ParameterTypeIntContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParameterTypeInt(@NotNull programParser.ParameterTypeIntContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVarTypeChar(@NotNull programParser.VarTypeCharContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarTypeChar(@NotNull programParser.VarTypeCharContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLiteral(@NotNull programParser.LiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLiteral(@NotNull programParser.LiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParameterArray(@NotNull programParser.ParameterArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParameterArray(@NotNull programParser.ParameterArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMultExprMultDivOp(@NotNull programParser.MultExprMultDivOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultExprMultDivOp(@NotNull programParser.MultExprMultDivOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDeclarationVarDeclaration(@NotNull programParser.DeclarationVarDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeclarationVarDeclaration(@NotNull programParser.DeclarationVarDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArg(@NotNull programParser.ArgContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArg(@NotNull programParser.ArgContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMethodTypeBoolean(@NotNull programParser.MethodTypeBooleanContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethodTypeBoolean(@NotNull programParser.MethodTypeBooleanContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatementMethodCall(@NotNull programParser.StatementMethodCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatementMethodCall(@NotNull programParser.StatementMethodCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatementIF(@NotNull programParser.StatementIFContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatementIF(@NotNull programParser.StatementIFContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterEqExprEqOp(@NotNull programParser.EqExprEqOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitEqExprEqOp(@NotNull programParser.EqExprEqOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterCond_op_and(@NotNull programParser.Cond_op_andContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCond_op_and(@NotNull programParser.Cond_op_andContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMethodTypeInt(@NotNull programParser.MethodTypeIntContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethodTypeInt(@NotNull programParser.MethodTypeIntContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParameterTypeBoolean(@NotNull programParser.ParameterTypeBooleanContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParameterTypeBoolean(@NotNull programParser.ParameterTypeBooleanContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLocationMember(@NotNull programParser.LocationMemberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLocationMember(@NotNull programParser.LocationMemberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterStatementExpression(@NotNull programParser.StatementExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatementExpression(@NotNull programParser.StatementExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAddExprMinusPlusOp(@NotNull programParser.AddExprMinusPlusOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAddExprMinusPlusOp(@NotNull programParser.AddExprMinusPlusOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnaryExprOther(@NotNull programParser.UnaryExprOtherContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnaryExprOther(@NotNull programParser.UnaryExprOtherContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPowmod_op(@NotNull programParser.Powmod_opContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPowmod_op(@NotNull programParser.Powmod_opContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVarTypeVoid(@NotNull programParser.VarTypeVoidContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarTypeVoid(@NotNull programParser.VarTypeVoidContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParamsParameterWithComma(@NotNull programParser.ParamsParameterWithCommaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParamsParameterWithComma(@NotNull programParser.ParamsParameterWithCommaContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterDeclarationMethodDeclaration(@NotNull programParser.DeclarationMethodDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeclarationMethodDeclaration(@NotNull programParser.DeclarationMethodDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -449,13 +809,49 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMethodCall(@NotNull programParser.MethodCallContext ctx) { }
+	@Override public void enterRelationExprRelOp(@NotNull programParser.RelationExprRelOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMethodCall(@NotNull programParser.MethodCallContext ctx) { }
+	@Override public void exitRelationExprRelOp(@NotNull programParser.RelationExprRelOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAddExprMultExpr(@NotNull programParser.AddExprMultExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAddExprMultExpr(@NotNull programParser.AddExprMultExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMultdiv_op(@NotNull programParser.Multdiv_opContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMultdiv_op(@NotNull programParser.Multdiv_opContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVarTypeBoolean(@NotNull programParser.VarTypeBooleanContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarTypeBoolean(@NotNull programParser.VarTypeBooleanContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

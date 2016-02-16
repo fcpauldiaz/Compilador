@@ -15,8 +15,8 @@ import java.util.HashMap;
 public class SymbolTable {
     
     
-    private HashMap tabla;
-    private SymbolTable ref;
+    private final HashMap tabla;
+    private final SymbolTable ref;
 
     public SymbolTable(SymbolTable ref) {
         this.tabla = new HashMap();
@@ -34,6 +34,14 @@ public class SymbolTable {
         }
     return null;
     }*/
+
+    public HashMap getTabla() {
+        return tabla;
+    }
+
+    public SymbolTable getRef() {
+        return ref;
+    }
     
     
     

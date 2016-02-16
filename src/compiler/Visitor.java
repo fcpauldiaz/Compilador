@@ -28,7 +28,7 @@ public class Visitor<T> extends programBaseVisitor {
         for (int i = 0 ;i<11;i++){
             
         }
-        
+        System.out.println("ctx" + ctx);
         this.visit(ctx.declaration(0));
        ambito=0;
         //System.out.println(ctx.getChild(1));

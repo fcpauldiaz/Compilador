@@ -282,7 +282,8 @@ public class ANTGui extends javax.swing.JFrame {
        
        CommonTokenStream tokens = new CommonTokenStream( lexer);
        programParser parser = new programParser(tokens);
-       ParseTree result = parser.program();
+       ParseTree tree = parser.program();
+       
        //System.out.println(tokens.getTokens().toString());
       // System.out.println(parser.program().getText());
            // System.out.println(result.getParent().getText());
@@ -294,17 +295,20 @@ public class ANTGui extends javax.swing.JFrame {
 
         // Specify our entry point
         programParser.ProgramContext contexto = parser.program();
+        //programParser.DeclarationContext declaration = parser.declaration();
+       
         
         // Walk it and attach our listener
         ParseTreeWalker walker = new ParseTreeWalker();
-        programBaseVisitor vis = new programBaseVisitor();
+      
         
-        ANTLRListener listener = new ANTLRListener();
-        walker.DEFAULT.walk(listener, contexto);
+       // ANTLRListener listener = new ANTLRListener();
+       // walker.DEFAULT.walk(listener, contexto);
         Trees.inspect(contexto, parser);
 
         
         int errorsCount = parser.getNumberOfSyntaxErrors();
+            System.out.println(errorsCount);
         if(errorsCount == 0){
           System.out.println("Parseo Exitoso");
        
@@ -316,6 +320,10 @@ public class ANTGui extends javax.swing.JFrame {
             textArea.setWrapStyleWord(true); 
             scrollPane.setPreferredSize( new Dimension( 250, 250 ) );
             JOptionPane.showMessageDialog(this, scrollPane);
+            
+            Visitor vistor = new Visitor();
+            vistor.visit(tree);
+            //System.out.println(vist.visitProgram(contexto));
         }
         
          } catch (RecognitionException e) {
@@ -323,6 +331,9 @@ public class ANTGui extends javax.swing.JFrame {
             System.out.println("LIl");
 			
         }
+        
+                
+                
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed

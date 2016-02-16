@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+//PABLO DIAZ UVG 13203
 
 grammar program;
 
@@ -13,7 +9,11 @@ ID : LETTER( LETTER | DIGIT)* ;
 NUM: DIGIT(DIGIT)* ; 
 CHAR: '\'' ('!'..'~' )|'\t'|'\\'|'\"'  '\'';  
 STRING: '\"' ( ('!'..'~') |'\t'|'\\'|'\"' )* '\"';
-FLOAT: DIGIT (DIGIT)* '.' DIGIT (DIGIT)*;
+//* '
+FLOAT
+ : [0-9]+ '.' [0-9]* 
+ | '.' [0-9]+
+ ;
 WS : [ \t\r\n]+ -> skip ; 
 COMMENTS: '//' ~('\r' | '\n' )*  -> skip;
 

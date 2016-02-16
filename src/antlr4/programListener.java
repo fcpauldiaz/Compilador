@@ -9,18 +9,6 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface programListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by the {@code parameterId}
-	 * labeled alternative in {@link programParser#parameter}.
-	 * @param ctx the parse tree
-	 */
-	void enterParameterId(@NotNull programParser.ParameterIdContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code parameterId}
-	 * labeled alternative in {@link programParser#parameter}.
-	 * @param ctx the parse tree
-	 */
-	void exitParameterId(@NotNull programParser.ParameterIdContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code statementReturn}
 	 * labeled alternative in {@link programParser#statement}.
 	 * @param ctx the parse tree
@@ -32,18 +20,6 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStatementReturn(@NotNull programParser.StatementReturnContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code varDeclarationStructId}
-	 * labeled alternative in {@link programParser#varDeclarationStruct}.
-	 * @param ctx the parse tree
-	 */
-	void enterVarDeclarationStructId(@NotNull programParser.VarDeclarationStructIdContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code varDeclarationStructId}
-	 * labeled alternative in {@link programParser#varDeclarationStruct}.
-	 * @param ctx the parse tree
-	 */
-	void exitVarDeclarationStructId(@NotNull programParser.VarDeclarationStructIdContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link programParser#program}.
 	 * @param ctx the parse tree
@@ -199,18 +175,6 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitAndExprCondOpAnd(@NotNull programParser.AndExprCondOpAndContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code varDeclarationId}
-	 * labeled alternative in {@link programParser#varDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterVarDeclarationId(@NotNull programParser.VarDeclarationIdContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code varDeclarationId}
-	 * labeled alternative in {@link programParser#varDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitVarDeclarationId(@NotNull programParser.VarDeclarationIdContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code andExprEqExpr}
 	 * labeled alternative in {@link programParser#andExpr}.
 	 * @param ctx the parse tree
@@ -244,6 +208,18 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitValueMethodCall(@NotNull programParser.ValueMethodCallContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code parameterID}
+	 * labeled alternative in {@link programParser#parameter}.
+	 * @param ctx the parse tree
+	 */
+	void enterParameterID(@NotNull programParser.ParameterIDContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code parameterID}
+	 * labeled alternative in {@link programParser#parameter}.
+	 * @param ctx the parse tree
+	 */
+	void exitParameterID(@NotNull programParser.ParameterIDContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code varDeclarationStructArray}
 	 * labeled alternative in {@link programParser#varDeclarationStruct}.
@@ -685,6 +661,18 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitStatementExpression(@NotNull programParser.StatementExpressionContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code varDeclarationStructID}
+	 * labeled alternative in {@link programParser#varDeclarationStruct}.
+	 * @param ctx the parse tree
+	 */
+	void enterVarDeclarationStructID(@NotNull programParser.VarDeclarationStructIDContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code varDeclarationStructID}
+	 * labeled alternative in {@link programParser#varDeclarationStruct}.
+	 * @param ctx the parse tree
+	 */
+	void exitVarDeclarationStructID(@NotNull programParser.VarDeclarationStructIDContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code addExprMinusPlusOp}
 	 * labeled alternative in {@link programParser#addExpr}.
 	 * @param ctx the parse tree
@@ -776,6 +764,18 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRelationExprRelOp(@NotNull programParser.RelationExprRelOpContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code varDeclarationID}
+	 * labeled alternative in {@link programParser#varDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterVarDeclarationID(@NotNull programParser.VarDeclarationIDContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code varDeclarationID}
+	 * labeled alternative in {@link programParser#varDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitVarDeclarationID(@NotNull programParser.VarDeclarationIDContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code addExprMultExpr}
 	 * labeled alternative in {@link programParser#addExpr}.

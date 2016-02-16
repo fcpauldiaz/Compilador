@@ -29,7 +29,7 @@ public class Visitor<T> extends programBaseVisitor {
             
         }
         System.out.println("ctx" + ctx);
-        this.visit(ctx.declaration(0));
+        this.visit(ctx.Id());
        ambito=0;
         //System.out.println(ctx.getChild(1));
         //System.out.println(ctx.toString());

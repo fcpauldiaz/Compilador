@@ -21,14 +21,14 @@ public class programParser extends Parser {
 		T__15=9, T__14=10, T__13=11, T__12=12, T__11=13, T__10=14, T__9=15, T__8=16, 
 		T__7=17, T__6=18, T__5=19, T__4=20, T__3=21, T__2=22, T__1=23, T__0=24, 
 		CLASS=25, STRUCT=26, TRUE=27, FALSE=28, VOID=29, IF=30, ELSE=31, WHILE=32, 
-		RETURN=33, INT=34, CHAR=35, BOOLEAN=36, Id=37, Num=38, Char=39, WSD=40, 
+		RETURN=33, INT=34, CHAR=35, BOOLEAN=36, ID=37, NUM=38, Char=39, WSD=40, 
 		COMMENT=41;
 	public static final String[] tokenNames = {
 		"<INVALID>", "'/'", "'!='", "'||'", "';'", "'{'", "'&&'", "'='", "'}'", 
 		"'<='", "'('", "'*'", "','", "'.'", "'>='", "'['", "'=='", "'<'", "']'", 
 		"'>'", "'!'", "'%'", "')'", "'+'", "'-'", "'class'", "'struct'", "'true'", 
 		"'false'", "'void'", "'if'", "'else'", "'while'", "'return'", "'int'", 
-		"'char'", "'boolean'", "Id", "Num", "Char", "WSD", "COMMENT"
+		"'char'", "'boolean'", "ID", "NUM", "Char", "WSD", "COMMENT"
 	};
 	public static final int
 		RULE_program = 0, RULE_declaration = 1, RULE_varDeclaration = 2, RULE_varDeclarationStruct = 3, 
@@ -71,10 +71,10 @@ public class programParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class ProgramContext extends ParserRuleContext {
+		public TerminalNode ID() { return getToken(programParser.ID, 0); }
 		public List<MethodDeclarationContext> methodDeclaration() {
 			return getRuleContexts(MethodDeclarationContext.class);
 		}
-		public TerminalNode Id() { return getToken(programParser.Id, 0); }
 		public List<DeclarationContext> declaration() {
 			return getRuleContexts(DeclarationContext.class);
 		}
@@ -112,7 +112,7 @@ public class programParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(72); match(CLASS);
-			setState(73); match(Id);
+			setState(73); match(ID);
 			setState(74); match(T__19);
 			setState(79);
 			_errHandler.sync(this);
@@ -271,32 +271,32 @@ public class programParser extends Parser {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class VarDeclarationIdContext extends VarDeclarationContext {
+	public static class VarDeclarationIDContext extends VarDeclarationContext {
+		public TerminalNode ID() { return getToken(programParser.ID, 0); }
 		public VarTypeContext varType() {
 			return getRuleContext(VarTypeContext.class,0);
 		}
-		public TerminalNode Id() { return getToken(programParser.Id, 0); }
-		public VarDeclarationIdContext(VarDeclarationContext ctx) { copyFrom(ctx); }
+		public VarDeclarationIDContext(VarDeclarationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).enterVarDeclarationId(this);
+			if ( listener instanceof programListener ) ((programListener)listener).enterVarDeclarationID(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).exitVarDeclarationId(this);
+			if ( listener instanceof programListener ) ((programListener)listener).exitVarDeclarationID(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitVarDeclarationId(this);
+			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitVarDeclarationID(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	public static class VarDeclarationArrayContext extends VarDeclarationContext {
+		public TerminalNode ID() { return getToken(programParser.ID, 0); }
 		public VarTypeContext varType() {
 			return getRuleContext(VarTypeContext.class,0);
 		}
-		public TerminalNode Num() { return getToken(programParser.Num, 0); }
-		public TerminalNode Id() { return getToken(programParser.Id, 0); }
+		public TerminalNode NUM() { return getToken(programParser.NUM, 0); }
 		public VarDeclarationArrayContext(VarDeclarationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -320,11 +320,11 @@ public class programParser extends Parser {
 			setState(100);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
-				_localctx = new VarDeclarationIdContext(_localctx);
+				_localctx = new VarDeclarationIDContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(89); varType();
-				setState(90); match(Id);
+				setState(90); match(ID);
 				setState(91); match(T__20);
 				}
 				break;
@@ -333,9 +333,9 @@ public class programParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(93); varType();
-				setState(94); match(Id);
+				setState(94); match(ID);
 				setState(95); match(T__9);
-				setState(96); match(Num);
+				setState(96); match(NUM);
 				setState(97); match(T__6);
 				setState(98); match(T__20);
 				}
@@ -365,11 +365,11 @@ public class programParser extends Parser {
 		}
 	}
 	public static class VarDeclarationStructArrayContext extends VarDeclarationStructContext {
+		public TerminalNode ID() { return getToken(programParser.ID, 0); }
 		public VarTypeContext varType() {
 			return getRuleContext(VarTypeContext.class,0);
 		}
-		public TerminalNode Num() { return getToken(programParser.Num, 0); }
-		public TerminalNode Id() { return getToken(programParser.Id, 0); }
+		public TerminalNode NUM() { return getToken(programParser.NUM, 0); }
 		public VarDeclarationStructArrayContext(VarDeclarationStructContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -385,23 +385,23 @@ public class programParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class VarDeclarationStructIdContext extends VarDeclarationStructContext {
+	public static class VarDeclarationStructIDContext extends VarDeclarationStructContext {
+		public TerminalNode ID() { return getToken(programParser.ID, 0); }
 		public VarTypeContext varType() {
 			return getRuleContext(VarTypeContext.class,0);
 		}
-		public TerminalNode Id() { return getToken(programParser.Id, 0); }
-		public VarDeclarationStructIdContext(VarDeclarationStructContext ctx) { copyFrom(ctx); }
+		public VarDeclarationStructIDContext(VarDeclarationStructContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).enterVarDeclarationStructId(this);
+			if ( listener instanceof programListener ) ((programListener)listener).enterVarDeclarationStructID(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).exitVarDeclarationStructId(this);
+			if ( listener instanceof programListener ) ((programListener)listener).exitVarDeclarationStructID(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitVarDeclarationStructId(this);
+			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitVarDeclarationStructID(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -413,11 +413,11 @@ public class programParser extends Parser {
 			setState(113);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
-				_localctx = new VarDeclarationStructIdContext(_localctx);
+				_localctx = new VarDeclarationStructIDContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(102); varType();
-				setState(103); match(Id);
+				setState(103); match(ID);
 				setState(104); match(T__20);
 				}
 				break;
@@ -426,9 +426,9 @@ public class programParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(106); varType();
-				setState(107); match(Id);
+				setState(107); match(ID);
 				setState(108); match(T__9);
-				setState(109); match(Num);
+				setState(109); match(NUM);
 				setState(110); match(T__6);
 				setState(111); match(T__20);
 				}
@@ -447,8 +447,8 @@ public class programParser extends Parser {
 	}
 
 	public static class StructDeclarationContext extends ParserRuleContext {
+		public TerminalNode ID() { return getToken(programParser.ID, 0); }
 		public TerminalNode STRUCT() { return getToken(programParser.STRUCT, 0); }
-		public TerminalNode Id() { return getToken(programParser.Id, 0); }
 		public VarDeclarationStructContext varDeclarationStruct(int i) {
 			return getRuleContext(VarDeclarationStructContext.class,i);
 		}
@@ -482,7 +482,7 @@ public class programParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(115); match(STRUCT);
-			setState(116); match(Id);
+			setState(116); match(ID);
 			setState(117); match(T__19);
 			setState(121);
 			_errHandler.sync(this);
@@ -576,8 +576,8 @@ public class programParser extends Parser {
 		}
 	}
 	public static class VarTypeStructContext extends VarTypeContext {
+		public TerminalNode ID() { return getToken(programParser.ID, 0); }
 		public TerminalNode STRUCT() { return getToken(programParser.STRUCT, 0); }
-		public TerminalNode Id() { return getToken(programParser.Id, 0); }
 		public VarTypeStructContext(VarTypeContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -660,7 +660,7 @@ public class programParser extends Parser {
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(129); match(STRUCT);
-				setState(130); match(Id);
+				setState(130); match(ID);
 				}
 				break;
 			case 5:
@@ -691,10 +691,10 @@ public class programParser extends Parser {
 	}
 
 	public static class MethodDeclarationContext extends ParserRuleContext {
+		public TerminalNode ID() { return getToken(programParser.ID, 0); }
 		public ParamsContext params() {
 			return getRuleContext(ParamsContext.class,0);
 		}
-		public TerminalNode Id() { return getToken(programParser.Id, 0); }
 		public MethodTypeContext methodType() {
 			return getRuleContext(MethodTypeContext.class,0);
 		}
@@ -727,7 +727,7 @@ public class programParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(135); methodType();
-			setState(136); match(Id);
+			setState(136); match(ID);
 			setState(137); match(T__14);
 			setState(140);
 			switch (_input.LA(1)) {
@@ -1011,32 +1011,32 @@ public class programParser extends Parser {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class ParameterIdContext extends ParameterContext {
+	public static class ParameterIDContext extends ParameterContext {
+		public TerminalNode ID() { return getToken(programParser.ID, 0); }
 		public ParameterTypeContext parameterType() {
 			return getRuleContext(ParameterTypeContext.class,0);
 		}
-		public TerminalNode Id() { return getToken(programParser.Id, 0); }
-		public ParameterIdContext(ParameterContext ctx) { copyFrom(ctx); }
+		public ParameterIDContext(ParameterContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).enterParameterId(this);
+			if ( listener instanceof programListener ) ((programListener)listener).enterParameterID(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).exitParameterId(this);
+			if ( listener instanceof programListener ) ((programListener)listener).exitParameterID(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitParameterId(this);
+			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitParameterID(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 	public static class ParameterArrayContext extends ParameterContext {
+		public TerminalNode ID() { return getToken(programParser.ID, 0); }
+		public TerminalNode NUM() { return getToken(programParser.NUM, 0); }
 		public ParameterTypeContext parameterType() {
 			return getRuleContext(ParameterTypeContext.class,0);
 		}
-		public TerminalNode Num() { return getToken(programParser.Num, 0); }
-		public TerminalNode Id() { return getToken(programParser.Id, 0); }
 		public ParameterArrayContext(ParameterContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
@@ -1060,11 +1060,11 @@ public class programParser extends Parser {
 			setState(171);
 			switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
 			case 1:
-				_localctx = new ParameterIdContext(_localctx);
+				_localctx = new ParameterIDContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(162); parameterType();
-				setState(163); match(Id);
+				setState(163); match(ID);
 				}
 				break;
 			case 2:
@@ -1072,9 +1072,9 @@ public class programParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(165); parameterType();
-				setState(166); match(Id);
+				setState(166); match(ID);
 				setState(167); match(T__9);
-				setState(168); match(Num);
+				setState(168); match(NUM);
 				setState(169); match(T__6);
 				}
 				break;
@@ -1239,7 +1239,7 @@ public class programParser extends Parser {
 			setState(183);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__20) | (1L << T__19) | (1L << T__14) | (1L << T__4) | (1L << T__0) | (1L << STRUCT) | (1L << TRUE) | (1L << FALSE) | (1L << VOID) | (1L << IF) | (1L << WHILE) | (1L << RETURN) | (1L << INT) | (1L << CHAR) | (1L << BOOLEAN) | (1L << Id) | (1L << Num) | (1L << Char))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__20) | (1L << T__19) | (1L << T__14) | (1L << T__4) | (1L << T__0) | (1L << STRUCT) | (1L << TRUE) | (1L << FALSE) | (1L << VOID) | (1L << IF) | (1L << WHILE) | (1L << RETURN) | (1L << INT) | (1L << CHAR) | (1L << BOOLEAN) | (1L << ID) | (1L << NUM) | (1L << Char))) != 0)) {
 				{
 				setState(181);
 				switch (_input.LA(1)) {
@@ -1262,8 +1262,8 @@ public class programParser extends Parser {
 				case IF:
 				case WHILE:
 				case RETURN:
-				case Id:
-				case Num:
+				case ID:
+				case NUM:
 				case Char:
 					{
 					setState(180); statement();
@@ -1501,8 +1501,8 @@ public class programParser extends Parser {
 				case T__0:
 				case TRUE:
 				case FALSE:
-				case Id:
-				case Num:
+				case ID:
+				case NUM:
 				case Char:
 					{
 					setState(204); expression(0);
@@ -1549,7 +1549,7 @@ public class programParser extends Parser {
 				{
 				setState(219);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__4) | (1L << T__0) | (1L << TRUE) | (1L << FALSE) | (1L << Id) | (1L << Num) | (1L << Char))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__4) | (1L << T__0) | (1L << TRUE) | (1L << FALSE) | (1L << ID) | (1L << NUM) | (1L << Char))) != 0)) {
 					{
 					setState(218); expression(0);
 					}
@@ -1572,10 +1572,10 @@ public class programParser extends Parser {
 	}
 
 	public static class LocationContext extends ParserRuleContext {
+		public TerminalNode ID() { return getToken(programParser.ID, 0); }
 		public LocationMemberContext locationMember() {
 			return getRuleContext(LocationMemberContext.class,0);
 		}
-		public TerminalNode Id() { return getToken(programParser.Id, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
@@ -1608,12 +1608,12 @@ public class programParser extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,18,_ctx) ) {
 			case 1:
 				{
-				setState(224); match(Id);
+				setState(224); match(ID);
 				}
 				break;
 			case 2:
 				{
-				setState(225); match(Id);
+				setState(225); match(ID);
 				setState(226); match(T__9);
 				setState(227); expression(0);
 				setState(228); match(T__6);
@@ -1643,10 +1643,10 @@ public class programParser extends Parser {
 	}
 
 	public static class LocationMemberContext extends ParserRuleContext {
+		public TerminalNode ID() { return getToken(programParser.ID, 0); }
 		public LocationMemberContext locationMember() {
 			return getRuleContext(LocationMemberContext.class,0);
 		}
-		public TerminalNode Id() { return getToken(programParser.Id, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
@@ -1679,12 +1679,12 @@ public class programParser extends Parser {
 			switch ( getInterpreter().adaptivePredict(_input,20,_ctx) ) {
 			case 1:
 				{
-				setState(236); match(Id);
+				setState(236); match(ID);
 				}
 				break;
 			case 2:
 				{
-				setState(237); match(Id);
+				setState(237); match(ID);
 				setState(238); match(T__9);
 				setState(239); expression(0);
 				setState(240); match(T__6);
@@ -2686,7 +2686,7 @@ public class programParser extends Parser {
 		public ArgContext arg(int i) {
 			return getRuleContext(ArgContext.class,i);
 		}
-		public TerminalNode Id() { return getToken(programParser.Id, 0); }
+		public TerminalNode ID() { return getToken(programParser.ID, 0); }
 		public List<ArgContext> arg() {
 			return getRuleContexts(ArgContext.class);
 		}
@@ -2716,11 +2716,11 @@ public class programParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(340); match(Id);
+			setState(340); match(ID);
 			setState(341); match(T__14);
 			setState(350);
 			_la = _input.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__4) | (1L << T__0) | (1L << TRUE) | (1L << FALSE) | (1L << Id) | (1L << Num) | (1L << Char))) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__4) | (1L << T__0) | (1L << TRUE) | (1L << FALSE) | (1L << ID) | (1L << NUM) | (1L << Char))) != 0)) {
 				{
 				setState(342); arg();
 				setState(347);
@@ -3136,7 +3136,7 @@ public class programParser extends Parser {
 		try {
 			setState(373);
 			switch (_input.LA(1)) {
-			case Num:
+			case NUM:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(370); int_literal();
@@ -3171,7 +3171,7 @@ public class programParser extends Parser {
 	}
 
 	public static class Int_literalContext extends ParserRuleContext {
-		public TerminalNode Num() { return getToken(programParser.Num, 0); }
+		public TerminalNode NUM() { return getToken(programParser.NUM, 0); }
 		public Int_literalContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -3197,7 +3197,7 @@ public class programParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(375); match(Num);
+			setState(375); match(NUM);
 			}
 		}
 		catch (RecognitionException re) {

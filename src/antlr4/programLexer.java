@@ -21,7 +21,7 @@ public class programLexer extends Lexer {
 		T__15=9, T__14=10, T__13=11, T__12=12, T__11=13, T__10=14, T__9=15, T__8=16, 
 		T__7=17, T__6=18, T__5=19, T__4=20, T__3=21, T__2=22, T__1=23, T__0=24, 
 		CLASS=25, STRUCT=26, TRUE=27, FALSE=28, VOID=29, IF=30, ELSE=31, WHILE=32, 
-		RETURN=33, INT=34, CHAR=35, BOOLEAN=36, Id=37, Num=38, Char=39, WSD=40, 
+		RETURN=33, INT=34, CHAR=35, BOOLEAN=36, ID=37, NUM=38, Char=39, WSD=40, 
 		COMMENT=41;
 	public static String[] modeNames = {
 		"DEFAULT_MODE"
@@ -41,7 +41,7 @@ public class programLexer extends Lexer {
 		"T__15", "T__14", "T__13", "T__12", "T__11", "T__10", "T__9", "T__8", 
 		"T__7", "T__6", "T__5", "T__4", "T__3", "T__2", "T__1", "T__0", "CLASS", 
 		"STRUCT", "TRUE", "FALSE", "VOID", "IF", "ELSE", "WHILE", "RETURN", "INT", 
-		"CHAR", "BOOLEAN", "Letter", "Digit", "Others", "Id", "Num", "Char", "WSD", 
+		"CHAR", "BOOLEAN", "LETTER", "DIGIT", "ASCII", "ID", "NUM", "Char", "WSD", 
 		"COMMENT"
 	};
 

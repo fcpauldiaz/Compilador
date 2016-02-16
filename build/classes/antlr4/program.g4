@@ -2,26 +2,26 @@
 grammar program;
 
 //*********************LEXER SPECIFICATION **************
-CLASS : 'class' ;
-STRUCT : 'struct' ;
-TRUE : 'true' ;
-FALSE : 'false' ;
-VOID : 'void' ;
-IF : 'if' ;
-ELSE : 'else' ;
-WHILE : 'while' ;
-RETURN : 'return' ;
-INT : 'int' ;
-CHAR : 'char' ;
+CLASS :   'class' ;
+STRUCT :  'struct' ;
+TRUE :    'true' ;
+FALSE :   'false' ;
+VOID :    'void' ;
+IF :      'if' ;
+ELSE :    'else' ;
+WHILE :   'while' ;
+RETURN :  'return' ;
+INT :     'int' ;
+CHAR :    'char' ;
 BOOLEAN : 'boolean' ;
 
-fragment Letter : ('a'..'z'|'A'..'Z') ;
-fragment Digit :'0'..'9' ;
-fragment Others : (' ' ..'~') | '\\' | '\'' | '"' | '\t' | '\n' ;
+fragment LETTER : ('a'..'z'|'A'..'Z') ;
+fragment DIGIT :'0'..'9' ;
+fragment ASCII : (' ' ..'~') | '\\' | '\'' | '"' | '\t' | '\n' ;
 
-Id : Letter(Letter|Digit)* ;
-Num : Digit(Digit)* ;
-Char : '\'' Others '\'';
+ID : LETTER ( LETTER | DIGIT )* ;
+NUM : DIGIT ( DIGIT )* ;
+Char : '\'' ASCII '\'';
 
 
 WSD : 
@@ -37,7 +37,7 @@ COMMENT
 //************** PARSER SPECIFICATION **************
 
 program
-	: CLASS Id '{' (declaration | methodDeclaration)* '}' 
+	: CLASS ID '{' (declaration | methodDeclaration)* '}' 
 	;
 
 declaration
@@ -46,30 +46,30 @@ declaration
 	|	methodDeclaration	#declarationMethodDeclaration
 	;
 varDeclaration
-	: 	varType Id ';'				#varDeclarationId
-	| 	varType Id '[' Num ']' ';'	#varDeclarationArray
+	: 	varType ID ';'			#varDeclarationID
+	| 	varType ID '[' NUM ']' ';'	#varDeclarationArray
 	;
 
 varDeclarationStruct
-	: 	varType Id ';'				#varDeclarationStructId
-	| 	varType Id '[' Num ']' ';'	#varDeclarationStructArray
+	: 	varType ID ';'			#varDeclarationStructID
+	| 	varType ID '[' NUM ']' ';'	#varDeclarationStructArray
 	;
 
 structDeclaration
-	:	STRUCT Id '{' (varDeclarationStruct)* '}'
+	:	STRUCT ID '{' (varDeclarationStruct)* '}'
 	;
 
 varType
 	: 	INT				#varTypeInt
 	|	CHAR				#varTypeChar
 	|	BOOLEAN				#varTypeBoolean
-	|	STRUCT Id			#varTypeStruct
+	|	STRUCT ID			#varTypeStruct
 	|	structDeclaration               #varTypeStructDeclaration
 	| 	VOID				#varTypeVoid
 	;
 
 methodDeclaration
-	:	methodType Id '(' (params | ) ')' block
+	:	methodType ID '(' (params | ) ')' block
 	;
 
 	
@@ -86,8 +86,8 @@ methodType
 	;
 
 parameter
-	: 	parameterType Id		#parameterId
-	|	parameterType Id '[' Num ']'	#parameterArray
+	: 	parameterType ID		#parameterID
+	|	parameterType ID '[' NUM ']'	#parameterArray
 	;
 	
 parameterType
@@ -112,11 +112,11 @@ statement
 	;
 	
 location
-	:	(Id | Id '[' expression ']') ('.' locationMember)?
+	:	(ID | ID '[' expression ']') ('.' locationMember)?
 	;
 	
 locationMember
-	:	(Id | Id '[' expression ']')('.' locationMember)?
+	:	(ID | ID '[' expression ']')('.' locationMember)?
 	;
 
 
@@ -169,7 +169,7 @@ value
 
 	
 methodCall
-	:	Id '(' (arg (',' arg)*)? ')' 
+	:	ID '(' (arg (',' arg)*)? ')' 
 	;
 	
 arg
@@ -214,7 +214,7 @@ literal
 	;
 	
 int_literal
-	:	Num
+	:	NUM
 	;
 
 char_literal

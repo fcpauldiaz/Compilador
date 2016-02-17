@@ -77,6 +77,12 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInt_literal(@NotNull programParser.Int_literalContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link programParser#varType}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarType(@NotNull programParser.VarTypeContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link programParser#cond_op_or}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -95,13 +101,6 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBlock(@NotNull programParser.BlockContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code declarationStructDeclaration}
-	 * labeled alternative in {@link programParser#declaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeclarationStructDeclaration(@NotNull programParser.DeclarationStructDeclarationContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code andExprCondOpAnd}
 	 * labeled alternative in {@link programParser#andExpr}.
@@ -143,20 +142,6 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitVarDeclarationStructArray(@NotNull programParser.VarDeclarationStructArrayContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code varTypeStructDeclaration}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarTypeStructDeclaration(@NotNull programParser.VarTypeStructDeclarationContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code varTypeStruct}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarTypeStruct(@NotNull programParser.VarTypeStructContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code valueExprWithParent}
 	 * labeled alternative in {@link programParser#value}.
@@ -259,13 +244,6 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitEqExprRelationExpr(@NotNull programParser.EqExprRelationExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code varTypeInt}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarTypeInt(@NotNull programParser.VarTypeIntContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code valueLiteral}
 	 * labeled alternative in {@link programParser#value}.
 	 * @param ctx the parse tree
@@ -294,13 +272,6 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParameterTypeInt(@NotNull programParser.ParameterTypeIntContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code varTypeChar}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarTypeChar(@NotNull programParser.VarTypeCharContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link programParser#literal}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -320,13 +291,6 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMultExprMultDivOp(@NotNull programParser.MultExprMultDivOpContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code declarationVarDeclaration}
-	 * labeled alternative in {@link programParser#declaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeclarationVarDeclaration(@NotNull programParser.DeclarationVarDeclarationContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link programParser#arg}.
 	 * @param ctx the parse tree
@@ -402,6 +366,12 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVarDeclarationStructID(@NotNull programParser.VarDeclarationStructIDContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link programParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclaration(@NotNull programParser.DeclarationContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code addExprMinusPlusOp}
 	 * labeled alternative in {@link programParser#addExpr}.
 	 * @param ctx the parse tree
@@ -422,26 +392,12 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPowmod_op(@NotNull programParser.Powmod_opContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code varTypeVoid}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarTypeVoid(@NotNull programParser.VarTypeVoidContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code paramsParameterWithComma}
 	 * labeled alternative in {@link programParser#params}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitParamsParameterWithComma(@NotNull programParser.ParamsParameterWithCommaContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code declarationMethodDeclaration}
-	 * labeled alternative in {@link programParser#declaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeclarationMethodDeclaration(@NotNull programParser.DeclarationMethodDeclarationContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link programParser#location}.
 	 * @param ctx the parse tree
@@ -475,11 +431,4 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMultdiv_op(@NotNull programParser.Multdiv_opContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code varTypeBoolean}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarTypeBoolean(@NotNull programParser.VarTypeBooleanContext ctx);
 }

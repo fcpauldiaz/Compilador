@@ -134,70 +134,30 @@ public class programParser extends Parser {
 	}
 
 	public static class DeclarationContext extends ParserRuleContext {
+		public MethodDeclarationContext methodDeclaration() {
+			return getRuleContext(MethodDeclarationContext.class,0);
+		}
+		public VarDeclarationContext varDeclaration() {
+			return getRuleContext(VarDeclarationContext.class,0);
+		}
+		public StructDeclarationContext structDeclaration() {
+			return getRuleContext(StructDeclarationContext.class,0);
+		}
 		public DeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_declaration; }
-	 
-		public DeclarationContext() { }
-		public void copyFrom(DeclarationContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class DeclarationVarDeclarationContext extends DeclarationContext {
-		public VarDeclarationContext varDeclaration() {
-			return getRuleContext(VarDeclarationContext.class,0);
-		}
-		public DeclarationVarDeclarationContext(DeclarationContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).enterDeclarationVarDeclaration(this);
+			if ( listener instanceof programListener ) ((programListener)listener).enterDeclaration(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).exitDeclarationVarDeclaration(this);
+			if ( listener instanceof programListener ) ((programListener)listener).exitDeclaration(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitDeclarationVarDeclaration(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class DeclarationMethodDeclarationContext extends DeclarationContext {
-		public MethodDeclarationContext methodDeclaration() {
-			return getRuleContext(MethodDeclarationContext.class,0);
-		}
-		public DeclarationMethodDeclarationContext(DeclarationContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).enterDeclarationMethodDeclaration(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).exitDeclarationMethodDeclaration(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitDeclarationMethodDeclaration(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class DeclarationStructDeclarationContext extends DeclarationContext {
-		public StructDeclarationContext structDeclaration() {
-			return getRuleContext(StructDeclarationContext.class,0);
-		}
-		public DeclarationStructDeclarationContext(DeclarationContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).enterDeclarationStructDeclaration(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).exitDeclarationStructDeclaration(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitDeclarationStructDeclaration(this);
+			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitDeclaration(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -209,21 +169,18 @@ public class programParser extends Parser {
 			setState(86);
 			switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
 			case 1:
-				_localctx = new DeclarationStructDeclarationContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(83); structDeclaration();
 				}
 				break;
 			case 2:
-				_localctx = new DeclarationVarDeclarationContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(84); varDeclaration();
 				}
 				break;
 			case 3:
-				_localctx = new DeclarationMethodDeclarationContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(85); methodDeclaration();
@@ -494,118 +451,30 @@ public class programParser extends Parser {
 	}
 
 	public static class VarTypeContext extends ParserRuleContext {
+		public TerminalNode ID() { return getToken(programParser.ID, 0); }
+		public TerminalNode STRUCT() { return getToken(programParser.STRUCT, 0); }
+		public TerminalNode VOID() { return getToken(programParser.VOID, 0); }
+		public StructDeclarationContext structDeclaration() {
+			return getRuleContext(StructDeclarationContext.class,0);
+		}
+		public TerminalNode CHAR() { return getToken(programParser.CHAR, 0); }
+		public TerminalNode BOOLEAN() { return getToken(programParser.BOOLEAN, 0); }
+		public TerminalNode INT() { return getToken(programParser.INT, 0); }
 		public VarTypeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_varType; }
-	 
-		public VarTypeContext() { }
-		public void copyFrom(VarTypeContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class VarTypeIntContext extends VarTypeContext {
-		public TerminalNode INT() { return getToken(programParser.INT, 0); }
-		public VarTypeIntContext(VarTypeContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).enterVarTypeInt(this);
+			if ( listener instanceof programListener ) ((programListener)listener).enterVarType(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).exitVarTypeInt(this);
+			if ( listener instanceof programListener ) ((programListener)listener).exitVarType(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitVarTypeInt(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class VarTypeStructDeclarationContext extends VarTypeContext {
-		public StructDeclarationContext structDeclaration() {
-			return getRuleContext(StructDeclarationContext.class,0);
-		}
-		public VarTypeStructDeclarationContext(VarTypeContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).enterVarTypeStructDeclaration(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).exitVarTypeStructDeclaration(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitVarTypeStructDeclaration(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class VarTypeVoidContext extends VarTypeContext {
-		public TerminalNode VOID() { return getToken(programParser.VOID, 0); }
-		public VarTypeVoidContext(VarTypeContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).enterVarTypeVoid(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).exitVarTypeVoid(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitVarTypeVoid(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class VarTypeStructContext extends VarTypeContext {
-		public TerminalNode ID() { return getToken(programParser.ID, 0); }
-		public TerminalNode STRUCT() { return getToken(programParser.STRUCT, 0); }
-		public VarTypeStructContext(VarTypeContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).enterVarTypeStruct(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).exitVarTypeStruct(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitVarTypeStruct(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class VarTypeCharContext extends VarTypeContext {
-		public TerminalNode CHAR() { return getToken(programParser.CHAR, 0); }
-		public VarTypeCharContext(VarTypeContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).enterVarTypeChar(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).exitVarTypeChar(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitVarTypeChar(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class VarTypeBooleanContext extends VarTypeContext {
-		public TerminalNode BOOLEAN() { return getToken(programParser.BOOLEAN, 0); }
-		public VarTypeBooleanContext(VarTypeContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).enterVarTypeBoolean(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).exitVarTypeBoolean(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitVarTypeBoolean(this);
+			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitVarType(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -617,28 +486,24 @@ public class programParser extends Parser {
 			setState(132);
 			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
 			case 1:
-				_localctx = new VarTypeIntContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(125); match(INT);
 				}
 				break;
 			case 2:
-				_localctx = new VarTypeCharContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(126); match(CHAR);
 				}
 				break;
 			case 3:
-				_localctx = new VarTypeBooleanContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(127); match(BOOLEAN);
 				}
 				break;
 			case 4:
-				_localctx = new VarTypeStructContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(128); match(STRUCT);
@@ -646,14 +511,12 @@ public class programParser extends Parser {
 				}
 				break;
 			case 5:
-				_localctx = new VarTypeStructDeclarationContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(130); structDeclaration();
 				}
 				break;
 			case 6:
-				_localctx = new VarTypeVoidContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
 				setState(131); match(VOID);

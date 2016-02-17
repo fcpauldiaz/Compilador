@@ -17,8 +17,13 @@ import org.antlr.v4.runtime.tree.ParseTreeProperty;
  */
 public class Visitor<T> extends programBaseVisitor {
     
-    private int ambito;
-    ParseTreeProperty<T> values = new ParseTreeProperty<T>();
+    private int ambito=0;
+    private final SymbolTable tablaSimbolos;
+    public int autoincrement = 0;
+
+    public Visitor() {
+        this.tablaSimbolos = new SymbolTable();
+    }
     @Override 
     public T visitProgram(programParser.ProgramContext ctx) {
         System.out.println("YOLO: " + ctx.getText());
@@ -29,9 +34,9 @@ public class Visitor<T> extends programBaseVisitor {
            this.visit(ctx.getChild(i));
        }
        
-        //this.visit(ctx.);
-        ambito=0;
         
+        
+        tablaSimbolos.printSymbolTable();
         return (T)"";
     }
     
@@ -40,5 +45,37 @@ public class Visitor<T> extends programBaseVisitor {
         
         
         return (T) "s";
+    }
+    
+    @Override
+    public T visitDeclaration(programParser.DeclarationContext ctx){
+        
+        
+        
+        return (T)"T";
+    }
+    
+    @Override
+    public T visitVarDeclarationID(programParser.VarDeclarationIDContext ctx){
+        System.out.println(ctx.getChildCount()+"cantidad var declaration");
+        System.out.println(ctx.toStringTree());
+        
+        Symbol simbolo = new Symbol();
+        //ambito,id
+        Type tipo = new Type();
+        tipo.setNombre(ctx.getChild(0).getText());
+        tipo.setNombre_tipo((String)this.visit(ctx.getChild(0)));
+        simbolo.setAmbito(ambito);
+        simbolo.setId(++autoincrement);
+        
+       
+        
+        return (T)simbolo;
+    }
+    
+    @Override
+    public T visitVarType(programParser.VarTypeContext ctx){
+            
+        return (T)ctx.getText();
     }
 }

@@ -119,6 +119,16 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitInt_literal(@NotNull programParser.Int_literalContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link programParser#varType}.
+	 * @param ctx the parse tree
+	 */
+	void enterVarType(@NotNull programParser.VarTypeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link programParser#varType}.
+	 * @param ctx the parse tree
+	 */
+	void exitVarType(@NotNull programParser.VarTypeContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link programParser#cond_op_or}.
 	 * @param ctx the parse tree
 	 */
@@ -150,18 +160,6 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBlock(@NotNull programParser.BlockContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code declarationStructDeclaration}
-	 * labeled alternative in {@link programParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclarationStructDeclaration(@NotNull programParser.DeclarationStructDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code declarationStructDeclaration}
-	 * labeled alternative in {@link programParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclarationStructDeclaration(@NotNull programParser.DeclarationStructDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code andExprCondOpAnd}
 	 * labeled alternative in {@link programParser#andExpr}.
@@ -232,30 +230,6 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVarDeclarationStructArray(@NotNull programParser.VarDeclarationStructArrayContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code varTypeStructDeclaration}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 */
-	void enterVarTypeStructDeclaration(@NotNull programParser.VarTypeStructDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code varTypeStructDeclaration}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 */
-	void exitVarTypeStructDeclaration(@NotNull programParser.VarTypeStructDeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code varTypeStruct}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 */
-	void enterVarTypeStruct(@NotNull programParser.VarTypeStructContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code varTypeStruct}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 */
-	void exitVarTypeStruct(@NotNull programParser.VarTypeStructContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code valueExprWithParent}
 	 * labeled alternative in {@link programParser#value}.
@@ -429,18 +403,6 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitEqExprRelationExpr(@NotNull programParser.EqExprRelationExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code varTypeInt}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 */
-	void enterVarTypeInt(@NotNull programParser.VarTypeIntContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code varTypeInt}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 */
-	void exitVarTypeInt(@NotNull programParser.VarTypeIntContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code valueLiteral}
 	 * labeled alternative in {@link programParser#value}.
 	 * @param ctx the parse tree
@@ -489,18 +451,6 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitParameterTypeInt(@NotNull programParser.ParameterTypeIntContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code varTypeChar}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 */
-	void enterVarTypeChar(@NotNull programParser.VarTypeCharContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code varTypeChar}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 */
-	void exitVarTypeChar(@NotNull programParser.VarTypeCharContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link programParser#literal}.
 	 * @param ctx the parse tree
 	 */
@@ -534,18 +484,6 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMultExprMultDivOp(@NotNull programParser.MultExprMultDivOpContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code declarationVarDeclaration}
-	 * labeled alternative in {@link programParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclarationVarDeclaration(@NotNull programParser.DeclarationVarDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code declarationVarDeclaration}
-	 * labeled alternative in {@link programParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclarationVarDeclaration(@NotNull programParser.DeclarationVarDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link programParser#arg}.
 	 * @param ctx the parse tree
@@ -673,6 +611,16 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitVarDeclarationStructID(@NotNull programParser.VarDeclarationStructIDContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link programParser#declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclaration(@NotNull programParser.DeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link programParser#declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclaration(@NotNull programParser.DeclarationContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code addExprMinusPlusOp}
 	 * labeled alternative in {@link programParser#addExpr}.
 	 * @param ctx the parse tree
@@ -707,18 +655,6 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitPowmod_op(@NotNull programParser.Powmod_opContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code varTypeVoid}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 */
-	void enterVarTypeVoid(@NotNull programParser.VarTypeVoidContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code varTypeVoid}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 */
-	void exitVarTypeVoid(@NotNull programParser.VarTypeVoidContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code paramsParameterWithComma}
 	 * labeled alternative in {@link programParser#params}.
 	 * @param ctx the parse tree
@@ -730,18 +666,6 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParamsParameterWithComma(@NotNull programParser.ParamsParameterWithCommaContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code declarationMethodDeclaration}
-	 * labeled alternative in {@link programParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclarationMethodDeclaration(@NotNull programParser.DeclarationMethodDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code declarationMethodDeclaration}
-	 * labeled alternative in {@link programParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclarationMethodDeclaration(@NotNull programParser.DeclarationMethodDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link programParser#location}.
 	 * @param ctx the parse tree
@@ -798,16 +722,4 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMultdiv_op(@NotNull programParser.Multdiv_opContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code varTypeBoolean}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 */
-	void enterVarTypeBoolean(@NotNull programParser.VarTypeBooleanContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code varTypeBoolean}
-	 * labeled alternative in {@link programParser#varType}.
-	 * @param ctx the parse tree
-	 */
-	void exitVarTypeBoolean(@NotNull programParser.VarTypeBooleanContext ctx);
 }

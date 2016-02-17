@@ -5,15 +5,21 @@
  */
 package compiler;
 
+import GUI.Main;
 import antlr4.programLexer;
 import antlr4.programParser;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -40,6 +46,7 @@ public class ANTGui extends javax.swing.JFrame {
      */
     public ANTGui() {
         initComponents();
+        toolbar();
     }
 
     /**
@@ -52,74 +59,24 @@ public class ANTGui extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea2 = new javax.swing.JTextArea();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jToolBar1 = new javax.swing.JToolBar();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea3 = new javax.swing.JTextArea();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
-        jButton1.setText("Guardar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton3.setText("Generar Parser/Lexer");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(93, 93, 93)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(32, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 42, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Gramática", jPanel1);
 
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
@@ -144,9 +101,9 @@ public class ANTGui extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 721, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 708, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
                     .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -155,30 +112,73 @@ public class ANTGui extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 701, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(76, 76, 76)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(76, 76, 76)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Input", jPanel2);
 
+        jToolBar1.setBackground(new java.awt.Color(204, 204, 204));
+        jToolBar1.setForeground(new java.awt.Color(204, 204, 204));
+        jToolBar1.setRollover(true);
+        jToolBar1.setToolTipText("ToolBar");
+
+        jTextArea3.setColumns(20);
+        jTextArea3.setRows(5);
+        jScrollPane3.setViewportView(jTextArea3);
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1079, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1008, Short.MAX_VALUE)
+                .addGap(37, 37, 37))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 518, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        jTabbedPane1.addTab("tab3", jPanel3);
+        jTabbedPane2.addTab("Log", jPanel3);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1051, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 208, Short.MAX_VALUE)
+        );
+
+        jTabbedPane2.addTab("Gramática", jPanel4);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1051, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 208, Short.MAX_VALUE)
+        );
+
+        jTabbedPane2.addTab("Tabla de Símbolos", jPanel5);
 
         jMenu1.setText("Archivo");
 
@@ -207,21 +207,114 @@ public class ANTGui extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(327, 327, 327)
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1072, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 886, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void toolbar(){
+        
+        
+        //************************ Actions ************************
+        Action newFileButton = new AbstractAction("Nuevo",new ImageIcon("src/resources/new-git.png")) {
+            public void actionPerformed(ActionEvent e) {
+               nuevoArchivo();
+            }
+        };
+        
+        
+        Action openFileAction = new AbstractAction("Abrir",new ImageIcon("src/resources/open-git.png")) {
+            public void actionPerformed(ActionEvent e) {
+               abrirArchivo();
+            }
+        };
+        
+        
+        Action saveAction = new AbstractAction("Guardar",new ImageIcon("src/resources/update-git.png")) {
+            public void actionPerformed(ActionEvent e) {
+               guardarArchivo();
+            }
+        };
+        
+        
+          Action compileAction = new AbstractAction("Compilar", new ImageIcon("src/resources/compile.png")) {
+            public void actionPerformed(ActionEvent e) {
+                compilar();
+            }
+        };
+          
+             Action showTree = new AbstractAction("Arbpñ", new ImageIcon("src/resources/tree-git.png")) {
+            public void actionPerformed(ActionEvent e) {
+                mostrarArbol();
+            }
+        };
+          
+        
+        JButton btnNew = this.jToolBar1.add(newFileButton);
+        btnNew.setToolTipText("Nuevo archivo");
+        
+        this.jToolBar1.add(openFileAction).setToolTipText("Abrir archivo");
+        this.jToolBar1.add(saveAction).setToolTipText("Guardar");
+        this.jToolBar1.addSeparator();
+        this.jToolBar1.addSeparator();
+        this.jToolBar1.addSeparator();
+        this.jToolBar1.addSeparator();
+        this.jToolBar1.addSeparator();
+        this.jToolBar1.addSeparator();
+        this.jToolBar1.addSeparator();
+        this.jToolBar1.addSeparator();
+        this.jToolBar1.addSeparator();
+        this.jToolBar1.addSeparator();
+        this.jToolBar1.addSeparator();
+        this.jToolBar1.addSeparator();
+        this.jToolBar1.addSeparator();
+        this.jToolBar1.add(showTree).setToolTipText("Mostrar Arbol");
+        this.jToolBar1.add(compileAction).setToolTipText("COMPILAR");
+        
+    }
+    
+    public void nuevoArchivo(){
+        
+    }
+    
+    public void guardarArchivo(){
+        
+    }
+    
+    public void abrirArchivo(){
+        
+    }
+    
+    public void compilar(){
+        
+    }
+    
+    public void mostrarArbol(){
+        
+    }
+    
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         
@@ -244,7 +337,7 @@ public class ANTGui extends javax.swing.JFrame {
                 }
             }catch(Exception e){}
             
-            this.jTextArea1.setText(input);
+            //this.jTextArea1.setText(input);
            
         }
         else{
@@ -253,91 +346,6 @@ public class ANTGui extends javax.swing.JFrame {
        
         
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        crearArchivo(this.jTextArea1.getText(),inputGrammar);
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        Tool.main(new String[]{inputGrammar.getAbsolutePath(),"-package","antlr4"});
-        
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-        
-        crearArchivo(this.jTextArea2.getText(),inputFile);
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-        try{
-          
-           //System.out.println(input.toString());
-       
-       CharStream cs =  new ANTLRInputStream(leerArchivo(inputFile));
-       
-       programLexer lexer = new programLexer(cs);
-       lexer.removeErrorListeners();
-        lexer.addErrorListener(DescriptiveErrorListener.INSTANCE);
-       CommonTokenStream tokens = new CommonTokenStream( lexer);
-       programParser parser = new programParser(tokens);
-       ParseTree tree = parser.program();
-       
-       //System.out.println(tokens.getTokens().toString());
-      // System.out.println(parser.program().getText());
-           // System.out.println(result.getParent().getText());
-       
-        
-        parser.removeErrorListeners();
-        parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
-            
-
-        // Specify our entry point
-        programParser.ProgramContext contexto = parser.program();
-        //programParser.DeclarationContext declaration = parser.declaration();
-       
-        
-        // Walk it and attach our listener
-        ParseTreeWalker walker = new ParseTreeWalker();
-      
-        
-       // ANTLRListener listener = new ANTLRListener();
-       // walker.DEFAULT.walk(listener, contexto);
-        Trees.inspect(contexto, parser);
-
-        
-        int errorsCount = parser.getNumberOfSyntaxErrors();
-            System.out.println(errorsCount);
-        if(errorsCount == 0){
-          System.out.println("Parseo Exitoso");
-       
-            JTextArea textArea = new JTextArea("Parseo Exitoso"+ "\n"+
-                                    contexto.toStringTree(parser)
-                                    );
-            JScrollPane scrollPane = new JScrollPane(textArea);  
-            textArea.setLineWrap(true);  
-            textArea.setWrapStyleWord(true); 
-            scrollPane.setPreferredSize( new Dimension( 250, 250 ) );
-            JOptionPane.showMessageDialog(this, scrollPane);
-            
-            Visitor vistor = new Visitor();
-            vistor.visit(tree);
-            //System.out.println(vist.visitProgram(contexto));
-        }
-        
-         } catch (RecognitionException e) {
-            e.printStackTrace();
-            System.out.println("LIl");
-			
-        }
-        
-                
-                
-    }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
@@ -370,6 +378,72 @@ public class ANTGui extends javax.swing.JFrame {
         }
        
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        try{
+
+            //System.out.println(input.toString());
+
+            CharStream cs =  new ANTLRInputStream(leerArchivo(inputFile));
+
+            programLexer lexer = new programLexer(cs);
+            lexer.removeErrorListeners();
+            lexer.addErrorListener(DescriptiveErrorListener.INSTANCE);
+            CommonTokenStream tokens = new CommonTokenStream( lexer);
+            programParser parser = new programParser(tokens);
+            ParseTree tree = parser.program();
+
+            //System.out.println(tokens.getTokens().toString());
+            // System.out.println(parser.program().getText());
+            // System.out.println(result.getParent().getText());
+
+            parser.removeErrorListeners();
+            parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
+
+            // Specify our entry point
+            programParser.ProgramContext contexto = parser.program();
+            //programParser.DeclarationContext declaration = parser.declaration();
+
+            // Walk it and attach our listener
+            ParseTreeWalker walker = new ParseTreeWalker();
+
+            // ANTLRListener listener = new ANTLRListener();
+            // walker.DEFAULT.walk(listener, contexto);
+            Trees.inspect(contexto, parser);
+
+            int errorsCount = parser.getNumberOfSyntaxErrors();
+            System.out.println(errorsCount);
+            if(errorsCount == 0){
+                System.out.println("Parseo Exitoso");
+
+                JTextArea textArea = new JTextArea("Parseo Exitoso"+ "\n"+
+                    contexto.toStringTree(parser)
+                );
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+                scrollPane.setPreferredSize( new Dimension( 250, 250 ) );
+                JOptionPane.showMessageDialog(this, scrollPane);
+
+                Visitor vistor = new Visitor();
+                vistor.visit(tree);
+                //System.out.println(vist.visitProgram(contexto));
+            }
+
+        } catch (RecognitionException e) {
+            e.printStackTrace();
+            System.out.println("LIl");
+
+        }
+
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+
+        crearArchivo(this.jTextArea2.getText(),inputFile);
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     
     public static String leerArchivo(File inputFile){
@@ -469,21 +543,22 @@ public class ANTGui extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextArea jTextArea3;
+    private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 }

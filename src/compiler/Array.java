@@ -15,7 +15,7 @@ public class Array extends Type {
     public int size = 1;
     
     public Array(int sz, Type p) {
-        super("[]", sz * p.tamaño);
+        super("[]", sz * p.getTamaño());
         size = sz;
         of = p;
     }

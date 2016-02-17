@@ -40,9 +40,9 @@ program
 	;
 
 declaration
-	:	structDeclaration	#declarationStructDeclaration
-	|	varDeclaration		#declarationVarDeclaration
-	|	methodDeclaration	#declarationMethodDeclaration
+	:	structDeclaration	
+	|	varDeclaration		
+	|	methodDeclaration	
 	;
 varDeclaration
 	: 	varType ID ';'			#varDeclarationID
@@ -58,13 +58,13 @@ structDeclaration
 	:	STRUCT ID '{' (varDeclarationStruct)* '}'
 	;
 
-varType
-	: 	INT				#varTypeInt
-	|	CHAR				#varTypeChar
-	|	BOOLEAN				#varTypeBoolean
-	|	STRUCT ID			#varTypeStruct
-	|	structDeclaration               #varTypeStructDeclaration
-	| 	VOID				#varTypeVoid
+varType                                         
+	: 	INT				
+	|	CHAR				
+	|	BOOLEAN				
+	|	STRUCT ID			
+	|	structDeclaration              
+	| 	VOID				
 	;
 
 methodDeclaration

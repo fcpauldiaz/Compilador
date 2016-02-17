@@ -137,6 +137,18 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterVarType(@NotNull programParser.VarTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarType(@NotNull programParser.VarTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCond_op_or(@NotNull programParser.Cond_op_orContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -168,18 +180,6 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBlock(@NotNull programParser.BlockContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclarationStructDeclaration(@NotNull programParser.DeclarationStructDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclarationStructDeclaration(@NotNull programParser.DeclarationStructDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -252,30 +252,6 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitVarDeclarationStructArray(@NotNull programParser.VarDeclarationStructArrayContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterVarTypeStructDeclaration(@NotNull programParser.VarTypeStructDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVarTypeStructDeclaration(@NotNull programParser.VarTypeStructDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterVarTypeStruct(@NotNull programParser.VarTypeStructContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVarTypeStruct(@NotNull programParser.VarTypeStructContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -461,18 +437,6 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarTypeInt(@NotNull programParser.VarTypeIntContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVarTypeInt(@NotNull programParser.VarTypeIntContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterValueLiteral(@NotNull programParser.ValueLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -521,18 +485,6 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarTypeChar(@NotNull programParser.VarTypeCharContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVarTypeChar(@NotNull programParser.VarTypeCharContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterLiteral(@NotNull programParser.LiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -564,18 +516,6 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMultExprMultDivOp(@NotNull programParser.MultExprMultDivOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclarationVarDeclaration(@NotNull programParser.DeclarationVarDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclarationVarDeclaration(@NotNull programParser.DeclarationVarDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -713,6 +653,18 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterDeclaration(@NotNull programParser.DeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitDeclaration(@NotNull programParser.DeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAddExprMinusPlusOp(@NotNull programParser.AddExprMinusPlusOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -749,18 +701,6 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVarTypeVoid(@NotNull programParser.VarTypeVoidContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVarTypeVoid(@NotNull programParser.VarTypeVoidContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterParamsParameterWithComma(@NotNull programParser.ParamsParameterWithCommaContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -768,18 +708,6 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParamsParameterWithComma(@NotNull programParser.ParamsParameterWithCommaContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclarationMethodDeclaration(@NotNull programParser.DeclarationMethodDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclarationMethodDeclaration(@NotNull programParser.DeclarationMethodDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -840,18 +768,6 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMultdiv_op(@NotNull programParser.Multdiv_opContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterVarTypeBoolean(@NotNull programParser.VarTypeBooleanContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitVarTypeBoolean(@NotNull programParser.VarTypeBooleanContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

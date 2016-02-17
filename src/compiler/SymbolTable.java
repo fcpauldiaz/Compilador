@@ -7,6 +7,7 @@
 package compiler;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -15,13 +16,18 @@ import java.util.HashMap;
 public class SymbolTable {
     
     
-    private final HashMap tabla;
+    private HashMap<Integer,Symbol> tabla;
     private final SymbolTable ref;
 
     public SymbolTable(SymbolTable ref) {
         this.tabla = new HashMap();
         this.ref = ref;
     }
+    public SymbolTable() {
+        this.tabla = new HashMap();  
+        ref = null;
+    }
+    
     
    /* public void insert(String token, Type t,int b){
         tabla.put(token, new Id(token,t,b));
@@ -43,7 +49,16 @@ public class SymbolTable {
         return ref;
     }
     
+    public void addSymbol(Symbol simbolo){
+        this.tabla.put(simbolo.getId(), simbolo);
+    }
     
-    
+    public void printSymbolTable(){
+        for (Map.Entry<Integer, Symbol> entry : tabla.entrySet()) {
+            int key = entry.getKey();
+            Symbol value = entry.getValue();
+            System.out.println("key, " + key + " value " + value);
+        }
+    }
 
 }

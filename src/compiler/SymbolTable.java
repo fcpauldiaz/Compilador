@@ -16,8 +16,8 @@ import java.util.Map;
 public class SymbolTable {
     
     
-    private HashMap<Integer,Symbol> tabla;
-    private final SymbolTable ref;
+    private final HashMap<Integer,Symbol> tabla;
+    private final SymbolTable ref; //not used
 
     public SymbolTable(SymbolTable ref) {
         this.tabla = new HashMap();
@@ -29,18 +29,7 @@ public class SymbolTable {
     }
     
     
-   /* public void insert(String token, Type t,int b){
-        tabla.put(token, new Id(token,t,b));
-    }
-    
-    public Id get(String token) {
-        for (SymbolTable tab = this ; tab != null ; tab = tab.outer) {
-        Id id = (Id)(tab.table.get(token));
-        if ( id != null ) return id;
-        }
-    return null;
-    }*/
-
+ 
     public HashMap getTabla() {
         return tabla;
     }
@@ -50,7 +39,10 @@ public class SymbolTable {
     }
     
     public void addSymbol(Symbol simbolo){
-        this.tabla.put(simbolo.getId(), simbolo);
+         if (revisarSimbolos(simbolo))
+            this.tabla.put(simbolo.getId(), simbolo);
+         else
+             System.out.println("Variable ya declarada");
     }
     
     public void printSymbolTable(){
@@ -59,6 +51,24 @@ public class SymbolTable {
             Symbol value = entry.getValue();
             System.out.println("key, " + key + " value " + value);
         }
+    }
+    /**
+     * Método para revisar variables repetidas en un mismo ámbito
+     * @param simbolo
+     * @return boolean
+     * TRUE = valido
+     * FALSE = no valido
+     */
+    public boolean revisarSimbolos(Symbol simbolo){
+        for (Map.Entry<Integer, Symbol> entry : tabla.entrySet()) {
+            int key = entry.getKey();
+            Symbol value = entry.getValue();
+            if (value.getAmbito()==simbolo.getAmbito() 
+                && 
+                value.getTipo().getNombreVariable().equals(simbolo.getTipo().getNombreVariable()))
+                return false;
+        }
+        return true;
     }
 
 }

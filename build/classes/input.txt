@@ -2,30 +2,19 @@ class Program {
      
      int z;
     int c;
-
-
+   char a;
+   boolean b;
+   struct F{
+       int b;
+   }
 }
-
 class Program {
      
-    
-       int z;
-       int c;
-
+     int z;
+    int c;
+  char a;
+  boolean b;
+  struct F {
+       int b;
+   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

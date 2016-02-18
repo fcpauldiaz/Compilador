@@ -19,6 +19,12 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatementReturn(@NotNull programParser.StatementReturnContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link programParser#wrapper}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWrapper(@NotNull programParser.WrapperContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link programParser#program}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -157,6 +163,12 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitValueLocation(@NotNull programParser.ValueLocationContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link programParser#varDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarDeclaration(@NotNull programParser.VarDeclarationContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code unaryExprCast}
 	 * labeled alternative in {@link programParser#unaryExpr}.
 	 * @param ctx the parse tree
@@ -204,13 +216,6 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParamsParameter(@NotNull programParser.ParamsParameterContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code varDeclarationArray}
-	 * labeled alternative in {@link programParser#varDeclaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarDeclarationArray(@NotNull programParser.VarDeclarationArrayContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code statementWhile}
 	 * labeled alternative in {@link programParser#statement}.
@@ -411,13 +416,6 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitRelationExprRelOp(@NotNull programParser.RelationExprRelOpContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code varDeclarationID}
-	 * labeled alternative in {@link programParser#varDeclaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarDeclarationID(@NotNull programParser.VarDeclarationIDContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code addExprMultExpr}
 	 * labeled alternative in {@link programParser#addExpr}.

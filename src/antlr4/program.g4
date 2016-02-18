@@ -29,14 +29,15 @@ WS :
 
 COMMENT
     :   ( '//' ~[\r\n]* '\r'? '\n'	
-        | '/*' .*? '*/'			
+        | '/*' .*? '*/'	
         ) -> skip
     ;								
 
 //************** PARSER SPECIFICATION **************
 
+
 program
-	: 'class' 'Program' '{' (declaration)* '}' 
+	: 'class' 'Program' '{' (declaration)* '}'
 	;
 
 declaration
@@ -45,8 +46,9 @@ declaration
 	|	methodDeclaration	
 	;
 varDeclaration
-	: 	varType ID ';'			#varDeclarationID
-	| 	varType ID '[' NUM ']' ';'	#varDeclarationArray
+	: 	varType ID ';'			
+	| 	varType ID '[' NUM ']' ';'        
+        
 	;
 
 varDeclarationStruct

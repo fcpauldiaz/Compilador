@@ -35,39 +35,38 @@ public class Visitor<T> extends programBaseVisitor {
        }
        
         
-        
         tablaSimbolos.printSymbolTable();
         return (T)"";
     }
     
     @Override
     public T visitStructDeclaration(programParser.StructDeclarationContext ctx){
-        
+           
         
         return (T) "s";
     }
     
     @Override
     public T visitDeclaration(programParser.DeclarationContext ctx){
-        
-        
-        
-        return (T)"T";
+        System.out.println("cantidad declaration: " + ctx.getChildCount());
+        for (int i = 0;i<ctx.getChildCount();i++){
+            this.tablaSimbolos.addSymbol((Symbol)this.visit(ctx.getChild(i)));
+        }
+        return (T)"void";
     }
     
+    
+    
     @Override
-    public T visitVarDeclarationID(programParser.VarDeclarationIDContext ctx){
+    public T visitVarDeclaration(programParser.VarDeclarationContext ctx){
         System.out.println(ctx.getChildCount()+"cantidad var declaration");
-        System.out.println(ctx.toStringTree());
         
-        Symbol simbolo = new Symbol();
-        //ambito,id
-        Type tipo = new Type();
-        tipo.setNombre(ctx.getChild(0).getText());
-        tipo.setNombre_tipo((String)this.visit(ctx.getChild(0)));
-        simbolo.setAmbito(ambito);
-        simbolo.setId(++autoincrement);
         
+        
+        //param1 = nombre variable
+        //param2 = nombre tipo
+        Type tipo = new Type(ctx.getChild(1).getText(),ctx.getChild(0).getText());
+        Symbol simbolo = new Symbol(++autoincrement,ambito,tipo);
        
         
         return (T)simbolo;

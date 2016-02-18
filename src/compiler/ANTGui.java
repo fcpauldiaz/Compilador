@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -26,6 +28,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import org.antlr.v4.Tool;
 import org.antlr.v4.gui.Trees;
+import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -332,7 +335,7 @@ public class ANTGui extends javax.swing.JFrame {
                
                while ((sCurrentLine = br.readLine()) != null) {
                     
-                    input+=sCurrentLine+"\r\n";
+                    input+=sCurrentLine+"\n";
                 
                 }
             }catch(Exception e){}
@@ -364,13 +367,13 @@ public class ANTGui extends javax.swing.JFrame {
                
                while ((sCurrentLine = br.readLine()) != null) {
                     
-                    input+=sCurrentLine+"\r\n";
+                    input+=sCurrentLine+"\n";
                 
                 }
             }catch(Exception e){}
             
             this.jTextArea2.setText(input);
-            this.jTabbedPane1.setSelectedIndex(1);
+            
            
         }
         else{
@@ -384,8 +387,8 @@ public class ANTGui extends javax.swing.JFrame {
         try{
 
             //System.out.println(input.toString());
-
-            CharStream cs =  new ANTLRInputStream(leerArchivo(inputFile));
+             
+            CharStream cs =  new ANTLRFileStream((inputFile.getPath()));
 
             programLexer lexer = new programLexer(cs);
             lexer.removeErrorListeners();
@@ -406,7 +409,7 @@ public class ANTGui extends javax.swing.JFrame {
             //programParser.DeclarationContext declaration = parser.declaration();
 
             // Walk it and attach our listener
-            ParseTreeWalker walker = new ParseTreeWalker();
+            //ParseTreeWalker walker = new ParseTreeWalker();
 
             // ANTLRListener listener = new ANTLRListener();
             // walker.DEFAULT.walk(listener, contexto);
@@ -432,9 +435,10 @@ public class ANTGui extends javax.swing.JFrame {
             }
 
         } catch (RecognitionException e) {
-            e.printStackTrace();
             System.out.println("LIl");
 
+        } catch (IOException ex) {
+            Logger.getLogger(ANTGui.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_jButton5ActionPerformed
@@ -463,13 +467,13 @@ public class ANTGui extends javax.swing.JFrame {
                
                while ((sCurrentLine = br.readLine()) != null) {
                     
-                    input+=sCurrentLine+"\r\n";
+                    input+=sCurrentLine+"\n";
                 
                 }
              
                 
-        input+="\r\n";
-                
+        input+="\n";
+              
         return input;
         } catch (IOException e) {
                

@@ -24,7 +24,7 @@ public class SymbolTable {
         this.ref = ref;
     }
     public SymbolTable() {
-        this.tabla = new HashMap();  
+        this.tabla = new HashMap(100);  
         ref = null;
     }
     
@@ -63,6 +63,7 @@ public class SymbolTable {
         for (Map.Entry<Integer, Symbol> entry : tabla.entrySet()) {
             int key = entry.getKey();
             Symbol value = entry.getValue();
+           
             if (value.getAmbito()==simbolo.getAmbito() 
                 && 
                 value.getTipo().getNombreVariable().equals(simbolo.getTipo().getNombreVariable()))

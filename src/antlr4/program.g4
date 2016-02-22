@@ -46,18 +46,14 @@ declaration
 	|	methodDeclaration	
 	;
 varDeclaration
-	: 	varType ID ';'			
-	| 	varType ID '[' NUM ']' ';'        
+	: 	varType ID ';'			#varDeclarationID
+	| 	varType ID '[' NUM ']' ';'      #varDeclarationArray
         
 	;
 
-varDeclarationStruct
-	: 	varType ID ';'			#varDeclarationStructID
-	| 	varType ID '[' NUM ']' ';'	#varDeclarationStructArray
-	;
 
 structDeclaration
-	:	STRUCT ID '{' (varDeclarationStruct)* '}'
+	:	STRUCT ID '{' (varDeclaration)* '}'
 	;
 
 varType                                         
@@ -70,20 +66,16 @@ varType
 	;
 
 methodDeclaration
-	:	methodType ID '(' (params | ) ')' block
+	:	methodType ID '('  (parameter (',' parameter)*)* ')' block
 	;
 
 	
-params
-	:	params ',' parameter	#paramsParameterWithComma
-	|	parameter		#paramsParameter
-	;
 	
 methodType
-	:	INT				#methodTypeInt
-	|	CHAR				#methodTypeChar
-	|	BOOLEAN				#methodTypeBoolean
-	|	VOID				#methodTypeVoid
+	:	INT				
+	|	CHAR				
+	|	BOOLEAN				
+	|	VOID				
 	;
 
 parameter
@@ -92,14 +84,14 @@ parameter
 	;
 	
 parameterType
-	:	INT				#parameterTypeInt
-	|	CHAR				#parameterTypeChar
-	|	BOOLEAN				#parameterTypeBoolean
+	:	INT				
+	|	CHAR				
+	|	BOOLEAN				
 	;
 	
 
 block
-	:	'{' (varDeclaration | statement)* '}'
+	:	'{' (varDeclaration)*  (statement)* '}'
 	;
 
 statement

@@ -17,11 +17,17 @@ public class MethodType<T> extends Type {
     
     private ArrayList parameters;
     
-
     public MethodType(String nombreVar, String literal_tipo){
         super(nombreVar, literal_tipo);
+        this.parameters = new ArrayList();
+       
         
     }
+
+    public MethodType() {
+        this.parameters = new ArrayList();
+    }
+    
     
     public void addParameter(T param){
         parameters.add(param);
@@ -39,6 +45,13 @@ public class MethodType<T> extends Type {
             return true;
         return false;
     }
+
+    @Override
+    public String toString() {
+        return "MethodType{" + "parameters=" + parameters + ", literal_tipo= " + this.getLiteralTipo() + ", nombre= " + this.getNombreVariable()+'}';
+    }
+
+    
     
     
     

@@ -431,6 +431,9 @@ public class ANTGui extends javax.swing.JFrame {
 
                 Visitor vistor = new Visitor();
                 vistor.visit(tree);
+               
+                //regresar el ambito actual al default
+                Scope.ambitoActual = 0;
                 //System.out.println(vist.visitProgram(contexto));
             }
 

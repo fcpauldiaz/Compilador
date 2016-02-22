@@ -1,42 +1,37 @@
 class Program {
-     
-     int z;
-    int c;
-   char a;
-   boolean b;
-  struct x { 
-   int a;
- }
- int asdf [10];
-  int carro(int h, int j){
-    boolean test;
-    char pepe;
-}
-if (j<i){
+     	int b;
+	void main(int a){
+ 	if (b == 1){
+	int b;
+	}
+	if (c==1){
+		int d;
+	}
+	while (c==2){
+		int d;
+	}
+	}
+boolean as;
+	
 
-}
 
 }
 class Program {
-     
-     int z;
-    int c;
-   char a;
-   boolean b;
-struct x { 
-   int a;
- }
- int asdf [10];
-int carro(int h, int j){
- boolean test;
- char pepe;
-}
-
-if (j<i){
-
-}
+     	int b;
+	void main(int a){
+ 	if (b == 1){
+	int b;
+	}
+	if (c==1){
+		int d;
+	}
+	while (c==2){
+		int d;
+	}
+	}
+	boolean as;
+	
 
 }
-
 
 

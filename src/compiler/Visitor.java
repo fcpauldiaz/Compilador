@@ -178,6 +178,8 @@ public class Visitor<T> extends programBaseVisitor {
                 
             }
       }
+   
+      
   
       return (T)null;
     }
@@ -208,4 +210,44 @@ public class Visitor<T> extends programBaseVisitor {
         return (T)ctx.getText();
         
     }
+
+    @Override
+    public T visitStatementIF(programParser.StatementIFContext ctx) {
+    
+        Scope scopeIF = new Scope();
+        
+        scopeActual.addSiguiente(scopeIF);
+        scopeIF.setAnterior(scopeActual);
+        scopeActual = scopeIF;
+        
+        for (int i = 0;i<ctx.getChildCount();i++){
+            this.visit(ctx.getChild(i));
+        }
+         scopeActual = scopeActual.getAnterior();
+         
+       
+        return (T)null;
+    }
+
+    @Override
+    public T visitStatementWhile(programParser.StatementWhileContext ctx) {
+       
+        
+        Scope scopeWhile = new Scope();
+        
+        scopeActual.addSiguiente(scopeWhile);
+        scopeWhile.setAnterior(scopeActual);
+        scopeActual = scopeWhile;
+        
+        for (int i = 0;i<ctx.getChildCount();i++){
+            this.visit(ctx.getChild(i));
+        }
+         scopeActual = scopeActual.getAnterior();
+         
+      
+        return (T)null;
+    }
+
+    
+    
 }

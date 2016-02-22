@@ -91,11 +91,11 @@ parameterType
 	
 
 block
-	:	'{' (varDeclaration)*  (statement)* '}'
+	:	'{' (varDeclaration|statement)* '}'
 	;
 
 statement
-	:	IF '(' expression ')' block (ELSE block)?	#statementIF
+	:	'if' '(' expression ')' block (ELSE block)?	#statementIF
 	|	WHILE '(' expression ')' block			#statementWhile
 	|	'return' (expression | ) ';'			#statementReturn
 	|	methodCall ';'					#statementMethodCall

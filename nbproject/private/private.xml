@@ -10,7 +10,6 @@
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/GUI/TablePanel.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/GUI/SymbolTable.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/ANTGui.java</file>
-            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/ArrayType.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/GUI/TreePanel.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/GUI/StructTable.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/GUI/ColorPane.java</file>
@@ -34,6 +33,7 @@
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/GUI/Main.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/DescriptiveErrorListener.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Visitor.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Scope.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/GUI/Structure.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/SymbolTable.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/GUI/Type.java</file>

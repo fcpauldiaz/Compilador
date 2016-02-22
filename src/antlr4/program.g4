@@ -95,7 +95,7 @@ block
 	;
 
 statement
-	:	'if' '(' expression ')' block (ELSE block)?	#statementIF
+	:	'if' '(' expression ')' block (statementElse)?	#statementIF
 	|	WHILE '(' expression ')' block			#statementWhile
 	|	'return' (expression | ) ';'			#statementReturn
 	|	methodCall ';'					#statementMethodCall
@@ -103,6 +103,11 @@ statement
 	|	location '=' expression ';'			#statementLocation
 	|	(expression)?';'				#statementExpression
 	;
+
+statementElse
+    :
+        ELSE block
+    ;
 	
 location
 	:	(ID | ID '[' expression ']') ('.' locationMember)?

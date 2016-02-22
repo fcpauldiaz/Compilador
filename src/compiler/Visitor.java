@@ -248,6 +248,22 @@ public class Visitor<T> extends programBaseVisitor {
         return (T)null;
     }
 
+    @Override
+    public T visitStatementElse(programParser.StatementElseContext ctx) {
+         Scope scopeElse = new Scope();
+        
+        scopeActual.addSiguiente(scopeElse);
+        scopeElse.setAnterior(scopeActual);
+        scopeActual = scopeElse;
+        
+        for (int i = 0;i<ctx.getChildCount();i++){
+            this.visit(ctx.getChild(i));
+        }
+         scopeActual = scopeActual.getAnterior();
+         
+      
+        return (T)null;
+    }
     
     
 }

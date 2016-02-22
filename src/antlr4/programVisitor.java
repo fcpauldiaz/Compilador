@@ -366,4 +366,10 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMultdiv_op(@NotNull programParser.Multdiv_opContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link programParser#statementElse}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatementElse(@NotNull programParser.StatementElseContext ctx);
 }

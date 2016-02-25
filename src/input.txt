@@ -1,15 +1,21 @@
 class Program {
      	int b;
+	int c;
+	int d;
+	char p;
 	void main(int a){
+	b = 1;
+	c = b;
+	d = c;
+	p = 'a';
  	if (b == 1){
 	int b;
 	}
 	if (c==1){
 		int d;
 	}
-	else{
-		int f;
-	}
+	boolean proof;
+	
 	while (c==2){
 		int d;
 	}
@@ -21,16 +27,22 @@ boolean as;
 }
 class Program {
      	int b;
+	int c;
+	int d;
+	char p;
 	void main(int a){
+	b = 1;
+	c = b;
+	d = c;
+	p = 'a';
  	if (b == 1){
 	int b;
 	}
 	if (c==1){
 		int d;
 	}
-	else{
-		int f;
-	}
+	boolean proof;
+	
 	while (c==2){
 		int d;
 	}

@@ -63,7 +63,6 @@ public class SymbolTable {
         for (Map.Entry<Integer, Symbol> entry : tabla.entrySet()) {
             int key = entry.getKey();
             Symbol value = entry.getValue();
-           
             if (value.getAmbito()==simbolo.getAmbito() 
                 && 
                 value.getTipo().getNombreVariable().equals(simbolo.getTipo().getNombreVariable()))
@@ -72,4 +71,40 @@ public class SymbolTable {
         return true;
     }
 
+    public boolean revisarNombreVar(String nombreVar, Scope ambitoActual){
+        Scope scope = ambitoActual;
+        while (scope!=null){
+            for (Map.Entry<Integer, Symbol> entry : tabla.entrySet()) {
+                int key = entry.getKey();
+                Symbol value = entry.getValue();
+                String varName = value.getTipo().getNombreVariable();
+                int ambito = value.getAmbito();
+                if (varName.equals(nombreVar)
+                    && 
+                   ambito == scope.getIdScope())
+                    return true;
+            }
+            scope = scope.getAnterior();
+        }
+        return false;
+    }
+    
+    public Symbol showSymbol(String nombreVar,Scope ambitoActual){
+         Scope scope = ambitoActual;
+        while (scope!=null){
+            for (Map.Entry<Integer, Symbol> entry : tabla.entrySet()) {
+                int key = entry.getKey();
+                Symbol value = entry.getValue();
+                String varName = value.getTipo().getNombreVariable();
+                int ambito = value.getAmbito();
+                if (varName.equals(nombreVar)
+                    && 
+                   ambito == scope.getIdScope())
+                    return value;
+            }
+            scope = scope.getAnterior();
+        }
+        return null;
+    
+    }
 }

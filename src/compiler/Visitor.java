@@ -8,9 +8,6 @@ package compiler;
 
 import antlr4.programBaseVisitor;
 import antlr4.programParser;
-import java.util.ArrayList;
-import java.util.Stack;
-import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 
 /**
@@ -25,11 +22,9 @@ public class Visitor<T> extends programBaseVisitor {
     private final SymbolTable tablaSimbolos;
     public int autoincrement = 0;
     public Scope scopeActual;
+    public static boolean verificacion = true;
     
-    public ParseTreeProperty<Scope> scopes = new ParseTreeProperty<>();
-   // public GlobalScope globals;
-   // public Scope currentScope; //
-    
+   
     
     
     
@@ -179,8 +174,6 @@ public class Visitor<T> extends programBaseVisitor {
             }
       }
    
-      
-  
       return (T)null;
     }
     
@@ -196,12 +189,6 @@ public class Visitor<T> extends programBaseVisitor {
 
  
 
-    
-   
-    
-    
-    
-    
     
     @Override
     public T visitVarType(programParser.VarTypeContext ctx){
@@ -264,6 +251,93 @@ public class Visitor<T> extends programBaseVisitor {
       
         return (T)null;
     }
+
+    @Override
+    public T visitLocation(programParser.LocationContext ctx) {
+        return (T)ctx.getChild(0).getText(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitStatementLocation(programParser.StatementLocationContext ctx) {
+        
+        //aqui tengo el nombre de la variable
+        String nombreVar = (String)this.visit(ctx.getChild(0));
+        
+        //ahora verifico que ya esté declarada.
+        boolean encontrado = this.tablaSimbolos.revisarNombreVar(nombreVar, scopeActual);
+        System.out.println("");
+        if (!encontrado){
+            System.out.println("Variable no declarada: línea " + ctx.getStart().getLine()+
+                    " columna: " + ctx.getStart().getCharPositionInLine());
+        }
+        System.out.println("");
+        if (encontrado){
+            Symbol simboloEncontrado = this.tablaSimbolos.showSymbol(nombreVar, scopeActual);
+
+            String tipo =   simboloEncontrado.getTipo().getLiteralTipo();
+            String tipoDeclarado =  (String)this.visit(ctx.getChild(2));
+                System.out.println(tipo);
+                System.out.println(tipoDeclarado);
+            if (tipoDeclarado.contains("literal")){
+                if (tipoDeclarado.contains(tipo))
+                        System.out.println("Tipo Correcto!");
+                else{
+                        System.out.println("Tipo incorrecto");
+                        Visitor.verificacion = false;
+                }
+            }
+            else{
+                String search = buscarRecursivo(tipoDeclarado,tipo);
+                if (search.contains(tipo)){
+                    System.out.println("Tipo Correcto");
+                }
+                else{
+                    System.out.println("Tipo Incorrecto");
+                }
+                
+            }
+        }
+        
+        //ahora reviso que tenga el tipo correcto.
+        
+        
+        return null; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String buscarRecursivo(String nombreVar,String tipo){
+         boolean encontrado = this.tablaSimbolos.revisarNombreVar(nombreVar, scopeActual);
+        System.out.println("");
+        if (!encontrado){
+            /*System.out.println("Variable no declarada: línea " + ctx.getStart().getLine()+
+                    " columna: " + ctx.getStart().getCharPositionInLine());*/
+        }
+        System.out.println("");
+        if (encontrado){
+            Symbol simboloEncontrado = this.tablaSimbolos.showSymbol(nombreVar, scopeActual);
+            return simboloEncontrado.getTipo().getLiteralTipo();
+           
+              
+         }
+        
+        return null;
+    }
+    
+    @Override
+    public Object visitInt_literal(programParser.Int_literalContext ctx) {
+        return ANTGui.ruleNames[ctx.getRuleContext().getRuleIndex()];
+        
+    }
+
+    @Override
+    public Object visitChar_literal(programParser.Char_literalContext ctx) {
+       return ANTGui.ruleNames[ctx.getRuleContext().getRuleIndex()];
+    }
+
+    @Override
+    public Object visitBool_literal(programParser.Bool_literalContext ctx) {
+        return ANTGui.ruleNames[ctx.getRuleContext().getRuleIndex()];
+    }
+    
     
     
 }

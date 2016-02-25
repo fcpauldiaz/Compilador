@@ -71,9 +71,7 @@ public class Type {
         this.literal_tipo = nombre_tipo;
     }
 
-    public String getLiteral_tipo() {
-        return literal_tipo;
-    }
+   
 
     public int getTamaño() {
         return tamaño;

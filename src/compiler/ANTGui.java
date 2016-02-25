@@ -44,6 +44,7 @@ public class ANTGui extends javax.swing.JFrame {
     
     private File inputFile;
     private File inputGrammar;
+    public static String[] ruleNames;
     /**
      * Creates new form ANTGui
      */
@@ -406,6 +407,7 @@ public class ANTGui extends javax.swing.JFrame {
 
             // Specify our entry point
             programParser.ProgramContext contexto = parser.program();
+            ruleNames = parser.getRuleNames();
             //programParser.DeclarationContext declaration = parser.declaration();
 
             // Walk it and attach our listener

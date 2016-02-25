@@ -26,6 +26,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import org.antlr.v4.Tool;
 import org.antlr.v4.gui.Trees;
 import org.antlr.v4.runtime.ANTLRFileStream;
@@ -45,12 +46,22 @@ public class ANTGui extends javax.swing.JFrame {
     private File inputFile;
     private File inputGrammar;
     public static String[] ruleNames;
+    private programParser parser;
+    private programParser.ProgramContext contexto;
     /**
      * Creates new form ANTGui
      */
     public ANTGui() {
         initComponents();
         toolbar();
+        lines();
+        
+    }
+    
+    public void lines(){
+   
+    TextLineNumber tln = new TextLineNumber(this.jTextArea2);
+    this.jScrollPane2.setRowHeaderView(tln);
     }
 
     /**
@@ -269,7 +280,7 @@ public class ANTGui extends javax.swing.JFrame {
             }
         };
           
-             Action showTree = new AbstractAction("Arbpñ", new ImageIcon("src/resources/tree-git.png")) {
+             Action showTree = new AbstractAction("Arbol", new ImageIcon("src/resources/tree-git.png")) {
             public void actionPerformed(ActionEvent e) {
                 mostrarArbol();
             }
@@ -304,18 +315,95 @@ public class ANTGui extends javax.swing.JFrame {
     }
     
     public void guardarArchivo(){
-        
+       crearArchivo(this.jTextArea2.getText(),inputFile);
     }
     
     public void abrirArchivo(){
-        
+               JFileChooser fc = new JFileChooser();
+        int returnVal = fc.showOpenDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            inputFile = fc.getSelectedFile();
+            //This is where a real application would open the file.
+            String dir = inputFile.toString();
+            String input="";
+            try{
+            BufferedReader br = new BufferedReader(new FileReader(inputFile.getAbsoluteFile()));
+            String sCurrentLine;
+            
+               
+               while ((sCurrentLine = br.readLine()) != null) {
+                    
+                    input+=sCurrentLine+"\n";
+                
+                }
+            }catch(Exception e){}
+            
+            this.jTextArea2.setText(input);
+            
+           
+        }
+        else{
+            System.out.println("Error al abrir el archivo");
+        }
+       
     }
     
     public void compilar(){
-        
+          try{
+
+            
+             
+            CharStream cs =  new ANTLRFileStream((inputFile.getPath()));
+
+            programLexer lexer = new programLexer(cs);
+            lexer.removeErrorListeners();
+            lexer.addErrorListener(DescriptiveErrorListener.INSTANCE);
+            CommonTokenStream tokens = new CommonTokenStream( lexer);
+             parser = new programParser(tokens);
+            ParseTree tree = parser.program();
+
+            
+
+            parser.removeErrorListeners();
+            parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
+
+            // Specify our entry point
+            contexto = parser.program();
+            ruleNames = parser.getRuleNames();
+            
+
+            int errorsCount = parser.getNumberOfSyntaxErrors();
+            System.out.println(errorsCount);
+            if(errorsCount == 0){
+                System.out.println("Parseo Exitoso");
+
+                JTextArea textArea = new JTextArea("Parseo Exitoso"+ "\n"+
+                    contexto.toStringTree(parser)
+                );
+                JScrollPane scrollPane = new JScrollPane(textArea);
+                textArea.setLineWrap(true);
+                textArea.setWrapStyleWord(true);
+                scrollPane.setPreferredSize( new Dimension( 250, 250 ) );
+                JOptionPane.showMessageDialog(this, scrollPane);
+
+                Visitor vistor = new Visitor();
+                vistor.visit(tree);
+               
+                //regresar el ambito actual al default
+                Scope.ambitoActual = 0;
+                //System.out.println(vist.visitProgram(contexto));
+            }
+
+        } catch (RecognitionException e) {
+            System.out.println("LIl");
+
+        } catch (IOException ex) {
+            Logger.getLogger(ANTGui.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void mostrarArbol(){
+        Trees.inspect(contexto, parser);
         
     }
     
@@ -354,7 +442,7 @@ public class ANTGui extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         
-          JFileChooser fc = new JFileChooser();
+        JFileChooser fc = new JFileChooser();
         int returnVal = fc.showOpenDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             inputFile = fc.getSelectedFile();
@@ -385,66 +473,7 @@ public class ANTGui extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        try{
-
-            //System.out.println(input.toString());
-             
-            CharStream cs =  new ANTLRFileStream((inputFile.getPath()));
-
-            programLexer lexer = new programLexer(cs);
-            lexer.removeErrorListeners();
-            lexer.addErrorListener(DescriptiveErrorListener.INSTANCE);
-            CommonTokenStream tokens = new CommonTokenStream( lexer);
-            programParser parser = new programParser(tokens);
-            ParseTree tree = parser.program();
-
-            //System.out.println(tokens.getTokens().toString());
-            // System.out.println(parser.program().getText());
-            // System.out.println(result.getParent().getText());
-
-            parser.removeErrorListeners();
-            parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
-
-            // Specify our entry point
-            programParser.ProgramContext contexto = parser.program();
-            ruleNames = parser.getRuleNames();
-            //programParser.DeclarationContext declaration = parser.declaration();
-
-            // Walk it and attach our listener
-            //ParseTreeWalker walker = new ParseTreeWalker();
-
-            // ANTLRListener listener = new ANTLRListener();
-            // walker.DEFAULT.walk(listener, contexto);
-            Trees.inspect(contexto, parser);
-
-            int errorsCount = parser.getNumberOfSyntaxErrors();
-            System.out.println(errorsCount);
-            if(errorsCount == 0){
-                System.out.println("Parseo Exitoso");
-
-                JTextArea textArea = new JTextArea("Parseo Exitoso"+ "\n"+
-                    contexto.toStringTree(parser)
-                );
-                JScrollPane scrollPane = new JScrollPane(textArea);
-                textArea.setLineWrap(true);
-                textArea.setWrapStyleWord(true);
-                scrollPane.setPreferredSize( new Dimension( 250, 250 ) );
-                JOptionPane.showMessageDialog(this, scrollPane);
-
-                Visitor vistor = new Visitor();
-                vistor.visit(tree);
-               
-                //regresar el ambito actual al default
-                Scope.ambitoActual = 0;
-                //System.out.println(vist.visitProgram(contexto));
-            }
-
-        } catch (RecognitionException e) {
-            System.out.println("LIl");
-
-        } catch (IOException ex) {
-            Logger.getLogger(ANTGui.class.getName()).log(Level.SEVERE, null, ex);
-        }
+      
 
     }//GEN-LAST:event_jButton5ActionPerformed
 

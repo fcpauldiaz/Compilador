@@ -319,7 +319,7 @@ public class Visitor<T> extends programBaseVisitor {
               
          }
         
-        return null;
+        return "";
     }
     
     @Override

@@ -10,19 +10,19 @@ package compiler;
  *
  * @author Pablo
  */
-public class Symbol {
+public class Symbol<T> {
     
     private int id;
     private int ambito;
-    private Type tipo;
+    private T tipo;
 
-    public Symbol(int id, int ambito, Type tipo) {
+    public Symbol(int id, int ambito, T tipo) {
         this.id = id;
         this.ambito = ambito;
         this.tipo = tipo;
     }
 
-    public Symbol(int ambito, Type tipo) {
+    public Symbol(int ambito, T tipo) {
         this.ambito = ambito;
         this.tipo = tipo;
     }
@@ -48,11 +48,11 @@ public class Symbol {
         this.ambito = ambito;
     }
 
-    public Type getTipo() {
+    public T getTipo() {
         return tipo;
     }
 
-    public void setTipo(Type tipo) {
+    public void setTipo(T tipo) {
         this.tipo = tipo;
     }
 

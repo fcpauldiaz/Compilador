@@ -31,16 +31,6 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitProgram(@NotNull programParser.ProgramContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link programParser#bool_literal}.
-	 * @param ctx the parse tree
-	 */
-	void enterBool_literal(@NotNull programParser.Bool_literalContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link programParser#bool_literal}.
-	 * @param ctx the parse tree
-	 */
-	void exitBool_literal(@NotNull programParser.Bool_literalContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code unaryExprNot}
 	 * labeled alternative in {@link programParser#unaryExpr}.
 	 * @param ctx the parse tree
@@ -52,18 +42,6 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitUnaryExprNot(@NotNull programParser.UnaryExprNotContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code relationExprAddExpr}
-	 * labeled alternative in {@link programParser#relationExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterRelationExprAddExpr(@NotNull programParser.RelationExprAddExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code relationExprAddExpr}
-	 * labeled alternative in {@link programParser#relationExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitRelationExprAddExpr(@NotNull programParser.RelationExprAddExprContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link programParser#rel_op}.
 	 * @param ctx the parse tree
@@ -379,6 +357,16 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitStatementBlock(@NotNull programParser.StatementBlockContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link programParser#boolean_literal}.
+	 * @param ctx the parse tree
+	 */
+	void enterBoolean_literal(@NotNull programParser.Boolean_literalContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link programParser#boolean_literal}.
+	 * @param ctx the parse tree
+	 */
+	void exitBoolean_literal(@NotNull programParser.Boolean_literalContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link programParser#literal}.
 	 * @param ctx the parse tree
 	 */
@@ -457,6 +445,16 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitStatementIF(@NotNull programParser.StatementIFContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link programParser#relationExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterRelationExpr(@NotNull programParser.RelationExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link programParser#relationExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitRelationExpr(@NotNull programParser.RelationExprContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code eqExprEqOp}
 	 * labeled alternative in {@link programParser#eqExpr}.
 	 * @param ctx the parse tree
@@ -498,6 +496,16 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLocationMember(@NotNull programParser.LocationMemberContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link programParser#locationArray}.
+	 * @param ctx the parse tree
+	 */
+	void enterLocationArray(@NotNull programParser.LocationArrayContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link programParser#locationArray}.
+	 * @param ctx the parse tree
+	 */
+	void exitLocationArray(@NotNull programParser.LocationArrayContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code statementExpression}
 	 * labeled alternative in {@link programParser#statement}.
@@ -564,18 +572,6 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLocation(@NotNull programParser.LocationContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code relationExprRelOp}
-	 * labeled alternative in {@link programParser#relationExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterRelationExprRelOp(@NotNull programParser.RelationExprRelOpContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code relationExprRelOp}
-	 * labeled alternative in {@link programParser#relationExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitRelationExprRelOp(@NotNull programParser.RelationExprRelOpContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code varDeclarationID}
 	 * labeled alternative in {@link programParser#varDeclaration}.

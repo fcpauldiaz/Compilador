@@ -25,25 +25,12 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProgram(@NotNull programParser.ProgramContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link programParser#bool_literal}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBool_literal(@NotNull programParser.Bool_literalContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code unaryExprNot}
 	 * labeled alternative in {@link programParser#unaryExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitUnaryExprNot(@NotNull programParser.UnaryExprNotContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code relationExprAddExpr}
-	 * labeled alternative in {@link programParser#relationExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRelationExprAddExpr(@NotNull programParser.RelationExprAddExprContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link programParser#rel_op}.
 	 * @param ctx the parse tree
@@ -230,6 +217,12 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatementBlock(@NotNull programParser.StatementBlockContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link programParser#boolean_literal}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBoolean_literal(@NotNull programParser.Boolean_literalContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link programParser#literal}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -276,6 +269,12 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatementIF(@NotNull programParser.StatementIFContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link programParser#relationExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRelationExpr(@NotNull programParser.RelationExprContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code eqExprEqOp}
 	 * labeled alternative in {@link programParser#eqExpr}.
 	 * @param ctx the parse tree
@@ -300,6 +299,12 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLocationMember(@NotNull programParser.LocationMemberContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link programParser#locationArray}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLocationArray(@NotNull programParser.LocationArrayContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code statementExpression}
 	 * labeled alternative in {@link programParser#statement}.
@@ -339,13 +344,6 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLocation(@NotNull programParser.LocationContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code relationExprRelOp}
-	 * labeled alternative in {@link programParser#relationExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRelationExprRelOp(@NotNull programParser.RelationExprRelOpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code varDeclarationID}
 	 * labeled alternative in {@link programParser#varDeclaration}.

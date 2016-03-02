@@ -41,18 +41,6 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBool_literal(@NotNull programParser.Bool_literalContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitBool_literal(@NotNull programParser.Bool_literalContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterUnaryExprNot(@NotNull programParser.UnaryExprNotContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -60,18 +48,6 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitUnaryExprNot(@NotNull programParser.UnaryExprNotContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRelationExprAddExpr(@NotNull programParser.RelationExprAddExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRelationExprAddExpr(@NotNull programParser.RelationExprAddExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -413,6 +389,18 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBoolean_literal(@NotNull programParser.Boolean_literalContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBoolean_literal(@NotNull programParser.Boolean_literalContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLiteral(@NotNull programParser.LiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -497,6 +485,18 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterRelationExpr(@NotNull programParser.RelationExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRelationExpr(@NotNull programParser.RelationExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterEqExprEqOp(@NotNull programParser.EqExprEqOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -540,6 +540,18 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLocationMember(@NotNull programParser.LocationMemberContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLocationArray(@NotNull programParser.LocationArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLocationArray(@NotNull programParser.LocationArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -612,18 +624,6 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLocation(@NotNull programParser.LocationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterRelationExprRelOp(@NotNull programParser.RelationExprRelOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitRelationExprRelOp(@NotNull programParser.RelationExprRelOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

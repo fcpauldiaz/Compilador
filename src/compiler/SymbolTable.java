@@ -6,6 +6,7 @@
 
 package compiler;
 
+import static compiler.ANTGui.jTextArea3;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,11 +39,13 @@ public class SymbolTable {
         return ref;
     }
     
-    public void addSymbol(Symbol simbolo){
+    public void addSymbol(Symbol simbolo, int lineaActual, int columnaActual){
          if (revisarSimbolos(simbolo))
             this.tabla.put(simbolo.getId(), simbolo);
-         else
-             System.out.println("Variable ya declarada");
+         else{
+            System.out.println("Variable ya declarada");
+            agregarLog("Error: Variable ya declarada " + ((Type)(simbolo.getTipo())).getNombreVariable(), lineaActual, columnaActual);
+        }
     }
     
     public void printSymbolTable(){
@@ -65,7 +68,7 @@ public class SymbolTable {
             Symbol value = entry.getValue();
             if (value.getAmbito()==simbolo.getAmbito() 
                 && 
-                value.getTipo().getNombreVariable().equals(simbolo.getTipo().getNombreVariable()))
+                ((Type)value.getTipo()).getNombreVariable().equals(((Type)simbolo.getTipo()).getNombreVariable()))
                 return false;
         }
         return true;
@@ -77,7 +80,7 @@ public class SymbolTable {
             for (Map.Entry<Integer, Symbol> entry : tabla.entrySet()) {
                 int key = entry.getKey();
                 Symbol value = entry.getValue();
-                String varName = value.getTipo().getNombreVariable();
+                String varName =  ((Type)value.getTipo()).getNombreVariable();
                 int ambito = value.getAmbito();
                 if (varName.equals(nombreVar)
                     && 
@@ -95,7 +98,8 @@ public class SymbolTable {
             for (Map.Entry<Integer, Symbol> entry : tabla.entrySet()) {
                 int key = entry.getKey();
                 Symbol value = entry.getValue();
-                String varName = value.getTipo().getNombreVariable();
+                
+                String varName = ((Type)value.getTipo()).getNombreVariable();
                 int ambito = value.getAmbito();
                 if (varName.equals(nombreVar)
                     && 
@@ -106,5 +110,11 @@ public class SymbolTable {
         }
         return null;
     
+    }
+    
+    public void agregarLog(String mensaje, int linea, int columna){
+        jTextArea3.setText(jTextArea3.getText()+"\n"+
+                "linea: " + linea +": "+ columna +  " " + mensaje
+                );
     }
 }

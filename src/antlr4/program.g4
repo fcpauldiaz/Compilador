@@ -37,7 +37,7 @@ COMMENT
 
 
 program
-	: 'class' 'Program' '{' (declaration)* '}'
+	: 'class' ID '{' (declaration)* '}'
 	;
 
 declaration
@@ -110,14 +110,17 @@ statementElse
     ;
 	
 location
-	:	(ID | ID '[' expression ']') ('.' locationMember)?
+	:	(ID | locationArray)('.' locationMember)?
 	;
 	
 locationMember
-	:	(ID | ID '[' expression ']')('.' locationMember)?
+	:	(ID | locationArray)('.' locationMember)?
 	;
 
-
+locationArray
+        :   ID '[' expression ']'
+        ;
+    
 expression 
 	:	andExpr				#expressionAndExpr
 	| 	expression cond_op_or andExpr  	#expressionCondOpOr
@@ -134,8 +137,8 @@ eqExpr
 	;
 
 relationExpr
-	: 	addExpr 			#relationExprAddExpr
-	| 	relationExpr rel_op addExpr 	#relationExprRelOp
+	: 	addExpr 			
+	| 	relationExpr rel_op addExpr 	
 	;
 
 
@@ -208,7 +211,7 @@ cond_op_and: '&&';
 literal
 	:	int_literal
 	|	char_literal
-	|	bool_literal
+	|	boolean_literal
 	;
 	
 int_literal
@@ -219,7 +222,7 @@ char_literal
 	:	Char 
 	;
 	
-bool_literal
+boolean_literal
 	:	'true'
 	|	'false'
 	;

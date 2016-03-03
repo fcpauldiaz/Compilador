@@ -296,7 +296,7 @@ public class Visitor<T> extends programBaseVisitor {
             System.out.println(tipo);
             System.out.println(tipoDeclarado);
             if (tipoDeclarado.contains("literal")){
-               
+                 
                 if (tipoDeclarado.contains(tipo))
                     agregarLog("Tipo Correcto " + tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
 
@@ -340,7 +340,7 @@ public class Visitor<T> extends programBaseVisitor {
             Symbol simboloEncontrado = this.tablaSimbolos.showSymbol(nombreVar, scopeActual);
             return ((Type)simboloEncontrado.getTipo()).getLiteralTipo();
            
-              
+           
          }
         
         return "";
@@ -354,7 +354,7 @@ public class Visitor<T> extends programBaseVisitor {
 
     @Override
     public Object visitChar_literal(programParser.Char_literalContext ctx) {
-       return ANTGui.ruleNames[ctx.getRuleContext().getRuleIndex()];
+       return ANTGui.ruleNames[ctx.getRuleContext().getRuleIndex()]; 
     }
 
     @Override
@@ -376,14 +376,14 @@ public class Visitor<T> extends programBaseVisitor {
          System.out.println(autoincrement);
          
             if (ctx.getParent().getParent().getChild(0).getChild(0) != null){
-            String returnType = ctx.getParent().getParent().getChild(0).getChild(0).getText();
-             System.out.println(returnType);
-             System.out.println(currentReturnType);
-            if (!currentReturnType.contains(returnType))
-                agregarLog("Error: return type "+returnType+ " incorrecto",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
-            else
-                agregarLog("Return type "+ returnType+" del método es correcto", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
-            }
+                String returnType = ctx.getParent().getParent().getChild(0).getChild(0).getText();
+                System.out.println(returnType);
+                System.out.println(currentReturnType);
+                if (!currentReturnType.contains(returnType))
+                    agregarLog("Error: return type "+returnType+ " incorrecto",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+                else
+                    agregarLog("Return type "+ returnType+" del método es correcto", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+                }
         return null;
     }
 
@@ -418,7 +418,7 @@ public class Visitor<T> extends programBaseVisitor {
                
                 ArrayList arraySimbolos = tipoMetodo.getParameters();
                 if (arraySimbolos.size() != validCount){
-                    agregarLog("Error no coincide el número de argumentos y parámetros", i, i);
+                    agregarLog("Error no coincide el número de argumentos y parámetros", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
                     verificacion = false;
                 }
                 

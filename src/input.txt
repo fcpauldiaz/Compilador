@@ -4,11 +4,13 @@ class proyecto1 {
 	int global1;
 	int compare1;
 	int compare2;
-
+	
+	
 	void antesDeclarada(){
 		// Variable antes de ser declarada
 		int a;
 		a = 10; 
+		
 	}
 	
 	// Declarar un arreglo tamaño 0
@@ -120,7 +122,7 @@ class proyecto1 {
 		 char b;
 		 boolean c;
 		 int d;
-		int f;
+		 int f;
 		 a = usarParametros();
 		 a = c ; 
 		 b = a;

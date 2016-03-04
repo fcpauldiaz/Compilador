@@ -9,6 +9,7 @@ package compiler;
 
 import GUI.ToolbarFrame;
 import static GUI.ToolbarFrame.outputTextPane;
+import static compiler.ANTGui.jTextArea3;
 import java.awt.Color;
 import java.awt.Container;
 import java.io.OutputStream;
@@ -55,13 +56,15 @@ public class DescriptiveErrorListener extends BaseErrorListener {
         //OutputStream redirect = System.err;
 	//PrintStream myPrintStream = new PrintStream(redirect);
 	
-        SimpleAttributeSet set = new SimpleAttributeSet();
+        /*SimpleAttributeSet set = new SimpleAttributeSet();
         StyleConstants.setForeground(set, Color.red);
-        ToolbarFrame.outputTextPane.setCharacterAttributes(set, true);
+        ToolbarFrame.outputTextPane.setCharacterAttributes(set, true);*/
        
-
+       agregarLog("Un error inesperado ha ocurrido " +"\n" + mensaje, line, charPositionInLine);
+        
+        
         //**ToolbarFrame************** escribe la palabra error con un estilo diferente *******
-        StyleConstants.setBold(set, true);
+        /*StyleConstants.setBold(set, true);
         String texto_error = "\nAn error has occurred. ¡Check the log!";
         mensaje += ToolbarFrame.outputTextPane.getText()+"\r\n";
             Document doc = outputTextPane.getStyledDocument();
@@ -72,6 +75,14 @@ public class DescriptiveErrorListener extends BaseErrorListener {
             } catch (BadLocationException ex) {
                 //Logger.getLogger(DocumentEditorView.class.getName()).log(Level.SEVERE, null, ex);
             }
-             ToolbarFrame.outputTextPane.setText(mensaje);
+             ToolbarFrame.outputTextPane.setText(mensaje);*/
+    }
+    
+     public static void agregarLog(String mensaje, int linea, int columna){
+        
+        jTextArea3.setText(jTextArea3.getText()+"\n"+
+                "linea: " + linea +": "+ columna +  " " + mensaje
+                );
+        
     }
 }

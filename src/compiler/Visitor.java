@@ -21,7 +21,7 @@ public class Visitor<T> extends programBaseVisitor {
     
     public int ambitoActual=0;
    
-    private final SymbolTable tablaSimbolos;
+    public static SymbolTable tablaSimbolos;
     public int autoincrement = 0;
     public Scope scopeActual;
     public static boolean verificacion = true;
@@ -315,6 +315,7 @@ public class Visitor<T> extends programBaseVisitor {
 
                 }
                 else{
+                   
                     System.out.println("Tipo Incorrecto");
                     agregarLog("Error tipo incorrecto " + tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
                 }
@@ -486,14 +487,66 @@ public class Visitor<T> extends programBaseVisitor {
     }
 
     @Override
+    public Object visitExpressionCondOpOr(programParser.ExpressionCondOpOrContext ctx) {
+        for (int i = 0;i<ctx.getChildCount();i++){
+            this.visit(ctx.getChild(i));
+        }
+        return this.visit(ctx.getChild(1)); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    
+    
+    @Override
     public Object visitCond_op_or(programParser.Cond_op_orContext ctx) {
         int cant = ctx.getChildCount();
-        
+        for (int i = 0;i<ctx.getChildCount();i++){
+            this.visit(ctx.getChild(i));
+        }
         System.out.println(cant + "CANT OP OR");
         return "boolean_literal";
         
         //return this.visit(ctx.getChild(0));
     }
+
+    @Override
+    public Object visitAndExprCondOpAnd(programParser.AndExprCondOpAndContext ctx) {
+        for (int i = 0;i<ctx.getChildCount();i++){
+            this.visit(ctx.getChild(i));
+        }
+        return "boolean_literal"; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitUnaryExprNot(programParser.UnaryExprNotContext ctx) {
+        for (int i = 0;i<ctx.getChildCount();i++){
+            this.visit(ctx.getChild(i));
+        }
+        return "boolean_literal"; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitAddExprMinusPlusOp(programParser.AddExprMinusPlusOpContext ctx) {
+        
+        String firstOpType = (String)this.visit(ctx.getChild(0));
+        String secondOpType = (String)this.visit(ctx.getChild(2));
+        String firstOp = (String)(ctx.getChild(0).getChild(0).getText());
+        String secondOp = (String)(ctx.getChild(2).getChild(0).getText());
+        System.out.println("OPS");
+        System.out.println(firstOpType);
+        System.out.println(secondOpType);
+        if (!firstOpType.contains("int")){
+            agregarLog(firstOpType+" "+firstOp+" no es de tipo int en la suma/resta",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+            return "";//se propaga el error
+        }
+        if(!secondOpType.contains("int")){
+             agregarLog(secondOpType+" "+secondOp+" no es de tipo int en la suma/resta",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+             return "";//se propagar el error
+        }
+    
+        return "int_literal";//se propaga el exito
+    }
+    
     
     
     

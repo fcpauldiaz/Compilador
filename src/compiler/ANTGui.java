@@ -16,6 +16,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -23,6 +26,7 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -97,6 +101,7 @@ public class ANTGui extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -174,7 +179,7 @@ public class ANTGui extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Tabla de Símbolos", jPanel5);
@@ -211,6 +216,9 @@ public class ANTGui extends javax.swing.JFrame {
         jMenu1.add(jMenuItem2);
 
         jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Acciones");
+        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -283,8 +291,26 @@ public class ANTGui extends javax.swing.JFrame {
             }
         };
           
+        jMenu2.setMnemonic('R');
+        JMenuItem item = jMenu1.add(compileAction);
+            jMenu2.add(item);
+            item.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F5, 0));
+            item.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, ActionEvent.CTRL_MASK));
+        jMenu2.setMnemonic('O');
+        item = jMenu2.add(openFileAction);
+            jMenu2.add(item);
+            item.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, 0));
+            item.setAccelerator((javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O,ActionEvent.CTRL_MASK)));
+        jMenu2.setMnemonic('T');
+        item = jMenu2.add(showTree);
+            jMenu2.add(item);
+           item.setAccelerator((javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T,ActionEvent.CTRL_MASK)));
+        jMenu2.setMnemonic('S');
+        item = jMenu2.add(saveAction);
+            jMenu2.add(item);
+           item.setAccelerator((javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S,ActionEvent.CTRL_MASK)));
         
-        JButton btnNew = this.jToolBar1.add(newFileButton);
+            JButton btnNew = this.jToolBar1.add(newFileButton);
         btnNew.setToolTipText("Nuevo archivo");
         
         this.jToolBar1.add(openFileAction).setToolTipText("Abrir archivo");
@@ -304,6 +330,14 @@ public class ANTGui extends javax.swing.JFrame {
         this.jToolBar1.addSeparator();
         this.jToolBar1.add(showTree).setToolTipText("Mostrar Arbol");
         this.jToolBar1.add(compileAction).setToolTipText("COMPILAR");
+        
+        
+        jTable1.getColumnModel().getColumn(0).setMaxWidth(30);
+        jTable1.getColumnModel().getColumn(1).setPreferredWidth(150);
+        jTable1.getColumnModel().getColumn(1).setMaxWidth(150);
+        jTable1.getColumnModel().getColumn(2).setMaxWidth(100);
+        jTable1.getColumnModel().getColumn(2).setPreferredWidth(100);
+        jTable1.getColumnModel().getColumn(3).setMaxWidth(45);
         
     }
     
@@ -375,14 +409,7 @@ public class ANTGui extends javax.swing.JFrame {
             if(errorsCount == 0){
                 System.out.println("Parseo Exitoso");
 
-                JTextArea textArea = new JTextArea("Parseo Exitoso"+ "\n"+
-                    contexto.toStringTree(parser)
-                );
-                JScrollPane scrollPane = new JScrollPane(textArea);
-                textArea.setLineWrap(true);
-                textArea.setWrapStyleWord(true);
-                scrollPane.setPreferredSize( new Dimension( 250, 250 ) );
-                JOptionPane.showMessageDialog(this, scrollPane);
+               JOptionPane.showMessageDialog(this, "¡Parseo Exitoso!");
 
                 Visitor vistor = new Visitor();
                 vistor.visit(tree);
@@ -399,9 +426,36 @@ public class ANTGui extends javax.swing.JFrame {
             }
 
         } catch (RecognitionException e) {
-            System.out.println("LIl");
+            System.out.println("ERROR");
 
         }
+        insertarTablaIDE();
+         
+    }
+    
+    
+    public void insertarTablaIDE(){
+        DefaultTableModel model = (DefaultTableModel) this.jTable1.getModel();
+         for (Map.Entry<Integer, Symbol> entry : Visitor.tablaSimbolos.getTabla().entrySet()) {
+            int key = entry.getKey();
+            Symbol simbolo = entry.getValue();
+            String paramsString="";
+            String methodString ="";
+            if (simbolo.getTipo().getClass().getName().equals("compiler.MethodType")){
+                ArrayList<Symbol> params = ((MethodType)simbolo.getTipo()).getParameters();
+               
+                for (int i = 0;i<params.size();i++){
+                    paramsString +="id: "+ (params.get(i).getId())+" -> "+ ((compiler.Type)params.get(i).getTipo()).getNombreVariable()+ "  ";
+                }
+                methodString = " method";
+            }
+           model.addRow(new Object[]{key, ((compiler.Type)simbolo.getTipo()).getNombreVariable(),
+               ((compiler.Type)simbolo.getTipo()).getLiteralTipo() + methodString ,
+                simbolo.getAmbito(),
+                paramsString});
+        }
+        
+        
     }
     
     public void mostrarArbol(){
@@ -572,6 +626,7 @@ public class ANTGui extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;

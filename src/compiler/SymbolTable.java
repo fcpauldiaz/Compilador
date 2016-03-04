@@ -31,7 +31,7 @@ public class SymbolTable {
     
     
  
-    public HashMap getTabla() {
+    public HashMap<Integer,Symbol> getTabla() {
         return tabla;
     }
 

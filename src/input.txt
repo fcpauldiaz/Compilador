@@ -110,10 +110,10 @@ class proyecto1 {
 	// Cond_ops y ! debe ser boolean
 	void condOps(){
 		boolean some;
-		//some = 8+9 || 10 ;
-		 //some = 'b' && 'a' ;
-		 //some = true || 10 ;
-		 //some = ! 10;
+		some = 8+true || 10 ;
+		 some = 'b' && 'a' ;
+		 some = true || 10 ;
+		 some = ! 10;
 	}
 
 	// La asignacion debe ser del mismo tipo que la variable
@@ -132,9 +132,27 @@ class proyecto1 {
 		d = a;
 		f = d;
 	}
+	//probar operaciones aritmeticas
+	void testOps(){
+		int op1;
+		int op2;
+		int res;
+		
+		res = 1+2;
+		res = 3*12;
+		res = 1+2*4;
+		//debe fallar
+		res = 1-'a';		
+		res = 2%1;
+		
+	
+
+	}
+
 	// main necesario
 	void main(){}
 }
+
 
 
 

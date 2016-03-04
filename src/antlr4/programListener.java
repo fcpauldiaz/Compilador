@@ -255,6 +255,16 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitMultExprUnary(@NotNull programParser.MultExprUnaryContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link programParser#locationMethod}.
+	 * @param ctx the parse tree
+	 */
+	void enterLocationMethod(@NotNull programParser.LocationMethodContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link programParser#locationMethod}.
+	 * @param ctx the parse tree
+	 */
+	void exitLocationMethod(@NotNull programParser.LocationMethodContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code unaryExprMinus}
 	 * labeled alternative in {@link programParser#unaryExpr}.
 	 * @param ctx the parse tree

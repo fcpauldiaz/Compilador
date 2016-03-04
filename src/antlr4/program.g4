@@ -110,17 +110,21 @@ statementElse
     ;
 	
 location
-	:	(ID | locationArray)('.' locationMember)?
+	:	(ID | locationArray)(locationMethod)?
 	;
 	
 locationMember
-	:	(ID | locationArray)('.' locationMember)?
+	:	(ID | locationArray)(locationMethod)?
 	;
 
 locationArray
         :   ID '[' expression ']'
         ;
     
+locationMethod
+    :
+        '.' locationMember
+    ;    
 expression 
 	:	andExpr				#expressionAndExpr
 	| 	expression cond_op_or andExpr  	#expressionCondOpOr

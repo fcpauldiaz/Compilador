@@ -267,7 +267,9 @@ public class Visitor<T> extends programBaseVisitor {
 
     @Override
     public T visitLocation(programParser.LocationContext ctx) {
-        this.visit(ctx.getChild(0));
+        for (int i = 0;i<ctx.getChildCount();i++){
+            this.visit(ctx.getChild(i));
+        }
         return (T)ctx.getChild(0).getText(); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -349,18 +351,18 @@ public class Visitor<T> extends programBaseVisitor {
     
     @Override
     public Object visitInt_literal(programParser.Int_literalContext ctx) {
-        return ANTGui.ruleNames[ctx.getRuleContext().getRuleIndex()];
+        return "int_literal";
         
     }
 
     @Override
     public Object visitChar_literal(programParser.Char_literalContext ctx) {
-       return ANTGui.ruleNames[ctx.getRuleContext().getRuleIndex()]; 
+       return "char_literal";
     }
 
     @Override
     public Object visitBoolean_literal(programParser.Boolean_literalContext ctx) {
-        return ANTGui.ruleNames[ctx.getRuleContext().getRuleIndex()];
+        return "boolean_literal";
     }
 
     @Override
@@ -520,7 +522,7 @@ public class Visitor<T> extends programBaseVisitor {
     @Override
     public Object visitUnaryExprNot(programParser.UnaryExprNotContext ctx) {
         for (int i = 0;i<ctx.getChildCount();i++){
-            this.visit(ctx.getChild(i));
+             this.visit(ctx.getChild(i));
         }
         return "boolean_literal"; //To change body of generated methods, choose Tools | Templates.
     }
@@ -546,6 +548,32 @@ public class Visitor<T> extends programBaseVisitor {
     
         return "int_literal";//se propaga el exito
     }
+
+    @Override
+    public Object visitLocationMethod(programParser.LocationMethodContext ctx) {
+       
+        String nombreStruct = ctx.getParent().getChild(0).getText();
+        String nombreAtributo = ctx.getChild(1).getChild(0).getText();
+        Symbol simboloStruct = tablaSimbolos.showSymbol(nombreStruct, scopeActual);
+        ArrayList<Symbol> arrayStruct = ((compiler.StructType)simboloStruct.getTipo()).getMembers();
+        
+        boolean encontrado = false;
+        for (int i = 0;i<arrayStruct.size();i++){
+            if (((compiler.Type)arrayStruct.get(i).getTipo()).getNombreVariable().equals(nombreAtributo)){
+                encontrado = true;
+            }
+        }
+        if (!encontrado){
+            agregarLog("Error:El atributo "+nombreAtributo+" del struct " + nombreStruct + " no existe", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
+        }
+        else{
+             agregarLog("El atributo "+nombreAtributo+" del struct " + nombreStruct + " es correcto", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
+        }
+        
+        return "";
+    }
+
+    
     
     
     

@@ -158,11 +158,14 @@ class proyecto1 {
 		
 
 	}
-	//probar structs
 	struct a {
 		int asf;
 		char LOL;
 		int array[10];
+	}
+
+	void callStruct(){
+		a.asf;
 	}
 
 	// main necesario

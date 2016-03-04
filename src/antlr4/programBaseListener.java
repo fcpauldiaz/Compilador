@@ -281,6 +281,18 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLocationMethod(@NotNull programParser.LocationMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLocationMethod(@NotNull programParser.LocationMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterUnaryExprMinus(@NotNull programParser.UnaryExprMinusContext ctx) { }
 	/**
 	 * {@inheritDoc}

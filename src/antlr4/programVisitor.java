@@ -157,6 +157,12 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMultExprUnary(@NotNull programParser.MultExprUnaryContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link programParser#locationMethod}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLocationMethod(@NotNull programParser.LocationMethodContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code unaryExprMinus}
 	 * labeled alternative in {@link programParser#unaryExpr}.
 	 * @param ctx the parse tree

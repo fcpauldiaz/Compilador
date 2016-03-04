@@ -44,6 +44,10 @@ public class StructType<T> extends Type {
         members.add(miembro);
     }
 
+    public ArrayList<Symbol> getMembers() {
+        return members;
+    }
+
    
     
     

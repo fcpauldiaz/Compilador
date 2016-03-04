@@ -110,7 +110,7 @@ class proyecto1 {
 	// Cond_ops y ! debe ser boolean
 	void condOps(){
 		boolean some;
-		some = 8+true || 10 ;
+		 some = 8+1 || 10 ;
 		 some = 'b' && 'a' ;
 		 some = true || 10 ;
 		 some = ! 10;
@@ -137,16 +137,32 @@ class proyecto1 {
 		int op1;
 		int op2;
 		int res;
-		
+		op2 = 4;
 		res = 1+2;
 		res = 3*12;
 		res = 1+2*4;
 		//debe fallar
-		res = 1-'a';		
+		res = op2-1;		
 		res = 2%1;
 		
 	
 
+	}
+
+	void testCasteo(){
+		int num1;
+		char num2;
+		
+		//castear char a int
+		num1 = (int)num2;
+		
+
+	}
+	//probar structs
+	struct a {
+		int asf;
+		char LOL;
+		int array[10];
 	}
 
 	// main necesario

@@ -66,6 +66,14 @@ public class Type {
     public String getLiteralTipo() {
         return literal_tipo;
     }
+    
+    public String getModLiteralTipo()
+    {
+        if (arreglo){
+            return literal_tipo+"["+tamaño+"]";
+        }
+        return literal_tipo;
+    }
 
     public void setLiteralTipo(String nombre_tipo) {
         this.literal_tipo = nombre_tipo;

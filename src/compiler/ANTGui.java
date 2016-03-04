@@ -441,6 +441,9 @@ public class ANTGui extends javax.swing.JFrame {
             Symbol simbolo = entry.getValue();
             String paramsString="";
             String methodString ="";
+            
+            //agrega los tipos Method Type a un string y sus parametros para agregarlo a la tabla
+            
             if (simbolo.getTipo().getClass().getName().equals("compiler.MethodType")){
                 ArrayList<Symbol> params = ((MethodType)simbolo.getTipo()).getParameters();
                
@@ -449,8 +452,19 @@ public class ANTGui extends javax.swing.JFrame {
                 }
                 methodString = " method";
             }
-           model.addRow(new Object[]{key, ((compiler.Type)simbolo.getTipo()).getNombreVariable(),
-               ((compiler.Type)simbolo.getTipo()).getLiteralTipo() + methodString ,
+            //agrega los tipos Struct Type a un string y sus miembros a un string
+            //para agregarlo a la tabla.
+            if (simbolo.getTipo().getClass().getName().equals("compiler.StructType")){
+                ArrayList<Symbol> members = ((StructType)simbolo.getTipo()).getMembers();
+               
+                for (int i = 0;i<members.size();i++){
+                    paramsString +="id: "+ (members.get(i).getId())+" -> "+ ((compiler.Type)members.get(i).getTipo()).getNombreVariable()+ "  ";
+                }
+                methodString = " struct";
+            }
+            //agrega símbolo a a la tabla del IDE.
+            model.addRow(new Object[]{key, ((compiler.Type)simbolo.getTipo()).getNombreVariable(),
+               ((compiler.Type)simbolo.getTipo()).getModLiteralTipo()+ methodString ,
                 simbolo.getAmbito(),
                 paramsString});
         }

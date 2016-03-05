@@ -9,7 +9,13 @@ package compiler;
 import antlr4.programBaseVisitor;
 import antlr4.programParser;
 import static compiler.ANTGui.jTextArea3;
+import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Stack;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 
 /**
@@ -26,7 +32,7 @@ public class Visitor<T> extends programBaseVisitor {
     public Scope scopeActual;
     public static boolean verificacion = true;
     public static boolean verificadorMain;
-    
+    public Stack literals = new Stack();
     
     public Visitor() {
        
@@ -214,7 +220,7 @@ public class Visitor<T> extends programBaseVisitor {
             if (this.visit(ctx.getChild(i)) != null){
                 String tipo = (String)this.visit(ctx.getChild(i));
                 if (!tipo.contains("boolean")){
-                    agregarLog("Error: se espera expresión booleana", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+                    agregarLog("Error: se espera expresión booleana", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
                 }
             }
         }
@@ -238,7 +244,7 @@ public class Visitor<T> extends programBaseVisitor {
             if (this.visit(ctx.getChild(i)) != null){
                 String tipo = (String)this.visit(ctx.getChild(i));
                 if (!tipo.contains("boolean")){
-                    agregarLog("Error: se espera expresión booleana", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+                    agregarLog("Error: se espera expresión booleana", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
                 }
             }
         }
@@ -294,34 +300,65 @@ public class Visitor<T> extends programBaseVisitor {
 
             String tipo =   ((Type)simboloEncontrado.getTipo()).getLiteralTipo();
             String tipoDeclarado =  (String)this.visit(ctx.getChild(2));
-           
+            
             System.out.println(tipo);
             System.out.println(tipoDeclarado);
             if (tipoDeclarado.contains("literal")){
-                 
+                
+                
                 if (tipoDeclarado.contains(tipo))
-                    agregarLog("Tipo Correcto " + tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+                    agregarLog("Tipo Correcto " + tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),false);
 
                 else{
                         System.out.println("Tipo incorrecto");
-                        agregarLog("Error: tipo incorrecto",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+                        agregarLog("Error: tipo incorrecto",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
 
                         Visitor.verificacion = false;
                 }
             }
             else{
-                String search = buscarRecursivo(tipoDeclarado,tipo);
-                if (search.contains(tipo)){
-                    System.out.println("Tipo Correcto");
-                    agregarLog("Tipo Correcto "+ tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+                Symbol symbol = buscarRecursivo(tipoDeclarado,tipo);
+                if (symbol != null){
+                    String search = ((Type)symbol.getTipo()).getLiteralTipo();
+                     if (((Type)symbol.getTipo()).isArreglo()==true){
 
+                         if (((Type)simboloEncontrado.getTipo()).isArreglo()==true){
+                           agregarLog("Tipo Correcto array "+ tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),false);
+
+                         }
+                         else{
+                             agregarLog("Error tipo incorrecto, no es array " + tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
+
+                         }
+
+                     }
+                     else if (((Type)simboloEncontrado.getTipo()).isArreglo()==true){
+
+                         if (((Type)symbol.getTipo()).isArreglo()==true){
+                           agregarLog("Tipo Correcto array "+ tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),false);
+
+                         }
+                         else{
+                             agregarLog("Error tipo incorrecto, no es array " + tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
+
+                         }
+
+                     }
+                     else{
+
+                        if (search.contains(tipo)){
+
+                            System.out.println("Tipo Correcto");
+                            agregarLog("Tipo Correcto "+ tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),false);
+
+                        }
+                        else{
+
+                            System.out.println("Tipo Incorrecto");
+                            agregarLog("Error tipo incorrecto " + tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
+                        }
+                    }
                 }
-                else{
-                   
-                    System.out.println("Tipo Incorrecto");
-                    agregarLog("Error tipo incorrecto " + tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
-                }
-                
             }
         }
         
@@ -331,8 +368,8 @@ public class Visitor<T> extends programBaseVisitor {
         return null; //To change body of generated methods, choose Tools | Templates.
     }
 
-    public String buscarRecursivo(String nombreVar,String tipo){
-         boolean encontrado = this.tablaSimbolos.revisarNombreVar(nombreVar, scopeActual);
+    public Symbol buscarRecursivo(String nombreVar,String tipo){
+        boolean encontrado = this.tablaSimbolos.revisarNombreVar(nombreVar, scopeActual);
         System.out.println("");
         if (!encontrado){
             /*System.out.println("Variable no declarada: línea " + ctx.getStart().getLine()+
@@ -341,16 +378,17 @@ public class Visitor<T> extends programBaseVisitor {
         System.out.println("");
         if (encontrado){
             Symbol simboloEncontrado = this.tablaSimbolos.showSymbol(nombreVar, scopeActual);
-            return ((Type)simboloEncontrado.getTipo()).getLiteralTipo();
+            return simboloEncontrado;
            
            
          }
         
-        return "";
+        return null;
     }
     
     @Override
     public Object visitInt_literal(programParser.Int_literalContext ctx) {
+        literals.push(ctx.getChild(0).getText());
         return "int_literal";
         
     }
@@ -383,9 +421,9 @@ public class Visitor<T> extends programBaseVisitor {
                 System.out.println(returnType);
                 System.out.println(currentReturnType);
                 if (!currentReturnType.contains(returnType))
-                    agregarLog("Error: return type "+returnType+ " incorrecto",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+                    agregarLog("Error: return type "+returnType+ " incorrecto",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
                 else
-                    agregarLog("Return type "+ returnType+" del método es correcto", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+                    agregarLog("Return type "+ returnType+" del método es correcto", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),false);
                 }
         return null;
     }
@@ -413,6 +451,7 @@ public class Visitor<T> extends programBaseVisitor {
                
                 System.out.println("TEST");
                 System.out.println(found);
+                System.out.println(varName);
                
                 System.out.println(nombreMetodo);
               
@@ -421,19 +460,28 @@ public class Visitor<T> extends programBaseVisitor {
                
                 ArrayList arraySimbolos = tipoMetodo.getParameters();
                 if (arraySimbolos.size() != validCount){
-                    agregarLog("Error no coincide el número de argumentos y parámetros", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
+                    agregarLog("Error no coincide el número de argumentos y parámetros", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
                     verificacion = false;
                 }
                 
                 Symbol simboloInterno = (Symbol)arraySimbolos.get(countValidSymbols);
                 String stringInternalType = ((Type)simboloInterno.getTipo()).getLiteralTipo();
-                String stringExternalType = ((Type)found.getTipo()).getLiteralTipo();
-                if (!stringExternalType.equals(stringInternalType)){
-                    agregarLog("Error: Tipo incorrecto en argumentos " + ((Type)found.getTipo()).getNombreVariable(),ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+                String stringExternalType = "";
+                
+                if (found!=null){
+                    stringExternalType = ((Type)found.getTipo()).getLiteralTipo();
+                    varName = ((Type)found.getTipo()).getNombreVariable();
+                }
+                else{
+                    stringExternalType = varName;
+                }
+                    
+                if (!stringExternalType.contains(stringInternalType)){
+                    agregarLog("Error: Tipo incorrecto en argumentos " + varName,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
                     verificacion = false;
                 }
                 else{
-                    agregarLog("Tipo correcto en argumentos "+ ((Type)found.getTipo()).getNombreVariable(),ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+                    agregarLog("Tipo correcto en argumentos "+ varName,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),false);
                 }
                 System.out.println(arraySimbolos);
                 countValidSymbols++;
@@ -452,18 +500,26 @@ public class Visitor<T> extends programBaseVisitor {
             String compare = ((String)this.visit(ctx.getChild(2)));
             boolean verArray = true;
             if (!compare.contains("int") && !compare.isEmpty()){
-                agregarLog("Error: invalid return type " + ((String)this.visit(ctx.getChild(2))), ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+                agregarLog("Error: invalid return type " + ((String)this.visit(ctx.getChild(2))), ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
                 verArray = false;
             }
             String nombreArray = ctx.getChild(0).getText();
             Symbol simboloArray = this.tablaSimbolos.showSymbol(nombreArray, scopeActual);
             Type tipoArray = ((Type)simboloArray.getTipo());
             if (tipoArray.isArreglo()== false){
-                agregarLog("Error: " + tipoArray.getNombreVariable() + " no es un array", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine() );
+                agregarLog("Error: " + tipoArray.getNombreVariable() + " no es un array", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true );
                  verArray = false;
             }
             if (verArray){
-                agregarLog("Array " + tipoArray.getNombreVariable()+" tipo correcto" , ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
+                int tamañoArray = ((Type)simboloArray.getTipo()).getTamaño();
+                int tamañoActual = Integer.parseInt((String)literals.pop());
+                if (tamañoActual > tamañoArray ){
+                    agregarLog("Error: index out of bounds ", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
+                }
+            }
+            
+            if (verArray){
+                agregarLog("Array " + tipoArray.getNombreVariable()+" tipo correcto" , ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),false);
             }
             
         return null;
@@ -537,12 +593,20 @@ public class Visitor<T> extends programBaseVisitor {
         System.out.println("OPS");
         System.out.println(firstOpType);
         System.out.println(secondOpType);
+        if (!firstOpType.contains("literal")){
+            Symbol firstSymbol = tablaSimbolos.showSymbol(firstOp, scopeActual);
+            firstOpType = ((Type)firstSymbol.getTipo()).getLiteralTipo();
+        }
+          if (!secondOpType.contains("literal")){
+            Symbol secondSymbol = tablaSimbolos.showSymbol(firstOp, scopeActual);
+            secondOpType = ((Type)secondSymbol.getTipo()).getLiteralTipo();
+        }
         if (!firstOpType.contains("int")){
-            agregarLog(firstOpType+" "+firstOp+" no es de tipo int en la suma/resta",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+            agregarLog(firstOpType+" "+firstOp+" no es de tipo int en la suma/resta",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
             return "";//se propaga el error
         }
         if(!secondOpType.contains("int")){
-             agregarLog(secondOpType+" "+secondOp+" no es de tipo int en la suma/resta",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+             agregarLog(secondOpType+" "+secondOp+" no es de tipo int en la suma/resta",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
              return "";//se propagar el error
         }
     
@@ -555,6 +619,11 @@ public class Visitor<T> extends programBaseVisitor {
         String nombreStruct = ctx.getParent().getChild(0).getText();
         String nombreAtributo = ctx.getChild(1).getChild(0).getText();
         Symbol simboloStruct = tablaSimbolos.showSymbol(nombreStruct, scopeActual);
+        if (!simboloStruct.getTipo().getClass().getName().equals("compiler.StructType")){
+            
+            agregarLog("Error: Solo los structs tienen atributos",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
+            return "";
+        }
         ArrayList<Symbol> arrayStruct = ((compiler.StructType)simboloStruct.getTipo()).getMembers();
         
         boolean encontrado = false;
@@ -564,10 +633,10 @@ public class Visitor<T> extends programBaseVisitor {
             }
         }
         if (!encontrado){
-            agregarLog("Error:El atributo "+nombreAtributo+" del struct " + nombreStruct + " no existe", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
+            agregarLog("Error:El atributo "+nombreAtributo+" del struct " + nombreStruct + " no existe", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
         }
         else{
-             agregarLog("El atributo "+nombreAtributo+" del struct " + nombreStruct + " es correcto", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine());
+             agregarLog("El atributo "+nombreAtributo+" del struct " + nombreStruct + " es correcto", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),false);
         }
         
         return "";
@@ -578,11 +647,26 @@ public class Visitor<T> extends programBaseVisitor {
     
     
     
-    public void agregarLog(String mensaje, int linea, int columna){
+    public void agregarLog(String mensaje, int linea, int columna, boolean error){
         
-        jTextArea3.setText(jTextArea3.getText()+"\n"+
+        StyledDocument doc = jTextArea3.getStyledDocument();
+
+        Style style = jTextArea3.addStyle("I'm a Style", null);
+        StyleConstants.setForeground(style, Color.red);
+        
+        if (error){
+            try { doc.insertString(doc.getLength(), "linea: " + linea +": "+ columna +  " " + mensaje+"\n",style); }
+            catch (BadLocationException e){}
+        }
+        else{
+            StyleConstants.setForeground(style, Color.blue);
+            try { doc.insertString(doc.getLength(), "linea: " + linea +": "+ columna +  " " + mensaje+"\n",style); }
+            catch (BadLocationException e){}
+        }
+        
+        /*jTextArea3.setText(jTextArea3.getText()+"\n"+
                 "linea: " + linea +": "+ columna +  " " + mensaje
-                );
+        );*/
         
     }
     

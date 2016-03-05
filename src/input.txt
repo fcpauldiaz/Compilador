@@ -29,10 +29,10 @@ class proyecto1 {
 		//parametrosPrueba(b) ;
 
 		// Otro tipo	
-		 //parametrosPrueba(b,c) ;
+		 //parametrosPrueba(a,c) ;
 		
 		// Correcto
-		parametrosPrueba(a,b) ;
+		parametrosPrueba(1,b) ;
 		return a;
 	}
 	// Usar expression --> methodCall debe devolver algo
@@ -137,12 +137,13 @@ class proyecto1 {
 		int op1;
 		int op2;
 		int res;
+		char char1;
 		op2 = 4;
 		res = 1+2;
 		res = 3*12;
 		res = 1+2*4;
 		//debe fallar
-		res = op2-1;		
+		res = op2-op2;		
 		res = 2%1;
 		
 	
@@ -152,9 +153,14 @@ class proyecto1 {
 	void testCasteo(){
 		int num1;
 		char num2;
+		int nums;
+		int res[10];
 		
+		res = nums;
+				
+
 		//castear char a int
-		num1 = (int)num2;
+		//num1 = (int)num2;
 		
 
 	}
@@ -162,11 +168,17 @@ class proyecto1 {
 		int asf;
 		char LOL;
 		int array[10];
+		
 	}
+	int structB;
 
 	void callStruct(){
 		a.asf;
+		//revisar que solo se pueden accesar los structs
+		structB.LOL;		
 	}
+
+	//falta revisar firma de metodos
 
 	// main necesario
 	void main(){}

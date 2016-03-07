@@ -416,6 +416,9 @@ public class ANTGui extends javax.swing.JFrame {
                 Scope.ambitoActual = 0;
                 //System.out.println(vist.visitProgram(contexto));
             }
+            else{
+                 JOptionPane.showMessageDialog(this, "¡Parseo Fallido!");
+            }
 
         } catch (RecognitionException e) {
             System.out.println("ERROR");
@@ -427,8 +430,11 @@ public class ANTGui extends javax.swing.JFrame {
     
     
     public void insertarTablaIDE(){
+        
+       
         DefaultTableModel model = (DefaultTableModel) this.jTable1.getModel();
-         for (Map.Entry<Integer, Symbol> entry : Visitor.tablaSimbolos.getTabla().entrySet()) {
+        model.setRowCount(0);
+        for (Map.Entry<Integer, Symbol> entry : Visitor.tablaSimbolos.getTabla().entrySet()) {
             int key = entry.getKey();
             Symbol simbolo = entry.getValue();
             String paramsString="";
@@ -452,7 +458,7 @@ public class ANTGui extends javax.swing.JFrame {
                 for (int i = 0;i<members.size();i++){
                     paramsString +="id: "+ (members.get(i).getId())+" -> "+ ((compiler.Type)members.get(i).getTipo()).getNombreVariable()+ "  ";
                 }
-                methodString = " struct";
+                methodString = " ";
             }
             //agrega símbolo a a la tabla del IDE.
             model.addRow(new Object[]{key, ((compiler.Type)simbolo.getTipo()).getNombreVariable(),

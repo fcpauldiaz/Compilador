@@ -38,7 +38,7 @@ public class Visitor<T> extends programBaseVisitor {
        
         scopeActual = new Scope();
         scopeActual.setIdScope(ambitoActual);
-        this.tablaSimbolos = new SymbolTable();
+        tablaSimbolos = new SymbolTable();
         verificadorMain = false;
        
        
@@ -56,6 +56,7 @@ public class Visitor<T> extends programBaseVisitor {
        
         
         tablaSimbolos.printSymbolTable();
+        
         return (T)"";
     }
     
@@ -64,11 +65,11 @@ public class Visitor<T> extends programBaseVisitor {
     public T visitDeclaration(programParser.DeclarationContext ctx){
         //System.out.println("cantidad declaration: " + ctx.getChildCount());
         for (int i = 0;i<ctx.getChildCount();i++){
-            this.tablaSimbolos.addSymbol((Symbol)this.visit(ctx.getChild(i)),ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+            tablaSimbolos.addSymbol((Symbol)this.visit(ctx.getChild(i)),ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
         }
         
         
-        return (T)"void";
+        return (T)"void";//useless
     }
     /**
      * Debe devolver un símbolo
@@ -92,7 +93,7 @@ public class Visitor<T> extends programBaseVisitor {
         for (int i = 0;i<ctx.getChildCount();i++){
             Symbol simbolo = (Symbol)visit(ctx.getChild(i));
             if (simbolo != null){
-                this.tablaSimbolos.addSymbol(simbolo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
+                tablaSimbolos.addSymbol(simbolo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine());
                 struct.addMember(simbolo);
             }
         }
@@ -107,9 +108,6 @@ public class Visitor<T> extends programBaseVisitor {
    
     
     
-    
-    
-    
     @Override
     public T visitVarDeclarationID(programParser.VarDeclarationIDContext ctx){
         //System.out.println(ctx.getChildCount()+"cantidad var declaration");
@@ -117,7 +115,7 @@ public class Visitor<T> extends programBaseVisitor {
         
         //param1 = nombre variable
         //param2 = nombre tipo
-        Type tipo = new Type(ctx.getChild(1).getText(),ctx.getChild(0).getText());
+        Type tipo = new Type(ctx.getChild(1).getText(),(String)this.visit(ctx.getChild(0)));
         Symbol simbolo = new Symbol(++autoincrement,scopeActual.getIdScope(),tipo);
        
         
@@ -189,6 +187,7 @@ public class Visitor<T> extends programBaseVisitor {
     @Override
     public T visitParameterID(programParser.ParameterIDContext ctx) {
         //System.out.println("ENTRA");
+       
         Type tipo = new Type(ctx.getChild(1).getText(),ctx.getChild(0).getText());
         Symbol simbolo = new Symbol(++autoincrement,this.scopeActual.getIdScope(),tipo);
         tipo.setParametro();
@@ -202,6 +201,13 @@ public class Visitor<T> extends programBaseVisitor {
     @Override
     public T visitVarType(programParser.VarTypeContext ctx){
         
+        if (ctx.getChildCount()> 1){
+            String returnString = "";
+            for (int i =0;i<ctx.getChildCount();i++){
+                returnString = ctx.getChild(i).getText() + " ";
+            }
+            return (T)returnString;
+        }
         
         return (T)ctx.getText();
         
@@ -265,7 +271,7 @@ public class Visitor<T> extends programBaseVisitor {
         for (int i = 0;i<ctx.getChildCount();i++){
             this.visit(ctx.getChild(i));
         }
-         scopeActual = scopeActual.getAnterior();
+        scopeActual = scopeActual.getAnterior();
          
       
         return (T)null;
@@ -276,6 +282,10 @@ public class Visitor<T> extends programBaseVisitor {
         for (int i = 0;i<ctx.getChildCount();i++){
             this.visit(ctx.getChild(i));
         }
+        if (ctx.getChildCount()>1){
+           return (T)this.visit(ctx.getChild(1));
+        }
+        
         return (T)ctx.getChild(0).getText(); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -284,13 +294,13 @@ public class Visitor<T> extends programBaseVisitor {
         
         //aqui tengo el nombre de la variable
         String nombreVar = (String)this.visit(ctx.getChild(0));
-        if (nombreVar.contains("["))
-            nombreVar = nombreVar.substring(0,nombreVar.indexOf("["));
+        System.out.println("Nombre array-> "+ nombreVar);
         
         //ahora verifico que ya esté declarada.
-        boolean encontrado = this.tablaSimbolos.revisarNombreVar(nombreVar, scopeActual);
+        boolean encontrado = tablaSimbolos.revisarNombreVar(nombreVar, scopeActual);
         System.out.println("");
         if (!encontrado){
+            agregarLog("Error: Usando variable no declarada " + nombreVar, ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
             System.out.println("Variable no declarada " + nombreVar+ ": línea " + ctx.getStart().getLine()+
                     " columna: " + ctx.getStart().getCharPositionInLine());
         }
@@ -326,7 +336,9 @@ public class Visitor<T> extends programBaseVisitor {
                            agregarLog("Tipo Correcto array "+ tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),false);
 
                          }
+                         
                          else{
+                             
                              agregarLog("Error tipo incorrecto, no es array " + tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
 
                          }
@@ -338,8 +350,9 @@ public class Visitor<T> extends programBaseVisitor {
                            agregarLog("Tipo Correcto array "+ tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),false);
 
                          }
+                        
                          else{
-                             agregarLog("Error tipo incorrecto, no es array " + tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
+                            agregarLog("Error tipo incorrecto, no es array " + tipo,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
 
                          }
 
@@ -443,7 +456,18 @@ public class Visitor<T> extends programBaseVisitor {
         }
          String nombreMetodo = ctx.getText();
          nombreMetodo = nombreMetodo.substring(0,nombreMetodo.indexOf("("));
-         Symbol metodo = this.tablaSimbolos.showSymbol(nombreMetodo, scopeActual);
+         Symbol metodo = tablaSimbolos.showSymbol(nombreMetodo, scopeActual);
+         if (metodo == null){
+             return "";
+         }
+         
+          MethodType tipoMetodo = (MethodType)metodo.getTipo();
+          ArrayList arraySimbolos = tipoMetodo.getParameters();
+          if (arraySimbolos.size() != validCount){
+            agregarLog("Error no coincide el número de argumentos y parámetros", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
+            verificacion = false;
+            return "";
+        }
         for (int i = 0;i<ctx.getChildCount();i++){
             if (this.visit(ctx.getChild(i))!= null){
                 String varName = (String)this.visit(ctx.getChild(i));
@@ -455,16 +479,13 @@ public class Visitor<T> extends programBaseVisitor {
                
                 System.out.println(nombreMetodo);
               
-                MethodType tipoMetodo = (MethodType)metodo.getTipo();
                
-               
-                ArrayList arraySimbolos = tipoMetodo.getParameters();
-                if (arraySimbolos.size() != validCount){
-                    agregarLog("Error no coincide el número de argumentos y parámetros", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
-                    verificacion = false;
-                }
+                
                 
                 Symbol simboloInterno = (Symbol)arraySimbolos.get(countValidSymbols);
+                if (simboloInterno == null){
+                    agregarLog("Error: variable no declarada"+varName,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true );
+                }
                 String stringInternalType = ((Type)simboloInterno.getTipo()).getLiteralTipo();
                 String stringExternalType = "";
                 
@@ -473,8 +494,16 @@ public class Visitor<T> extends programBaseVisitor {
                     varName = ((Type)found.getTipo()).getNombreVariable();
                 }
                 else{
-                    stringExternalType = varName;
+                    if (varName.contains("literal"))
+                          stringExternalType = varName;// int_literal, char_literal, boolean_literal
+                    else{
+                        agregarLog("Error: la variable no existe " + varName,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
+                        verificacion = false;
+                    }
+                        
                 }
+                
+                
                     
                 if (!stringExternalType.contains(stringInternalType)){
                     agregarLog("Error: Tipo incorrecto en argumentos " + varName,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
@@ -488,11 +517,11 @@ public class Visitor<T> extends programBaseVisitor {
             }
             
         }
-         MethodType tipoMetodo = (MethodType)metodo.getTipo();
+        
          returnMethodCall = tipoMetodo.getLiteralTipo();
         System.out.println("method call " + returnMethodCall+" "+tipoMetodo.getNombreVariable());
          
-        return returnMethodCall+"_literal";
+        return returnMethodCall+"_literal";//mafiosa que devuelve el tipo
     }
 
     @Override
@@ -502,24 +531,33 @@ public class Visitor<T> extends programBaseVisitor {
             if (!compare.contains("int") && !compare.isEmpty()){
                 agregarLog("Error: invalid return type " + ((String)this.visit(ctx.getChild(2))), ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
                 verArray = false;
+                verificacion = false;
+                
             }
             String nombreArray = ctx.getChild(0).getText();
             Symbol simboloArray = this.tablaSimbolos.showSymbol(nombreArray, scopeActual);
             Type tipoArray = ((Type)simboloArray.getTipo());
             if (tipoArray.isArreglo()== false){
                 agregarLog("Error: " + tipoArray.getNombreVariable() + " no es un array", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true );
-                 verArray = false;
+                verArray = false;
+                verificacion = false;
+              
             }
             if (verArray){
                 int tamañoArray = ((Type)simboloArray.getTipo()).getTamaño();
                 int tamañoActual = Integer.parseInt((String)literals.pop());
-                if (tamañoActual > tamañoArray ){
+                if (tamañoActual > tamañoArray || tamañoActual < 0){
                     agregarLog("Error: index out of bounds ", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
+                    verArray = false;
+                    verificacion = false;
+                   
                 }
+                
             }
             
             if (verArray){
                 agregarLog("Array " + tipoArray.getNombreVariable()+" tipo correcto" , ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),false);
+                
             }
             
         return null;
@@ -595,7 +633,16 @@ public class Visitor<T> extends programBaseVisitor {
         System.out.println(secondOpType);
         if (!firstOpType.contains("literal")){
             Symbol firstSymbol = tablaSimbolos.showSymbol(firstOp, scopeActual);
-            firstOpType = ((Type)firstSymbol.getTipo()).getLiteralTipo();
+            System.out.println(firstOp);
+            if (firstSymbol != null)
+                firstOpType = ((Type)firstSymbol.getTipo()).getLiteralTipo();
+            else{
+                for (int j = 0;j<ctx.getChildCount();j++){
+                    visit(ctx.getChild(j));
+                }
+            }
+                
+            
         }
           if (!secondOpType.contains("literal")){
             Symbol secondSymbol = tablaSimbolos.showSymbol(firstOp, scopeActual);
@@ -615,10 +662,29 @@ public class Visitor<T> extends programBaseVisitor {
 
     @Override
     public Object visitLocationMethod(programParser.LocationMethodContext ctx) {
-       
+        
+        String str1 = "";
+        
         String nombreStruct = ctx.getParent().getChild(0).getText();
         String nombreAtributo = ctx.getChild(1).getChild(0).getText();
+        System.out.println("Nombre atributo " + nombreAtributo);
         Symbol simboloStruct = tablaSimbolos.showSymbol(nombreStruct, scopeActual);
+        
+        
+        System.out.println("simbolo struct " + simboloStruct);
+        if (simboloStruct != null){
+        if (simboloStruct.getTipo().getClass().getName().equals("compiler.Type")){
+            
+            Symbol finalType = buscarStructRecursivo(nombreAtributo, simboloStruct);
+            if (finalType != null)
+                return ((Type)finalType.getTipo()).getLiteralTipo();
+            else
+                return "";
+                
+           
+           
+        }
+        
         if (!simboloStruct.getTipo().getClass().getName().equals("compiler.StructType")){
             
             agregarLog("Error: Solo los structs tienen atributos",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
@@ -638,11 +704,42 @@ public class Visitor<T> extends programBaseVisitor {
         else{
              agregarLog("El atributo "+nombreAtributo+" del struct " + nombreStruct + " es correcto", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),false);
         }
-        
-        return "";
+        }
+        return ""; //To cha return "";
     }
 
-    
+    public Symbol buscarStructRecursivo(String nombreAtributo, Symbol simboloStruct){
+        
+        Symbol returnSymbol;
+        
+        if (simboloStruct != null){
+            String customTipo = ((compiler.Type)simboloStruct.getTipo()).getLiteralTipo();
+            if (nombreAtributo.contains("["))
+                nombreAtributo = nombreAtributo.substring(0,nombreAtributo.indexOf("["));
+            if (!customTipo.contains("literal")){
+                    Symbol customSymbol = tablaSimbolos.showSymbol(customTipo, scopeActual);
+                    if (customSymbol!=null){
+                    ArrayList<Symbol> arraySymbol = ((StructType)customSymbol.getTipo()).getMembers();
+
+                    for (Symbol sim: arraySymbol){
+                        if (((Type)sim.getTipo()).getNombreVariable().equals(nombreAtributo)){
+                            return buscarStructRecursivo(((Type)sim.getTipo()).getLiteralTipo(),sim);
+                        }
+                    }
+
+                    return arraySymbol.get(0);
+
+                }
+                else 
+                    return simboloStruct;
+                
+            }
+        }
+           
+        
+        
+        return null;
+    }
     
     
     
@@ -669,5 +766,7 @@ public class Visitor<T> extends programBaseVisitor {
         );*/
         
     }
+
+
     
 }

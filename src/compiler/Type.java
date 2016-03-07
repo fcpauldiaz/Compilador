@@ -16,12 +16,14 @@ public class Type {
     private String  nombreVariable="";
     private boolean parametro;     
     private boolean arreglo; 
+    private boolean struct;
     private int tamaño;
     
     public Type(String nombre){
         this.literal_tipo = nombre;
         this.parametro=false;
         this.arreglo=false;
+        this.struct = false;
        
     }
     public Type(){
@@ -45,6 +47,23 @@ public class Type {
         this.nombreVariable = nombre;
     }
 
+    public String getLiteral_tipo() {
+        return literal_tipo;
+    }
+
+    public void setLiteral_tipo(String literal_tipo) {
+        this.literal_tipo = literal_tipo;
+    }
+
+    public boolean isStruct() {
+        return struct;
+    }
+
+    public void setStruct() {
+        this.struct = true;
+    }
+    
+    
    
     public boolean isParametro() {
         return parametro;
@@ -90,6 +109,7 @@ public class Type {
     public String toString() {
         if (this.arreglo == false)
             return "Type{" + " literal_tipo=" + literal_tipo + ", nombreVar=" + nombreVariable + '}';
+        
         return "Type{" + " literal_tipo=" + literal_tipo + ", nombreVar=" + nombreVariable + 
                 " ,arreglo tamaño= " + this.tamaño
                 +'}';

@@ -15,7 +15,7 @@ import java.util.ArrayList;
  */
 public class StructType<T> extends Type {
     
-    private final ArrayList members;
+    private ArrayList members;
     
     public StructType(String nombreVar, String tipo_literal){
         super(nombreVar,tipo_literal);

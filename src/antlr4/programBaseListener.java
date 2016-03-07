@@ -29,6 +29,18 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterStatementLocationArray(@NotNull programParser.StatementLocationArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitStatementLocationArray(@NotNull programParser.StatementLocationArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterProgram(@NotNull programParser.ProgramContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -660,6 +672,18 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAddExprMultExpr(@NotNull programParser.AddExprMultExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterValueLocationArray(@NotNull programParser.ValueLocationArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitValueLocationArray(@NotNull programParser.ValueLocationArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

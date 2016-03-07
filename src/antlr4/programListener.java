@@ -21,6 +21,18 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitStatementReturn(@NotNull programParser.StatementReturnContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code statementLocationArray}
+	 * labeled alternative in {@link programParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatementLocationArray(@NotNull programParser.StatementLocationArrayContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code statementLocationArray}
+	 * labeled alternative in {@link programParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatementLocationArray(@NotNull programParser.StatementLocationArrayContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link programParser#program}.
 	 * @param ctx the parse tree
 	 */
@@ -606,6 +618,18 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAddExprMultExpr(@NotNull programParser.AddExprMultExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code valueLocationArray}
+	 * labeled alternative in {@link programParser#value}.
+	 * @param ctx the parse tree
+	 */
+	void enterValueLocationArray(@NotNull programParser.ValueLocationArrayContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code valueLocationArray}
+	 * labeled alternative in {@link programParser#value}.
+	 * @param ctx the parse tree
+	 */
+	void exitValueLocationArray(@NotNull programParser.ValueLocationArrayContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link programParser#multdiv_op}.
 	 * @param ctx the parse tree

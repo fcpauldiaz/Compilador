@@ -7,8 +7,13 @@
 package compiler;
 
 import static compiler.ANTGui.jTextArea3;
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 /**
  *
@@ -44,7 +49,7 @@ public class SymbolTable {
             this.tabla.put(simbolo.getId(), simbolo);
          else{
             System.out.println("Variable ya declarada");
-            agregarLog("Error: Variable ya declarada " + ((Type)(simbolo.getTipo())).getNombreVariable(), lineaActual, columnaActual);
+            agregarLog("Error: Variable ya declarada " + ((Type)(simbolo.getTipo())).getNombreVariable(), lineaActual, columnaActual,true);
         }
     }
     
@@ -94,6 +99,7 @@ public class SymbolTable {
     
     public Symbol showSymbol(String nombreVar,Scope ambitoActual){
          Scope scope = ambitoActual;
+         try{
         while (scope!=null){
             for (Map.Entry<Integer, Symbol> entry : tabla.entrySet()) {
                 int key = entry.getKey();
@@ -101,20 +107,40 @@ public class SymbolTable {
                 
                 String varName = ((Type)value.getTipo()).getNombreVariable();
                 int ambito = value.getAmbito();
-                if (varName.equals(nombreVar)
+                System.out.println(varName);
+                System.out.println(nombreVar);
+                if (varName.trim().equals(nombreVar.trim())
                     && 
                    ambito == scope.getIdScope())
                     return value;
             }
             scope = scope.getAnterior();
         }
+         }catch(Exception e){}
         return null;
     
     }
     
-    public void agregarLog(String mensaje, int linea, int columna){
-        jTextArea3.setText(jTextArea3.getText()+"\n"+
+    public void agregarLog(String mensaje, int linea, int columna, boolean error){
+        
+        StyledDocument doc = jTextArea3.getStyledDocument();
+
+        Style style = jTextArea3.addStyle("I'm a Style", null);
+        StyleConstants.setForeground(style, Color.red);
+        
+        if (error){
+            try { doc.insertString(doc.getLength(), "linea: " + linea +": "+ columna +  " " + mensaje+"\n",style); }
+            catch (BadLocationException e){}
+        }
+        else{
+            StyleConstants.setForeground(style, Color.blue);
+            try { doc.insertString(doc.getLength(), "linea: " + linea +": "+ columna +  " " + mensaje+"\n",style); }
+            catch (BadLocationException e){}
+        }
+        
+        /*jTextArea3.setText(jTextArea3.getText()+"\n"+
                 "linea: " + linea +": "+ columna +  " " + mensaje
-                );
+        );*/
+        
     }
 }

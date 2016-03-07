@@ -19,6 +19,13 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatementReturn(@NotNull programParser.StatementReturnContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code statementLocationArray}
+	 * labeled alternative in {@link programParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatementLocationArray(@NotNull programParser.StatementLocationArrayContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link programParser#program}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -364,6 +371,13 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAddExprMultExpr(@NotNull programParser.AddExprMultExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code valueLocationArray}
+	 * labeled alternative in {@link programParser#value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValueLocationArray(@NotNull programParser.ValueLocationArrayContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link programParser#multdiv_op}.
 	 * @param ctx the parse tree

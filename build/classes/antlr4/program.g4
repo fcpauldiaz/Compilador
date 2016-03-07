@@ -101,6 +101,7 @@ statement
 	|	methodCall ';'					#statementMethodCall
 	| 	block						#statementBlock				
 	|	location '=' expression ';'			#statementLocation
+        |       locationArray '=' expression ';'                #statementLocationArray
 	|	(expression)?';'				#statementExpression
 	;
 
@@ -110,15 +111,17 @@ statementElse
     ;
 	
 location
-	:	(ID | locationArray)(locationMethod)?
+	:	(ID)(locationMethod)?
 	;
 	
 locationMember
-	:	(ID | locationArray)(locationMethod)?
+	:	(ID)(locationMethod)? 
+        |       locationArray
 	;
 
 locationArray
-        :   ID '[' expression ']'
+        :   ID '[' expression ']' (locationMethod)?
+            
         ;
     
 locationMethod
@@ -166,6 +169,7 @@ unaryExpr
 
 value
 	:	location			#valueLocation
+        |       locationArray                   #valueLocationArray
 	|	methodCall			#valueMethodCall
 	|	literal				#valueLiteral
 	|	'(' expression ')'		#valueExprWithParent

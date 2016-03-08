@@ -33,6 +33,7 @@ public class Visitor<T> extends programBaseVisitor {
     public static boolean verificacion = true;
     public static boolean verificadorMain;
     public Stack literals = new Stack();
+    public Stack<String> methods = new Stack();
     
     public Visitor() {
        
@@ -125,8 +126,13 @@ public class Visitor<T> extends programBaseVisitor {
     @Override
     public T visitVarDeclarationArray(programParser.VarDeclarationArrayContext ctx) {
         
-        Type tipo = new Type(ctx.getChild(1).getText(),ctx.getChild(0).getText());
+        Type tipo = new Type(ctx.getChild(1).getText(),(String)visit(ctx.getChild(0)));
         tipo.setArreglo(Integer.parseInt(ctx.getChild(3).getText()));
+        
+        if (tipo.getTamaño()<=0){
+            agregarLog("Error: tamaño de declaración de array debe ser > 0", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
+            return null;
+        }
         
         Symbol simbolo = new Symbol(++autoincrement,scopeActual.getIdScope(),tipo);
        
@@ -206,8 +212,9 @@ public class Visitor<T> extends programBaseVisitor {
             for (int i =0;i<ctx.getChildCount();i++){
                 returnString = ctx.getChild(i).getText() + " ";
             }
-            return (T)returnString;
+            return (T)ctx.getChild(1).getText();
         }
+        
         
         return (T)ctx.getText();
         
@@ -225,8 +232,13 @@ public class Visitor<T> extends programBaseVisitor {
          for (int i = 0;i<ctx.getChildCount();i++){
             if (this.visit(ctx.getChild(i)) != null){
                 String tipo = (String)this.visit(ctx.getChild(i));
+                Symbol var = tablaSimbolos.showSymbol(tipo, scopeActual);
+                if (var != null){
+                    tipo = ((Type)var.getTipo()).getLiteralTipo();
+                  
+                }
                 if (!tipo.contains("boolean")){
-                    agregarLog("Error: se espera expresión booleana", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
+                    agregarLog("Error: se espera expresión booleana " + tipo, ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
                 }
             }
         }
@@ -471,7 +483,7 @@ public class Visitor<T> extends programBaseVisitor {
         for (int i = 0;i<ctx.getChildCount();i++){
             if (this.visit(ctx.getChild(i))!= null){
                 String varName = (String)this.visit(ctx.getChild(i));
-                Symbol found = this.tablaSimbolos.showSymbol(varName, scopeActual);
+                Symbol found = tablaSimbolos.showSymbol(varName, scopeActual);
                
                 System.out.println("TEST");
                 System.out.println(found);
@@ -526,6 +538,11 @@ public class Visitor<T> extends programBaseVisitor {
 
     @Override
     public T visitLocationArray(programParser.LocationArrayContext ctx) {
+            
+            for (int i = 0;i<ctx.getChildCount();i++){
+                visit(ctx.getChild(i));
+            }
+        
             String compare = ((String)this.visit(ctx.getChild(2)));
             boolean verArray = true;
             if (!compare.contains("int") && !compare.isEmpty()){
@@ -535,7 +552,11 @@ public class Visitor<T> extends programBaseVisitor {
                 
             }
             String nombreArray = ctx.getChild(0).getText();
-            Symbol simboloArray = this.tablaSimbolos.showSymbol(nombreArray, scopeActual);
+            Symbol simboloArray = tablaSimbolos.findAllScopes(nombreArray);
+            if (simboloArray == null){
+               
+                return null;
+            }
             Type tipoArray = ((Type)simboloArray.getTipo());
             if (tipoArray.isArreglo()== false){
                 agregarLog("Error: " + tipoArray.getNombreVariable() + " no es un array", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true );
@@ -546,8 +567,8 @@ public class Visitor<T> extends programBaseVisitor {
             if (verArray){
                 int tamañoArray = ((Type)simboloArray.getTipo()).getTamaño();
                 int tamañoActual = Integer.parseInt((String)literals.pop());
-                if (tamañoActual > tamañoArray || tamañoActual < 0){
-                    agregarLog("Error: index out of bounds ", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
+                if (tamañoActual > tamañoArray-1 || tamañoActual < 0){
+                    agregarLog("Error: index "+tipoArray.getNombreVariable()+" out of bounds ", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
                     verArray = false;
                     verificacion = false;
                    
@@ -559,8 +580,9 @@ public class Visitor<T> extends programBaseVisitor {
                 agregarLog("Array " + tipoArray.getNombreVariable()+" tipo correcto" , ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),false);
                 
             }
+           
             
-        return null;
+        return (T)compare;
     }
 
     @Override
@@ -637,9 +659,10 @@ public class Visitor<T> extends programBaseVisitor {
             if (firstSymbol != null)
                 firstOpType = ((Type)firstSymbol.getTipo()).getLiteralTipo();
             else{
-                for (int j = 0;j<ctx.getChildCount();j++){
-                    visit(ctx.getChild(j));
-                }
+               
+                firstOpType =  (String) visit(ctx.getChild(0));
+               
+                
             }
                 
             
@@ -663,28 +686,41 @@ public class Visitor<T> extends programBaseVisitor {
     @Override
     public Object visitLocationMethod(programParser.LocationMethodContext ctx) {
         
-        String str1 = "";
         
+        String tipoEncontrado = "";
         String nombreStruct = ctx.getParent().getChild(0).getText();
-        String nombreAtributo = ctx.getChild(1).getChild(0).getText();
+       
+        String nombreAtributo = (String)visit(ctx.getChild(1));
+        String preAtributo = nombreAtributo;
         System.out.println("Nombre atributo " + nombreAtributo);
+        
         Symbol simboloStruct = tablaSimbolos.showSymbol(nombreStruct, scopeActual);
         
         
         System.out.println("simbolo struct " + simboloStruct);
         if (simboloStruct != null){
         if (simboloStruct.getTipo().getClass().getName().equals("compiler.Type")){
-            
-            Symbol finalType = buscarStructRecursivo(nombreAtributo, simboloStruct);
-            if (finalType != null)
-                return ((Type)finalType.getTipo()).getLiteralTipo();
-            else
-                return "";
+    
                 
            
            
         }
         
+            System.out.println("simbolo STRUCT" + simboloStruct);
+         if (!((Type)simboloStruct.getTipo()).getLiteralTipo().contains("int") &&
+             !((Type)simboloStruct.getTipo()).getLiteralTipo().contains("boolean")&&
+             !((Type)simboloStruct.getTipo()).getLiteralTipo().contains("char")
+             ){
+             String buscarStruct = ((Type)simboloStruct.getTipo()).getLiteralTipo();
+             Symbol showStruct = tablaSimbolos.showSymbol(buscarStruct, scopeActual);
+             simboloStruct = showStruct;
+             if (simboloStruct == null){
+                 return "";
+             }
+            /// agregarLog("returning " + ((Type)simboloStruct.getTipo()).getLiteralTipo(),1,1,false);
+            // return ((Type)simboloStruct.getTipo()).getLiteralTipo();
+             
+         }
         if (!simboloStruct.getTipo().getClass().getName().equals("compiler.StructType")){
             
             agregarLog("Error: Solo los structs tienen atributos",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
@@ -693,9 +729,22 @@ public class Visitor<T> extends programBaseVisitor {
         ArrayList<Symbol> arrayStruct = ((compiler.StructType)simboloStruct.getTipo()).getMembers();
         
         boolean encontrado = false;
+        System.out.println(arrayStruct);
+        Type typeFound =null;
         for (int i = 0;i<arrayStruct.size();i++){
             if (((compiler.Type)arrayStruct.get(i).getTipo()).getNombreVariable().equals(nombreAtributo)){
                 encontrado = true;
+                tipoEncontrado = ((compiler.Type)arrayStruct.get(i).getTipo()).getLiteralTipo();
+                typeFound = ((compiler.Type)arrayStruct.get(i).getTipo());
+//                if (((compiler.Type)arrayStruct.get(i).getTipo()).isArreglo()
+//                    && !preAtributo.contains("[")
+//                    ){
+//                    encontrado = false;
+//                    tipoEncontrado = "";
+//                }
+                
+                
+                
             }
         }
         if (!encontrado){
@@ -703,44 +752,61 @@ public class Visitor<T> extends programBaseVisitor {
         }
         else{
              agregarLog("El atributo "+nombreAtributo+" del struct " + nombreStruct + " es correcto", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),false);
+             if (!methods.isEmpty()){
+                 while(!methods.isEmpty()){
+                     String atributo = methods.pop();
+                     Symbol otroSimbolo = tablaSimbolos.showSymbol(typeFound.getLiteralTipo(), scopeActual);
+                     ArrayList<Symbol> arrayStruct2 = ((compiler.StructType)otroSimbolo.getTipo()).getMembers();
+                      for (int i = 0;i<arrayStruct2.size();i++){
+                            if (((compiler.Type)arrayStruct2.get(i).getTipo()).getNombreVariable().equals(nombreAtributo)){
+                                encontrado = true;
+                                tipoEncontrado = ((compiler.Type)arrayStruct.get(i).getTipo()).getLiteralTipo();
+                                typeFound = ((compiler.Type)arrayStruct.get(i).getTipo());
+             
+                            }
+                        }
+                    if (!encontrado){
+                        agregarLog("Error:El atributo "+atributo+" del struct " + ((Type)otroSimbolo.getTipo()).getNombreVariable() + " no existe", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
+                    }
+                    else{
+                        agregarLog("El atributo "+atributo+" del struct " + ((Type)otroSimbolo.getTipo()).getNombreVariable() + " es correcto", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),false);
+                    }
+                    
+                 }
+             }
         }
         }
-        return ""; //To cha return "";
+        else
+            methods.push(nombreAtributo);
+//        for (int j = 0;j<ctx.getChildCount();j++){
+//            
+//            visit(ctx.getChild(j));
+//            
+//        }
+        return tipoEncontrado; //To cha return "";
     }
 
-    public Symbol buscarStructRecursivo(String nombreAtributo, Symbol simboloStruct){
+    @Override
+    public Object visitLocationMemberArray(programParser.LocationMemberArrayContext ctx) {
+        for (int i = 0;i<ctx.getChildCount();i++){
+            visit(ctx.getChild(i));
+        }
+        return ctx.getChild(0).getChild(0).getText(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitLocationMemberMethod(programParser.LocationMemberMethodContext ctx) {
         
-        Symbol returnSymbol;
-        
-        if (simboloStruct != null){
-            String customTipo = ((compiler.Type)simboloStruct.getTipo()).getLiteralTipo();
-            if (nombreAtributo.contains("["))
-                nombreAtributo = nombreAtributo.substring(0,nombreAtributo.indexOf("["));
-            if (!customTipo.contains("literal")){
-                    Symbol customSymbol = tablaSimbolos.showSymbol(customTipo, scopeActual);
-                    if (customSymbol!=null){
-                    ArrayList<Symbol> arraySymbol = ((StructType)customSymbol.getTipo()).getMembers();
-
-                    for (Symbol sim: arraySymbol){
-                        if (((Type)sim.getTipo()).getNombreVariable().equals(nombreAtributo)){
-                            return buscarStructRecursivo(((Type)sim.getTipo()).getLiteralTipo(),sim);
-                        }
-                    }
-
-                    return arraySymbol.get(0);
-
-                }
-                else 
-                    return simboloStruct;
-                
+        Symbol methodSymbol = tablaSimbolos.findAllScopes(ctx.getChild(0).getText());
+        if (methodSymbol != null){
+            if (((Type)methodSymbol.getTipo()).isArreglo()){
+                agregarLog("Error: la variable " +((Type)methodSymbol.getTipo()).getNombreVariable() + " es un array", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true );
             }
         }
-           
         
-        
-        return null;
+       return ctx.getChild(0).getText();
     }
-    
+
     
     
     

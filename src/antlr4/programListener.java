@@ -21,6 +21,18 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitStatementReturn(@NotNull programParser.StatementReturnContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code locationMemberArray}
+	 * labeled alternative in {@link programParser#locationMember}.
+	 * @param ctx the parse tree
+	 */
+	void enterLocationMemberArray(@NotNull programParser.LocationMemberArrayContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code locationMemberArray}
+	 * labeled alternative in {@link programParser#locationMember}.
+	 * @param ctx the parse tree
+	 */
+	void exitLocationMemberArray(@NotNull programParser.LocationMemberArrayContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code statementLocationArray}
 	 * labeled alternative in {@link programParser#statement}.
 	 * @param ctx the parse tree
@@ -421,6 +433,18 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitParameterArray(@NotNull programParser.ParameterArrayContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code locationMemberMethod}
+	 * labeled alternative in {@link programParser#locationMember}.
+	 * @param ctx the parse tree
+	 */
+	void enterLocationMemberMethod(@NotNull programParser.LocationMemberMethodContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code locationMemberMethod}
+	 * labeled alternative in {@link programParser#locationMember}.
+	 * @param ctx the parse tree
+	 */
+	void exitLocationMemberMethod(@NotNull programParser.LocationMemberMethodContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code multExprMultDivOp}
 	 * labeled alternative in {@link programParser#multExpr}.
 	 * @param ctx the parse tree
@@ -508,16 +532,6 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCond_op_and(@NotNull programParser.Cond_op_andContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link programParser#locationMember}.
-	 * @param ctx the parse tree
-	 */
-	void enterLocationMember(@NotNull programParser.LocationMemberContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link programParser#locationMember}.
-	 * @param ctx the parse tree
-	 */
-	void exitLocationMember(@NotNull programParser.LocationMemberContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link programParser#locationArray}.
 	 * @param ctx the parse tree

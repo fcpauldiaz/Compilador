@@ -29,6 +29,18 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLocationMemberArray(@NotNull programParser.LocationMemberArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLocationMemberArray(@NotNull programParser.LocationMemberArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterStatementLocationArray(@NotNull programParser.StatementLocationArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -461,6 +473,18 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLocationMemberMethod(@NotNull programParser.LocationMemberMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLocationMemberMethod(@NotNull programParser.LocationMemberMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterMultExprMultDivOp(@NotNull programParser.MultExprMultDivOpContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -552,18 +576,6 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCond_op_and(@NotNull programParser.Cond_op_andContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterLocationMember(@NotNull programParser.LocationMemberContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLocationMember(@NotNull programParser.LocationMemberContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

@@ -45,11 +45,13 @@ public class SymbolTable {
     }
     
     public void addSymbol(Symbol simbolo, int lineaActual, int columnaActual){
-         if (revisarSimbolos(simbolo))
-            this.tabla.put(simbolo.getId(), simbolo);
-         else{
-            System.out.println("Variable ya declarada");
-            agregarLog("Error: Variable ya declarada " + ((Type)(simbolo.getTipo())).getNombreVariable(), lineaActual, columnaActual,true);
+        if (simbolo != null){
+            if (revisarSimbolos(simbolo))
+               this.tabla.put(simbolo.getId(), simbolo);
+            else{
+               System.out.println("Variable ya declarada");
+               agregarLog("Error: Variable ya declarada " + ((Type)(simbolo.getTipo())).getNombreVariable(), lineaActual, columnaActual,true);
+           }
         }
     }
     
@@ -68,15 +70,26 @@ public class SymbolTable {
      * FALSE = no valido
      */
     public boolean revisarSimbolos(Symbol simbolo){
+        if (simbolo == null)
+            return false;
         for (Map.Entry<Integer, Symbol> entry : tabla.entrySet()) {
-            int key = entry.getKey();
-            Symbol value = entry.getValue();
-            if (value.getAmbito()==simbolo.getAmbito() 
-                && 
-                ((Type)value.getTipo()).getNombreVariable().equals(((Type)simbolo.getTipo()).getNombreVariable()))
-                return false;
-        }
-        return true;
+                int key = entry.getKey();
+                Symbol value = entry.getValue();
+                if (value.getAmbito()==simbolo.getAmbito() 
+                    && 
+                    ((Type)value.getTipo()).getNombreVariable().equals(((Type)simbolo.getTipo()).getNombreVariable())){
+                    if (simbolo.getTipo().getClass().getName().equals("compiler.MethodType")){
+                        if ( ((MethodType)value.getTipo()).getParameters().size() !=
+                           ((MethodType)simbolo.getTipo()).getParameters().size()  ){
+                            return true;
+                        }
+                    }
+                    
+                    return false;
+                }
+            }
+            return true;
+        
     }
 
     public boolean revisarNombreVar(String nombreVar, Scope ambitoActual){
@@ -107,8 +120,8 @@ public class SymbolTable {
                 
                 String varName = ((Type)value.getTipo()).getNombreVariable();
                 int ambito = value.getAmbito();
-                System.out.println(varName);
-                System.out.println(nombreVar);
+                //System.out.println(varName);
+                //System.out.println(nombreVar);
                 if (varName.trim().equals(nombreVar.trim())
                     && 
                    ambito == scope.getIdScope())
@@ -116,6 +129,28 @@ public class SymbolTable {
             }
             scope = scope.getAnterior();
         }
+         }catch(Exception e){}
+        return null;
+    
+    }
+    
+    public Symbol findAllScopes(String nombreVar){
+       
+         try{
+        
+            for (Map.Entry<Integer, Symbol> entry : tabla.entrySet()) {
+                int key = entry.getKey();
+                Symbol value = entry.getValue();
+                
+                String varName = ((Type)value.getTipo()).getNombreVariable();
+                int ambito = value.getAmbito();
+                //System.out.println(varName);
+                //System.out.println(nombreVar);
+                if (varName.trim().equals(nombreVar.trim()))
+                   
+                    return value;
+            }
+         
          }catch(Exception e){}
         return null;
     

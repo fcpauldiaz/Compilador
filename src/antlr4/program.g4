@@ -115,8 +115,8 @@ location
 	;
 	
 locationMember
-	:	(ID)(locationMethod)? 
-        |       locationArray
+	:	(ID)(locationMethod)?       #locationMemberMethod
+        |       locationArray               #locationMemberArray
 	;
 
 locationArray

@@ -19,6 +19,13 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatementReturn(@NotNull programParser.StatementReturnContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code locationMemberArray}
+	 * labeled alternative in {@link programParser#locationMember}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLocationMemberArray(@NotNull programParser.LocationMemberArrayContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code statementLocationArray}
 	 * labeled alternative in {@link programParser#statement}.
 	 * @param ctx the parse tree
@@ -255,6 +262,13 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitParameterArray(@NotNull programParser.ParameterArrayContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code locationMemberMethod}
+	 * labeled alternative in {@link programParser#locationMember}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLocationMemberMethod(@NotNull programParser.LocationMemberMethodContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code multExprMultDivOp}
 	 * labeled alternative in {@link programParser#multExpr}.
 	 * @param ctx the parse tree
@@ -306,12 +320,6 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCond_op_and(@NotNull programParser.Cond_op_andContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link programParser#locationMember}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitLocationMember(@NotNull programParser.LocationMemberContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link programParser#locationArray}.
 	 * @param ctx the parse tree

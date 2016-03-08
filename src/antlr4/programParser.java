@@ -1222,28 +1222,52 @@ public class programParser extends Parser {
 	}
 
 	public static class LocationMemberContext extends ParserRuleContext {
-		public TerminalNode ID() { return getToken(programParser.ID, 0); }
-		public LocationArrayContext locationArray() {
-			return getRuleContext(LocationArrayContext.class,0);
-		}
-		public LocationMethodContext locationMethod() {
-			return getRuleContext(LocationMethodContext.class,0);
-		}
 		public LocationMemberContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_locationMember; }
+	 
+		public LocationMemberContext() { }
+		public void copyFrom(LocationMemberContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class LocationMemberMethodContext extends LocationMemberContext {
+		public TerminalNode ID() { return getToken(programParser.ID, 0); }
+		public LocationMethodContext locationMethod() {
+			return getRuleContext(LocationMethodContext.class,0);
+		}
+		public LocationMemberMethodContext(LocationMemberContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).enterLocationMember(this);
+			if ( listener instanceof programListener ) ((programListener)listener).enterLocationMemberMethod(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).exitLocationMember(this);
+			if ( listener instanceof programListener ) ((programListener)listener).exitLocationMemberMethod(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitLocationMember(this);
+			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitLocationMemberMethod(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class LocationMemberArrayContext extends LocationMemberContext {
+		public LocationArrayContext locationArray() {
+			return getRuleContext(LocationArrayContext.class,0);
+		}
+		public LocationMemberArrayContext(LocationMemberContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof programListener ) ((programListener)listener).enterLocationMemberArray(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof programListener ) ((programListener)listener).exitLocationMemberArray(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitLocationMemberArray(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1255,6 +1279,7 @@ public class programParser extends Parser {
 			setState(219);
 			switch ( getInterpreter().adaptivePredict(_input,16,_ctx) ) {
 			case 1:
+				_localctx = new LocationMemberMethodContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
 				{
@@ -1271,6 +1296,7 @@ public class programParser extends Parser {
 				}
 				break;
 			case 2:
+				_localctx = new LocationMemberArrayContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(218); locationArray();

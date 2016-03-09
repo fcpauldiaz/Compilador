@@ -292,11 +292,12 @@ public class Visitor<T> extends programBaseVisitor {
     @Override
     public T visitLocation(programParser.LocationContext ctx) {
         for (int i = 0;i<ctx.getChildCount();i++){
-            this.visit(ctx.getChild(i));
+            T var = (T)this.visit(ctx.getChild(i));
+            if (i==1){
+                return var;
+            }
         }
-        if (ctx.getChildCount()>1){
-           return (T)this.visit(ctx.getChild(1));
-        }
+        
         
         return (T)ctx.getChild(0).getText(); //To change body of generated methods, choose Tools | Templates.
     }
@@ -751,25 +752,31 @@ public class Visitor<T> extends programBaseVisitor {
             agregarLog("Error:El atributo "+nombreAtributo+" del struct " + nombreStruct + " no existe", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
         }
         else{
-             agregarLog("El atributo "+nombreAtributo+" del struct " + nombreStruct + " es correcto", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),false);
+             //agregarLog("El atributo "+nombreAtributo+" del struct " + nombreStruct + " es correcto", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),false);
              if (!methods.isEmpty()){
                  while(!methods.isEmpty()){
                      String atributo = methods.pop();
                      Symbol otroSimbolo = tablaSimbolos.showSymbol(typeFound.getLiteralTipo(), scopeActual);
+                     if (otroSimbolo != null){
                      ArrayList<Symbol> arrayStruct2 = ((compiler.StructType)otroSimbolo.getTipo()).getMembers();
                       for (int i = 0;i<arrayStruct2.size();i++){
-                            if (((compiler.Type)arrayStruct2.get(i).getTipo()).getNombreVariable().equals(nombreAtributo)){
+                            if (((compiler.Type)arrayStruct2.get(i).getTipo()).getNombreVariable().equals(atributo)){
                                 encontrado = true;
-                                tipoEncontrado = ((compiler.Type)arrayStruct.get(i).getTipo()).getLiteralTipo();
+                                tipoEncontrado = ((compiler.Type)arrayStruct2.get(i).getTipo()).getLiteralTipo();
                                 typeFound = ((compiler.Type)arrayStruct.get(i).getTipo());
              
                             }
                         }
+                     }
                     if (!encontrado){
-                        agregarLog("Error:El atributo "+atributo+" del struct " + ((Type)otroSimbolo.getTipo()).getNombreVariable() + " no existe", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
+                        agregarLog("Error:El atributo "+atributo+" del struct " + nombreStruct + " no existe", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
                     }
                     else{
-                        agregarLog("El atributo "+atributo+" del struct " + ((Type)otroSimbolo.getTipo()).getNombreVariable() + " es correcto", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),false);
+                        Symbol last  = tablaSimbolos.showSymbol(atributo,scopeActual);
+                        if (last != null){
+                           tipoEncontrado = ((Type)last.getTipo()).getLiteralTipo();
+                        }
+                        agregarLog("El atributo "+atributo+" del struct " + nombreStruct + " es correcto", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),false);
                     }
                     
                  }
@@ -783,6 +790,7 @@ public class Visitor<T> extends programBaseVisitor {
 //            visit(ctx.getChild(j));
 //            
 //        }
+        
         return tipoEncontrado; //To cha return "";
     }
 
@@ -803,7 +811,9 @@ public class Visitor<T> extends programBaseVisitor {
                 agregarLog("Error: la variable " +((Type)methodSymbol.getTipo()).getNombreVariable() + " es un array", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true );
             }
         }
-        
+        for (int i = 0;i<ctx.getChildCount();i++){
+            visit(ctx.getChild(i));
+        }
        return ctx.getChild(0).getText();
     }
 
@@ -827,9 +837,7 @@ public class Visitor<T> extends programBaseVisitor {
             catch (BadLocationException e){}
         }
         
-        /*jTextArea3.setText(jTextArea3.getText()+"\n"+
-                "linea: " + linea +": "+ columna +  " " + mensaje
-        );*/
+        
         
     }
 

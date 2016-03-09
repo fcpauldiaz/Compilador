@@ -5,7 +5,6 @@
  */
 package compiler;
 
-import GUI.Main;
 import antlr4.programLexer;
 import antlr4.programParser;
 import java.awt.Dimension;
@@ -375,8 +374,13 @@ public class ANTGui extends javax.swing.JFrame {
           try{
               
             jTextArea3.setText("");
-            
-            String in = leerArchivo(inputFile);
+            String in="";
+            try{
+                in = leerArchivo(inputFile);
+            }catch(Exception e){}
+            if (inputFile == null){
+                in = this.jTextArea2.getText();
+            }
             CharStream cs =  new ANTLRInputStream(in+"\n"+in);
 
             programLexer lexer = new programLexer(cs);

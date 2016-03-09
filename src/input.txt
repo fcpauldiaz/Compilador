@@ -1,18 +1,22 @@
-class pr{	
-	int global;
-	void main(int parametro){
-		global = parametro;
+class pr{
+	struct cilindro{
+		boolean b;
+		int color;
 	}
-	void pruebaSinReturn(){	
-		global = 1;
+	struct llanta{
+		int diametro;
+		struct cilindro miCilindro[2];
+		char tipoLlanta;
 	}
-	char otroMetodo(){
-		int a;
-		a = 0;
-		return 'a';
+	struct carro{
+		int tamano;
+		char nombre;
+		struct llanta aro[4];
 	}
 	void main(){
-		char otraVar;		
-		otraVar = 'd';
+		int algo;
+		struct carro bmw[5];
+		algo = bmw[1].aro[2].miCilindro[0].color;
+
 	}
 }

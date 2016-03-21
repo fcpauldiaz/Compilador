@@ -7,19 +7,21 @@ package compiler;
 
 import antlr4.programLexer;
 import antlr4.programParser;
-import java.awt.Dimension;
+import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -27,19 +29,14 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import javax.swing.table.DefaultTableModel;
-import org.antlr.v4.Tool;
 import org.antlr.v4.gui.Trees;
-import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
+
 
 /**
  *
@@ -52,14 +49,17 @@ public class ANTGui extends javax.swing.JFrame {
     public static String[] ruleNames;
     private programParser parser;
     private programParser.ProgramContext contexto;
+    private String host = "192.168.1.109";
     
     /**
      * Creates new form ANTGui
      */
     public ANTGui() {
+       
         initComponents();
         toolbar();
         lines();
+        compilarARM();
         
         /*DefaultTableModel model = (DefaultTableModel) this.jTable1.getModel();
         model.addRow(new Object[]{"Column 1", "Column 2", "Column 3"});
@@ -68,7 +68,7 @@ public class ANTGui extends javax.swing.JFrame {
         
     }
     
-    public void lines(){
+    private void lines(){
    
     TextLineNumber tln = new TextLineNumber(this.jTextArea2);
     this.jScrollPane2.setRowHeaderView(tln);
@@ -96,6 +96,8 @@ public class ANTGui extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -175,15 +177,21 @@ public class ANTGui extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("Tabla de Símbolos", jPanel5);
 
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane3.setViewportView(jTextArea1);
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1051, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1051, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 189, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane2.addTab("Gramática", jPanel4);
@@ -245,7 +253,7 @@ public class ANTGui extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void toolbar(){
+    private void toolbar(){
        
         
         //************************ Actions ************************
@@ -601,6 +609,96 @@ public class ANTGui extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+     
+     private void trasladarArchivoRPI(File file){ try{
+      JSch jsch=new JSch();  
+
+     
+     
+     
+      String user="pi";
+      
+
+      Session session=jsch.getSession(user, host, 22);
+      java.util.Properties config = new java.util.Properties(); 
+    config.put("StrictHostKeyChecking", "no");
+    session.setConfig(config);
+      session.setPassword("strawberry");
+    
+      
+    session.connect();
+
+    // Abrimos el canal de sftp y conectamos
+   // Channel channel=session.openChannel("shell");
+    
+   Channel channel = session.openChannel("sftp");
+   channel.connect();
+   ChannelSftp  channelSftp = (ChannelSftp)channel;
+    channelSftp.cd("/home/pi");
+    File f = file;
+    channelSftp.put(new FileInputStream(f), f.getName());
+   
+    //channel.setInputStream(System.in);
+    //channel.setOutputStream(System.out);
+
+    //channel.connect();
+
+    while (channel.getExitStatus() == -1){
+       try{Thread.sleep(1000);}catch(Exception e){System.out.println(e);}
+    }
+   
+    // conectar y ejecutar
+        channel.connect();
+  
+     
+    }
+    catch(Exception e){
+      System.out.println(e);
+    }
+     }
+     //http://kodehelp.com/java-program-for-uploading-file-to-sftp-server/
+     private void compilarARM(){ 
+        try{
+            JSch jsch=new JSch();  
+
+           
+
+
+            String user="pi";
+
+
+            Session session=jsch.getSession(user, host, 22);
+            java.util.Properties config = new java.util.Properties(); 
+            config.put("StrictHostKeyChecking", "no");
+            session.setConfig(config);
+            session.setPassword("strawberry");
+
+
+            session.connect();
+
+            // Abrimos el canal de sftp y conectamos
+            Channel channel=session.openChannel("shell");
+
+        
+            PrintStream printStream = new PrintStream(new CustomOutputStream(this.jTextArea1));
+          //  System.setOut(printStream);
+          
+            
+            channel.setInputStream(System.in);
+            channel.setOutputStream(printStream);
+         
+
+            channel.connect();
+            System.out.println("Connected");
+
+          
+
+           
+        }
+        catch(Exception e){
+            System.out.println(e);
+          }
+     }
     /**
      * @param args the command line arguments
      */
@@ -652,10 +750,12 @@ public class ANTGui extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     public static javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     public static javax.swing.JTextPane jTextArea3;
     private javax.swing.JToolBar jToolBar1;

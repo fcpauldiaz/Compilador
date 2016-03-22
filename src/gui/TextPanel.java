@@ -2,9 +2,10 @@ package gui;
 
 /***********************************
 * Name: TextPanel.java
+* Archivo modificado por: Pablo D. 20/03/2016
 * Date: Aug 17, 2010
 * @author martin
-* Description:
+* 
 ***********************************/
 
 
@@ -12,8 +13,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.*;
@@ -60,29 +59,25 @@ public class TextPanel extends JPanel{
         //add the  listener
         this.textPane.getDocument().addDocumentListener(new myDocumentListener());
 
-        timer = new javax.swing.Timer(1, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if(activar_timer == false){
-                    return;
-                }
-                //System.out.println("actualizar colores");
-                setPosSelectedWithEnter();
-                if(inserto){
-                    insertTabs();
-                }
-                
-                activar_timer = false;
-                tamano_antes = textPane.getText().length();
-                timer.stop();
+        timer = new javax.swing.Timer(1, (ActionEvent e) -> {
+            if(activar_timer == false){
+                return;
             }
+            //System.out.println("actualizar colores");
+            setPosSelectedWithEnter();
+            if(inserto){
+                insertTabs();
+            }
+            
+            activar_timer = false;
+            tamano_antes = textPane.getText().length();
+            timer.stop();
         });
         //timer.start();
-        timer2 = new javax.swing.Timer(10, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if(textPane.getText().isEmpty())
-                    return;
-                highLightKey();
-            }
+        timer2 = new javax.swing.Timer(10, (ActionEvent e) -> {
+            if(textPane.getText().isEmpty())
+                return;
+            highLightKey();
         });
         timer2.start();
 
@@ -117,9 +112,9 @@ public class TextPanel extends JPanel{
         String[] lineas = all_txt.split("\n");
         for(int i=1;i<lineas.length+1;i++){
             suma+=lineas[i-1].length()+1;
-            System.out.println("suma: "+suma+" start: "+start);
+           
             if(suma>=start){
-                System.out.println("insertar tabs... :)!");
+               
                 String cadena = expect("(\t)+", lineas[i-1]);
                 if(!cadena.isEmpty()){
                     cant_tabs += cadena.length();
@@ -371,7 +366,7 @@ public class TextPanel extends JPanel{
         try {
             doc.remove(start, to_print.length());
             doc.insertString(start, to_print, set);
-        } catch (Exception ex) {System.out.println("no se pudo remover");}
+        } catch (Exception ex) {System.out.println("no se pudSystem.o remover");}
          set = new SimpleAttributeSet();
         textPane.setCharacterAttributes(set, true);
     }
@@ -553,6 +548,7 @@ public class TextPanel extends JPanel{
     *****************************************/
     public class myDocumentListener implements DocumentListener{
 
+        @Override
         public void insertUpdate(DocumentEvent de) {
             //System.out.println("insertUpdate");
 
@@ -568,6 +564,7 @@ public class TextPanel extends JPanel{
             }
         }
 
+        @Override
         public void removeUpdate(DocumentEvent de) {
             //System.out.println("remove Update");
             if(activar_timer == true){
@@ -582,8 +579,9 @@ public class TextPanel extends JPanel{
             }
         }
 
+        @Override
         public void changedUpdate(DocumentEvent de) {
-            System.out.println("changedUpdate");
+            //System.out.println("System.changedUpdate");
             //if(activar_timer == true){
 
             //}else{
@@ -648,15 +646,14 @@ public class TextPanel extends JPanel{
     /*****************************************
     * removeHighlights
     * remove all high lights from the pane
-    * @return void
     *****************************************/
     public void removeHighlights() {
         JTextComponent textComp = this.textPane;
         Highlighter hilite = textComp.getHighlighter();
         Highlighter.Highlight[] hilites = hilite.getHighlights();
-        for (int i=0; i<hilites.length; i++) {
-            if (hilites[i].getPainter() instanceof MyHighlightPainter){
-                hilite.removeHighlight(hilites[i]);
+        for (Highlighter.Highlight hilite1 : hilites) {
+            if (hilite1.getPainter() instanceof MyHighlightPainter) {
+                hilite.removeHighlight(hilite1);
             }
         }
     }

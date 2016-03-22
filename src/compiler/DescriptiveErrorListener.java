@@ -8,7 +8,7 @@ package compiler;
 
 
 
-import static compiler.ANTGui.jTextArea3;
+import static gui.ANTGui.jTextArea3;
 import java.awt.Color;
 import java.util.Collections;
 import java.util.List;

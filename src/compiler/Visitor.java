@@ -8,7 +8,7 @@ package compiler;
 
 import antlr4.programBaseVisitor;
 import antlr4.programParser;
-import static compiler.ANTGui.jTextArea3;
+import static gui.ANTGui.jTextArea3;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Stack;
@@ -336,7 +336,7 @@ public class Visitor<T> extends programBaseVisitor {
                         System.out.println("Tipo incorrecto");
                         agregarLog("Error: tipo incorrecto",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
 
-                        Visitor.verificacion = false;
+                       
                 }
             }
             else{
@@ -478,7 +478,7 @@ public class Visitor<T> extends programBaseVisitor {
           ArrayList arraySimbolos = tipoMetodo.getParameters();
           if (arraySimbolos.size() != validCount){
             agregarLog("Error no coincide el número de argumentos y parámetros", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
-            verificacion = false;
+           
             return "";
         }
         for (int i = 0;i<ctx.getChildCount();i++){
@@ -511,7 +511,7 @@ public class Visitor<T> extends programBaseVisitor {
                           stringExternalType = varName;// int_literal, char_literal, boolean_literal
                     else{
                         agregarLog("Error: la variable no existe " + varName,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
-                        verificacion = false;
+                        
                     }
                         
                 }
@@ -520,7 +520,7 @@ public class Visitor<T> extends programBaseVisitor {
                     
                 if (!stringExternalType.contains(stringInternalType)){
                     agregarLog("Error: Tipo incorrecto en argumentos " + varName,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
-                    verificacion = false;
+                   
                 }
                 else{
                     agregarLog("Tipo correcto en argumentos "+ varName,ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),false);
@@ -549,8 +549,7 @@ public class Visitor<T> extends programBaseVisitor {
             if (!compare.contains("int") && !compare.isEmpty()){
                 agregarLog("Error: invalid return type " + ((String)this.visit(ctx.getChild(2))), ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
                 verArray = false;
-                verificacion = false;
-                
+              
             }
             String nombreArray = ctx.getChild(0).getText();
             Symbol simboloArray = tablaSimbolos.findAllScopes(nombreArray);
@@ -562,7 +561,7 @@ public class Visitor<T> extends programBaseVisitor {
             if (tipoArray.isArreglo()== false){
                 agregarLog("Error: " + tipoArray.getNombreVariable() + " no es un array", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true );
                 verArray = false;
-                verificacion = false;
+               
               
             }
             if (verArray){
@@ -571,7 +570,7 @@ public class Visitor<T> extends programBaseVisitor {
                 if (tamañoActual > tamañoArray-1 || tamañoActual < 0){
                     agregarLog("Error: index "+tipoArray.getNombreVariable()+" out of bounds ", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
                     verArray = false;
-                    verificacion = false;
+               
                    
                 }
                 
@@ -824,11 +823,14 @@ public class Visitor<T> extends programBaseVisitor {
         
         StyledDocument doc = jTextArea3.getStyledDocument();
 
-        Style style = jTextArea3.addStyle("I'm a Style", null);
+        Style style = jTextArea3.addStyle("", null);
         StyleConstants.setForeground(style, Color.red);
         
         if (error){
-            try { doc.insertString(doc.getLength(), "linea: " + linea +": "+ columna +  " " + mensaje+"\n",style); }
+            try {
+                doc.insertString(doc.getLength(), "linea: " + linea +": "+ columna +  " " + mensaje+"\n",style);
+                verificacion = false;
+            }
             catch (BadLocationException e){}
         }
         else{

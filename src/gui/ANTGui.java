@@ -1,9 +1,9 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * UVG
+ * Pablo Díaz
+ * IDE para el compilador
  */
-package compiler;
+package gui;
 
 import antlr4.programLexer;
 import antlr4.programParser;
@@ -11,6 +11,14 @@ import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
+import compiler.CustomOutputStream;
+import compiler.DescriptiveErrorListener;
+import compiler.IntermediateCodeVisitor;
+import compiler.MethodType;
+import compiler.Scope;
+import compiler.StructType;
+import compiler.Symbol;
+import compiler.Visitor;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -50,6 +58,7 @@ public class ANTGui extends javax.swing.JFrame {
     private programParser parser;
     private programParser.ProgramContext contexto;
     private String host = "192.168.1.109";
+     TextPanel jTextArea2;
     
     /**
      * Creates new form ANTGui
@@ -59,19 +68,14 @@ public class ANTGui extends javax.swing.JFrame {
         initComponents();
         toolbar();
         lines();
-        compilarARM();
+       // compilarARM();
         
-        /*DefaultTableModel model = (DefaultTableModel) this.jTable1.getModel();
-        model.addRow(new Object[]{"Column 1", "Column 2", "Column 3"});
-         model.addRow(new Object[]{"Column 1", "Column 2", "Column 3"});*/
-       
         
     }
     
     private void lines(){
-   
-    TextLineNumber tln = new TextLineNumber(this.jTextArea2);
-    this.jScrollPane2.setRowHeaderView(tln);
+        jTextArea2 = new TextPanel();
+        this.jTabbedPane1.add(jTextArea2);
     }
 
     /**
@@ -84,9 +88,6 @@ public class ANTGui extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
         jToolBar1 = new javax.swing.JToolBar();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel3 = new javax.swing.JPanel();
@@ -105,29 +106,6 @@ public class ANTGui extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 708, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(151, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Input", jPanel2);
 
         jToolBar1.setBackground(new java.awt.Color(204, 204, 204));
         jToolBar1.setForeground(new java.awt.Color(204, 204, 204));
@@ -254,10 +232,11 @@ public class ANTGui extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void toolbar(){
-       
+        
         
         //************************ Actions ************************
         Action newFileButton = new AbstractAction("Nuevo",new ImageIcon("src/resources/new-git.png")) {
+            @Override
             public void actionPerformed(ActionEvent e) {
                nuevoArchivo();
             }
@@ -265,26 +244,32 @@ public class ANTGui extends javax.swing.JFrame {
         
         
         Action openFileAction = new AbstractAction("Abrir",new ImageIcon("src/resources/open-git.png")) {
+            @Override
             public void actionPerformed(ActionEvent e) {
                abrirArchivo();
             }
         };
         
         
+        
         Action saveAction = new AbstractAction("Guardar",new ImageIcon("src/resources/update-git.png")) {
+            @Override
             public void actionPerformed(ActionEvent e) {
-               guardarArchivo();
+                guardarArchivo();
             }
         };
         
         
-          Action compileAction = new AbstractAction("Compilar", new ImageIcon("src/resources/compile.png")) {
+         
+         Action compileAction = new AbstractAction("Compilar", new ImageIcon("src/resources/compile.png")) {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 compilar();
             }
         };
           
              Action showTree = new AbstractAction("Arbol", new ImageIcon("src/resources/tree-git.png")) {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 mostrarArbol();
             }
@@ -345,6 +330,7 @@ public class ANTGui extends javax.swing.JFrame {
     }
     
     public void guardarArchivo(){
+       
        crearArchivo(this.jTextArea2.getText(),inputFile);
     }
     
@@ -389,14 +375,15 @@ public class ANTGui extends javax.swing.JFrame {
             if (inputFile == null){
                 in = this.jTextArea2.getText();
             }
-            CharStream cs =  new ANTLRInputStream(in+"\n"+in);
+            CharStream cs =  new ANTLRInputStream(in);
 
             programLexer lexer = new programLexer(cs);
             lexer.removeErrorListeners();
             lexer.addErrorListener(DescriptiveErrorListener.INSTANCE);
             CommonTokenStream tokens = new CommonTokenStream( lexer);
              parser = new programParser(tokens);
-            ParseTree tree = parser.program();
+             contexto = parser.program();
+            ParseTree tree = contexto;
 
             
 
@@ -404,7 +391,7 @@ public class ANTGui extends javax.swing.JFrame {
             parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
 
             // Specify our entry point
-            contexto = parser.program();
+            ;
             ruleNames = parser.getRuleNames();
             
 
@@ -417,6 +404,8 @@ public class ANTGui extends javax.swing.JFrame {
 
                 Visitor vistor = new Visitor();
                 vistor.visit(tree);
+                IntermediateCodeVisitor visitCode = new IntermediateCodeVisitor();
+                visitCode.visit(tree);
                
                 if (Visitor.verificadorMain==false){
                     jTextArea3.setText(jTextArea3.getText()+"\n"+"Error: No existe el método MAIN");
@@ -744,19 +733,16 @@ public class ANTGui extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     public static javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
     public static javax.swing.JTextPane jTextArea3;
     private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables

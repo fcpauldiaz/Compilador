@@ -14,13 +14,15 @@ public class IntermediateCode {
     
     private String dir1;
     private String dir2;
-    private String tipo;
+    private String res;
+    private String op;
     private String tamaño;
+    private String etiqueta;
 
-    public IntermediateCode(String dir1, String dir2, String tipo) {
+    public IntermediateCode(String dir1, String dir2, String op) {
         this.dir1 = dir1;
         this.dir2 = dir2;
-        this.tipo = tipo;
+        this.op = op;
     }
 
     public IntermediateCode() {
@@ -44,14 +46,7 @@ public class IntermediateCode {
         this.dir2 = dir2;
     }
 
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
+  
     public String getTamaño() {
         return tamaño;
     }
@@ -60,10 +55,38 @@ public class IntermediateCode {
         this.tamaño = tamaño;
     }
 
+    public String getEtiqueta() {
+        return etiqueta;
+    }
+
+    public void setEtiqueta(String etiqueta) {
+        this.etiqueta = etiqueta;
+    }
+
+    public String getRes() {
+        return res;
+    }
+
+    public void setRes(String res) {
+        this.res = res;
+    }
+
+    public String getOp() {
+        return op;
+    }
+
+    public void setOp(String op) {
+        this.op = op;
+    }
+
     @Override
     public String toString() {
-        return "IntermediateCode{" + "dir1=" + dir1 + ", dir2=" + dir2 + ", tipo=" + tipo + '}';
+        return "IntermediateCode{" + "dir1=" + dir1 + ", dir2=" + dir2 + ", res=" + res + ", op=" + op + ", tamaño=" + tamaño + ", etiqueta=" + etiqueta + '}';
     }
+
+    
+    
+    
     
     
     

@@ -3,8 +3,6 @@ package gui;
  
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.text.*;
  
 public class LineNumber extends JComponent
 {

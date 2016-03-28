@@ -2,7 +2,7 @@ package gui;
 
 /***********************************
 * Name: TextPanelInterCode.java
-* Archivo modificado por: Pablo D. 24/03/2016
+* Archivo modificado por: Pablo D. 20/03/2016
 * Date: Aug 17, 2010
 * @author martin
 * 
@@ -26,7 +26,7 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 
-public class TextPanel extends JPanel{
+public class TextPanelInterCode extends JPanel{
 
     private JTextPane textPane = new JTextPane();
     private Timer timer, timer2;
@@ -45,17 +45,15 @@ public class TextPanel extends JPanel{
      * TextPanel
      * constructor
      *****************************************/
-    public TextPanel(){
+    public TextPanelInterCode(){
 
         JScrollPane scroll = new JScrollPane(this.textPane);
         this.textPane.setEditable(true);
 
         this.textPane.setFont(new Font("monospaced", Font.PLAIN, 12));
 
-        LineNumber lineNumber = new LineNumber( textPane );
-        lineNumber.setPreferredSize(99);
-        scroll.setRowHeaderView( lineNumber );
-
+       
+      
         //add the  listener
         this.textPane.getDocument().addDocumentListener(new myDocumentListener());
 

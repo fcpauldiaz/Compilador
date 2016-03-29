@@ -19,6 +19,9 @@ public class IntermediateCode {
     private String tamaño;
     private String etiqueta;
     private boolean global;
+    private boolean statementIF;
+    private String bandera;
+    private IntermediateCode gotoLabel;
 
     public IntermediateCode(String dir1, String dir2, String op) {
         this.dir1 = dir1;
@@ -85,10 +88,37 @@ public class IntermediateCode {
     public boolean isGlobal() {
         return global;
     }
+    
+    
 
     public void setGlobal(boolean global) {
         this.global = global;
     }
+
+    public boolean isStatementIF() {
+        return statementIF;
+    }
+
+    public void setStatementIF(boolean statementIF) {
+        this.statementIF = statementIF;
+    }
+
+    public String getBandera() {
+        return bandera;
+    }
+
+    public void setBandera(String bandera) {
+        this.bandera = bandera;
+    }
+
+    public IntermediateCode getGotoLabel() {
+        return gotoLabel;
+    }
+
+    public void setGotoLabel(IntermediateCode gotoLabel) {
+        this.gotoLabel = gotoLabel;
+    }
+
     
     
 

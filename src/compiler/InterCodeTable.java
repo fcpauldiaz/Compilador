@@ -44,10 +44,13 @@ public class InterCodeTable {
             String op = arrayCode.get(i).getOp();
             String res = arrayCode.get(i).getRes();
             boolean global = arrayCode.get(i).isGlobal();
+            boolean stIF = arrayCode.get(i).isStatementIF();
+            String bandera = arrayCode.get(i).getBandera();
+            IntermediateCode gotoL = arrayCode.get(i).getGotoLabel();
             if (etiqueta != null && global == false){
                 returnString += etiqueta + "\n";
             }
-            if (dir1 != null && dir2 != null && op != null && res != null){
+            if (dir1 != null && dir2 != null && op != null && res != null && !stIF){
                 returnString += res +" = "+ dir1 +" "+ op +" "+ dir2+"\n";
             }
             if (dir1 != null && dir2 == null && op != null && res != null){
@@ -56,6 +59,12 @@ public class InterCodeTable {
             if (global == true){
                 returnString += ".global " + etiqueta +"\n";
                // returnString += etiqueta +": word 0" + "\n";
+            }
+            if (stIF){
+                returnString += res +" "+ dir1+" " + op +" "+ dir2 + "\n";
+            }
+            if (dir1 == null && op != null && dir2 != null){
+                returnString += op +" "+ dir2 + "\n";
             }
             
         }

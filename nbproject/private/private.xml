@@ -5,12 +5,15 @@
         <group>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/ANTLRListener.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/IntermediateCode.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/gui/TextPanelInterCode.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Antlr4.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Type.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/gui/ANTGui.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/gui/LineNumber.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Visitor.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/IntermediateCodeVisitor.java</file>
-            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Antlr4.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/SymbolTable.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/gui/TextPanel.java</file>
-            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/gui/ANTGui.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/InterCodeTable.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/antlr4/program.g4</file>
         </group>

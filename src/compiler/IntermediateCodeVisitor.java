@@ -22,6 +22,11 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     private int contadorTemps = 0;
     private Stack globalStack;
     private Scope scopeActual;
+    private String etiquetaActual = "";
+    private int contEtiquetaActual = 0;
+    private String actualOp = "";
+    private IntermediateCode last;
+    private IntermediateCode elseInt;
 
     public IntermediateCodeVisitor() {
         this.globalStack = new Stack();
@@ -118,6 +123,8 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         
         IntermediateCode codigo = new IntermediateCode();
         String etiqueta = ctx.getChild(1).getText();
+        etiquetaActual = etiqueta;
+        contEtiquetaActual = 0;
 
         codigo.setEtiqueta(etiqueta+":");
         tablaCodigo.addCode(codigo);
@@ -155,7 +162,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             op2= opTemp2;
         }
         if (opTemp.isEmpty()){
-            op2 = (String)this.visit(ctx.getChild(0));
+            op2 = (String)this.visit(ctx.getChild(2));
         } 
        
         IntermediateCode codigo = new IntermediateCode();
@@ -194,11 +201,106 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         return codigo;
     }
 
+  
+    
     
     
     @Override
     public Object visitLiteral(programParser.LiteralContext ctx) {
        return ctx.getChild(0).getText();// change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitStatementIF(programParser.StatementIFContext ctx) {
+       
+        IntermediateCode etiqueta1 = new IntermediateCode();
+         IntermediateCode etiqueta2 = new IntermediateCode();
+        IntermediateCode codigo = new IntermediateCode();
+        codigo.setStatementIF(true);
+        etiqueta1.setEtiqueta(etiquetaActual+contEtiquetaActual+":");
+       
+        System.out.println(actualOp);
+        IntermediateCode midCode = (IntermediateCode)this.visit(ctx.getChild(2));
+        tablaCodigo.addCode(midCode);
+        codigo.setRes("ifFalse");
+        
+        codigo.setDir1(midCode.getRes());
+        codigo.setDir2(etiquetaActual+contEtiquetaActual+++":");
+        codigo.setOp("GOTO");
+        
+        tablaCodigo.addCode(codigo);
+        last = etiqueta1;
+      
+        if (ctx.getChildCount() > 5){
+            IntermediateCode gotoElse = new IntermediateCode();
+            gotoElse.setOp("GOTO");
+            gotoElse.setDir2(etiquetaActual+contEtiquetaActual);
+            elseInt = gotoElse;
+        }
+        
+        this.visit(ctx.getChild(4));
+         
+        
+       if (ctx.getChildCount() > 5){
+         
+            this.visit(ctx.getChild(5));
+            etiqueta2.setEtiqueta(etiquetaActual+contEtiquetaActual+++":");
+            tablaCodigo.addCode(etiqueta2);
+       }
+         
+        return ""; //To change body of generated methods, choose Tools | Templates.
+    }
+  @Override
+    public Object visitBlock(programParser.BlockContext ctx) {
+        super.visitBlock(ctx); 
+        if (elseInt != null){
+            this.tablaCodigo.addCode(elseInt);
+            elseInt = null;
+        }
+        if (last!=null){
+            this.tablaCodigo.addCode(last);
+            last = null;
+        }
+        return "";//To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitEqExprEqOp(programParser.EqExprEqOpContext ctx) {
+        actualOp = ctx.getChild(1).getChild(0).getText();
+        return super.visitEqExprEqOp(ctx); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitRelationExpr(programParser.RelationExprContext ctx) {
+        if (ctx.getChildCount()>1){
+        String dir1 = ((IntermediateCode)visit(ctx.getChild(0))).getRes();
+        String dir2 = ((IntermediateCode)visit(ctx.getChild(2))).getRes();
+        String op = ctx.getChild(1).getText();
+        IntermediateCode codigo = new IntermediateCode();
+        codigo.setDir1(dir1);
+        codigo.setDir2(dir2);
+        codigo.setOp(op);
+        codigo.setRes("temp"+this.contadorTemps);
+        
+        return codigo; //To change body of generated methods, choose Tools | Templates.
+        }
+        return super.visitRelationExpr(ctx);
+    }
+    
+    
+
+    @Override
+    public Object visitValueLocation(programParser.ValueLocationContext ctx) {
+        IntermediateCode codigo = new IntermediateCode();
+        codigo.setRes(ctx.getChild(0).getText());
+        return codigo; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitValueLiteral(programParser.ValueLiteralContext ctx) {
+          IntermediateCode codigo = new IntermediateCode();
+        codigo.setRes(ctx.getChild(0).getChild(0).getText());
+        return codigo; //To change body of generated methods, choose Tools | Templates.
     }
     
     

@@ -18,12 +18,13 @@ import java.util.Stack;
  */
 public class IntermediateCodeVisitor <T> extends programBaseVisitor {
 
-    private InterCodeTable tablaCodigo = new InterCodeTable();
+    private final InterCodeTable tablaCodigo = new InterCodeTable();
     private int contadorTemps = 0;
-    private Stack globalStack = new Stack();
+    private Stack globalStack;
     private Scope scopeActual;
 
     public IntermediateCodeVisitor() {
+        this.globalStack = new Stack();
         this.scopeActual = new Scope();
         this.scopeActual.setIdScope(0);
     }

@@ -63,7 +63,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             IntermediateCode code = this.tablaCodigo.searchCodeGlobal(res);
             res = code.getEtiqueta();
         }else{
-           res += "_"+this.etiquetaActual+"_"+this.scopeActual.getIdScope();
+           res += "_"+this.etiquetaActual+"_"+tablaCodigo.searchSymbolLastScope(res).getAmbito();
         }
         T returnValue = (T)visit(ctx.getChild(2));
         String dir1;

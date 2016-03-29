@@ -22,7 +22,8 @@ public class IntermediateCode {
     private boolean statementIF;
     private String bandera;
     private IntermediateCode gotoLabel;
-
+    private boolean declaration;
+    
     public IntermediateCode(String dir1, String dir2, String op) {
         this.dir1 = dir1;
         this.dir2 = dir2;
@@ -117,6 +118,14 @@ public class IntermediateCode {
 
     public void setGotoLabel(IntermediateCode gotoLabel) {
         this.gotoLabel = gotoLabel;
+    }
+
+    public boolean isDeclaration() {
+        return declaration;
+    }
+
+    public void setDeclaration(boolean declaration) {
+        this.declaration = declaration;
     }
 
     

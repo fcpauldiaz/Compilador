@@ -47,7 +47,8 @@ public class InterCodeTable {
             boolean stIF = arrayCode.get(i).isStatementIF();
             String bandera = arrayCode.get(i).getBandera();
             IntermediateCode gotoL = arrayCode.get(i).getGotoLabel();
-            if (etiqueta != null && global == false){
+            boolean declaration = arrayCode.get(i).isDeclaration();
+            if (etiqueta != null && global == false && declaration == false){
                 returnString += etiqueta + "\n";
             }
             if (dir1 != null && dir2 != null && op != null && res != null && !stIF){

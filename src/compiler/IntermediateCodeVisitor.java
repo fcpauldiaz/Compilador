@@ -30,8 +30,9 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
 
     public IntermediateCodeVisitor() {
         this.globalStack = new Stack();
+        Scope.setAmbitoActual(0);
         this.scopeActual = new Scope();
-        this.scopeActual.setIdScope(0);
+        
     }
     
     
@@ -61,6 +62,8 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         if (glbl){
             IntermediateCode code = this.tablaCodigo.searchCodeGlobal(res);
             res = code.getEtiqueta();
+        }else{
+           res += "_"+this.etiquetaActual+"_"+this.scopeActual.getIdScope();
         }
         T returnValue = (T)visit(ctx.getChild(2));
         String dir1;
@@ -83,6 +86,15 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         
         return ""; //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public Object visitValueMethodCall(programParser.ValueMethodCallContext ctx) {
+        String nombreMetodo = ctx.getChild(0).getText();
+        return super.visitValueMethodCall(ctx); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    
     
      @Override
     public T visitLocation(programParser.LocationContext ctx) {
@@ -100,14 +112,16 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
       @Override
     public Object visitVarDeclarationID(programParser.VarDeclarationIDContext ctx){
         //System.out.println(ctx.getChildCount()+"cantidad var declaration");
-        
+        IntermediateCode codigo = new IntermediateCode();
         if (scopeActual.getIdScope() == 0) {
-            IntermediateCode codigo = new IntermediateCode();
+           
             codigo.setEtiqueta(ctx.getChild(1).getText()+"_global");
             codigo.setGlobal(true);
-            tablaCodigo.addCode(codigo);
+           
         }
-       
+        codigo.setEtiqueta(ctx.getChild(1).getText()+"_"+etiquetaActual+"_"+scopeActual.getIdScope());
+        codigo.setDeclaration(true);
+        tablaCodigo.addCode(codigo);
         
         return super.visitVarDeclarationID(ctx);
     }
@@ -212,7 +226,8 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
 
     @Override
     public Object visitStatementIF(programParser.StatementIFContext ctx) {
-       
+        
+        
         IntermediateCode etiqueta1 = new IntermediateCode();
          IntermediateCode etiqueta2 = new IntermediateCode();
         IntermediateCode codigo = new IntermediateCode();
@@ -224,8 +239,15 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         tablaCodigo.addCode(midCode);
         codigo.setRes("ifFalse");
         
+        Scope scopeIF = new Scope();
+        
+        scopeActual.addSiguiente(scopeIF);
+        scopeIF.setAnterior(scopeActual);
+        scopeActual = scopeIF;
+        
+        
         codigo.setDir1(midCode.getRes());
-        codigo.setDir2(etiquetaActual+contEtiquetaActual+++":");
+        codigo.setDir2(etiquetaActual+contEtiquetaActual++);
         codigo.setOp("GOTO");
         
         tablaCodigo.addCode(codigo);
@@ -247,7 +269,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             etiqueta2.setEtiqueta(etiquetaActual+contEtiquetaActual+++":");
             tablaCodigo.addCode(etiqueta2);
        }
-         
+        scopeActual = scopeActual.getAnterior();
         return ""; //To change body of generated methods, choose Tools | Templates.
     }
   @Override
@@ -267,7 +289,30 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     @Override
     public Object visitEqExprEqOp(programParser.EqExprEqOpContext ctx) {
         actualOp = ctx.getChild(1).getChild(0).getText();
-        return super.visitEqExprEqOp(ctx); //To change body of generated methods, choose Tools | Templates.
+         if (ctx.getChildCount()>1){
+        String dir1 = ((IntermediateCode)visit(ctx.getChild(0))).getRes();
+        String dir2 = ((IntermediateCode)visit(ctx.getChild(2))).getRes();
+        try{
+            int test = Integer.parseInt(dir1);
+        }catch(Exception e){
+            dir1+="_"+etiquetaActual+"_"+scopeActual.getIdScope();
+        }
+        try{
+            int test = Integer.parseInt(dir2);
+        }catch(Exception e){
+            dir2+="_"+etiquetaActual+"_"+scopeActual.getIdScope();
+        }
+        String op = ctx.getChild(1).getText();
+        IntermediateCode codigo = new IntermediateCode();
+        codigo.setDir1(dir1);
+        codigo.setDir2(dir2);
+        codigo.setOp(op);
+        codigo.setRes("temp"+this.contadorTemps);
+        
+        return codigo; //To change body of generated methods, choose Tools | Templates.
+        }
+        return super.visitEqExprEqOp(ctx);
+      
     }
 
     @Override
@@ -275,6 +320,19 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         if (ctx.getChildCount()>1){
         String dir1 = ((IntermediateCode)visit(ctx.getChild(0))).getRes();
         String dir2 = ((IntermediateCode)visit(ctx.getChild(2))).getRes();
+        try{
+            int test = Integer.parseInt(dir1);
+        }catch(Exception e){
+            dir1+="_"+etiquetaActual+"_"+scopeActual.getIdScope();
+        }
+        try{
+            int test = Integer.parseInt(dir2);
+        }catch(Exception e){
+            dir2+="_"+etiquetaActual+"_"+scopeActual.getIdScope();
+        }
+        
+        
+       
         String op = ctx.getChild(1).getText();
         IntermediateCode codigo = new IntermediateCode();
         codigo.setDir1(dir1);

@@ -379,6 +379,8 @@ public class ANTGui extends javax.swing.JFrame {
           try{
               
             jTextArea3.setText("");
+            jTextIntermediate.setText("");
+           
             String in="";
             try{
                 in = leerArchivo(inputFile);

@@ -18,9 +18,17 @@ import java.util.Stack;
  */
 public class IntermediateCodeVisitor <T> extends programBaseVisitor {
 
-    private final InterCodeTable tablaCodigo = new InterCodeTable();
-    int contadorTemps = 0;
-    Stack stack = new Stack();
+    private InterCodeTable tablaCodigo = new InterCodeTable();
+    private int contadorTemps = 0;
+    private Stack globalStack = new Stack();
+    private Scope scopeActual;
+
+    public IntermediateCodeVisitor() {
+        this.scopeActual = new Scope();
+        this.scopeActual.setIdScope(0);
+    }
+    
+    
 
     @Override
     public Object visitProgram(programParser.ProgramContext ctx) {
@@ -29,7 +37,11 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         }
        
         tablaCodigo.printTable();
+         ANTGui.jTextIntermediate.clear();
+        
         ANTGui.jTextIntermediate.setText(tablaCodigo.toString());
+      
+       
         return ""; //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -38,8 +50,12 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     @Override
     public Object visitStatementLocation(programParser.StatementLocationContext ctx) {
         IntermediateCode codigo = new IntermediateCode();
-        
-        codigo.setRes((String)visit(ctx.getChild(0)));
+        String res = ((String)visit(ctx.getChild(0)));
+        boolean glbl = tablaCodigo.searchGlobalSymbol(res);
+        if (glbl){
+            IntermediateCode code = this.tablaCodigo.searchCodeGlobal(res);
+            res = code.getEtiqueta();
+        }
         T returnValue = (T)visit(ctx.getChild(2));
         String dir1;
         if (returnValue instanceof IntermediateCode ){
@@ -50,9 +66,14 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         }
         codigo.setDir1(dir1);
         codigo.setOp("=");
-        tablaCodigo.addCode(codigo);
         
-      
+        //Symbol simbolo = tablaCodigo.searchSymbolLastScope(res);
+        //System.out.println("jajaja" + simbolo.getAmbito());
+        //if (simbolo.getAmbito()==0){
+            //res = "global_"+res;
+       // }
+        codigo.setRes(res);
+        tablaCodigo.addCode(codigo);
         
         return ""; //To change body of generated methods, choose Tools | Templates.
     }
@@ -70,20 +91,44 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         return (T)ctx.getChild(0).getText(); //To change body of generated methods, choose Tools | Templates.
     }
 
+      @Override
+    public Object visitVarDeclarationID(programParser.VarDeclarationIDContext ctx){
+        //System.out.println(ctx.getChildCount()+"cantidad var declaration");
+        
+        if (scopeActual.getIdScope() == 0) {
+            IntermediateCode codigo = new IntermediateCode();
+            codigo.setEtiqueta(ctx.getChild(1).getText()+"_global");
+            codigo.setGlobal(true);
+            tablaCodigo.addCode(codigo);
+        }
+       
+        
+        return super.visitVarDeclarationID(ctx);
+    }
+    
+     
     @Override
     public Object visitMethodDeclaration(programParser.MethodDeclarationContext ctx) {
+        Scope scopeMethod = new Scope();
+        
+        scopeActual.addSiguiente(scopeMethod);
+        scopeMethod.setAnterior(scopeActual);
+        scopeActual = scopeMethod;
+        
         IntermediateCode codigo = new IntermediateCode();
         String etiqueta = ctx.getChild(1).getText();
 
         codigo.setEtiqueta(etiqueta+":");
         tablaCodigo.addCode(codigo);
-        return super.visitMethodDeclaration(ctx); //To change body of generated methods, choose Tools | Templates.
+         super.visitMethodDeclaration(ctx);
+        scopeActual = scopeActual.getAnterior();
+        return "";//To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Object visitAddExprMinusPlusOp(programParser.AddExprMinusPlusOpContext ctx) {
         String opTemp = "";
-        String opTemp2 = "";
+        String opTemp2;
         Stack<String> args = new Stack();
         int count = 0;
         for (int i = 0;i<ctx.getChildCount();i++){
@@ -156,5 +201,6 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     }
     
     
+   
 
 }

@@ -18,14 +18,17 @@ public class IntermediateCode {
     private String op;
     private String tamaño;
     private String etiqueta;
+    private boolean global;
 
     public IntermediateCode(String dir1, String dir2, String op) {
         this.dir1 = dir1;
         this.dir2 = dir2;
         this.op = op;
+        this.global = false;
     }
 
     public IntermediateCode() {
+        this.global = false;
     }
 
     
@@ -78,6 +81,16 @@ public class IntermediateCode {
     public void setOp(String op) {
         this.op = op;
     }
+
+    public boolean isGlobal() {
+        return global;
+    }
+
+    public void setGlobal(boolean global) {
+        this.global = global;
+    }
+    
+    
 
     @Override
     public String toString() {

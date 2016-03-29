@@ -109,6 +109,28 @@ public class SymbolTable {
         }
         return false;
     }
+        public boolean revisarNombreVarInter(String nombreVar, Scope ambitoActual){
+        Scope scope = ambitoActual;
+        while (scope!=null){
+            for (Map.Entry<Integer, Symbol> entry : tabla.entrySet()) {
+                int key = entry.getKey();
+                Symbol value = entry.getValue();
+                String varName =  ((Type)value.getTipo()).getNombreVariable();
+                int ambito = value.getAmbito();
+                if (varName.equals(nombreVar)
+                    && 
+                   ambito == scope.getIdScope()){
+                    if (ambito == 0){
+                        return true;
+                    }
+                    return false;
+                }
+                   
+            }
+            scope = scope.getAnterior();
+        }
+        return false;
+    }
     
     public Symbol showSymbol(String nombreVar,Scope ambitoActual){
          Scope scope = ambitoActual;

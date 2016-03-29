@@ -6,7 +6,9 @@
 
 package compiler;
 
+import static compiler.Visitor.tablaSimbolos;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  *
@@ -41,7 +43,8 @@ public class InterCodeTable {
             String dir2 = arrayCode.get(i).getDir2();
             String op = arrayCode.get(i).getOp();
             String res = arrayCode.get(i).getRes();
-            if (etiqueta != null){
+            boolean global = arrayCode.get(i).isGlobal();
+            if (etiqueta != null && global == false){
                 returnString += etiqueta + "\n";
             }
             if (dir1 != null && dir2 != null && op != null && res != null){
@@ -49,6 +52,10 @@ public class InterCodeTable {
             }
             if (dir1 != null && dir2 == null && op != null && res != null){
                 returnString += res +" "+ op +" "+ dir1+ "\n";
+            }
+            if (global == true){
+                returnString += ".global " + etiqueta +"\n";
+               // returnString += etiqueta +": word 0" + "\n";
             }
             
         }
@@ -61,7 +68,34 @@ public class InterCodeTable {
         }
     }
     
-   
+    public IntermediateCode searchCodeGlobal(String nombreVar){
+        for (int i = 0;i<this.arrayCode.size();i++){
+            IntermediateCode inter = this.arrayCode.get(i);
+            String etiqueta = inter.getEtiqueta().substring(0,inter.getEtiqueta().indexOf("_"));
+           if (inter.isGlobal()&&etiqueta.equals(nombreVar)){
+               return inter;
+           }
+        }
+        return null;
+    }
+    
+    public Symbol searchSymbolLastScope(String nombreVar){
+        ArrayList<Symbol> simbolos = new ArrayList();
+        for (Map.Entry<Integer, Symbol> entry : tablaSimbolos.getTabla().entrySet()) {
+            Symbol simbol = entry.getValue();
+            if (((Type)simbol.getTipo()).getNombreVariable().equals(nombreVar)){
+                simbolos.add(simbol);
+            }
+        }
+        return simbolos.get(simbolos.size()-1);
+    }
+    
+    public boolean searchGlobalSymbol(String nombreVar){
+        Symbol simbol = this.searchSymbolLastScope(nombreVar);
+        return simbol.getAmbito()==0;
+    }
+    
+    
     
     
 

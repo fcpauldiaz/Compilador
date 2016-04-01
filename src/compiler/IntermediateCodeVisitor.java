@@ -44,8 +44,8 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         }
        
         tablaCodigo.printTable();
-         ANTGui.jTextIntermediate.clear();
-        
+        ANTGui.jTextIntermediate.clear();
+        ANTGui.jTextARM.clear();
         ANTGui.jTextIntermediate.setText(tablaCodigo.toString());
       
        
@@ -121,6 +121,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         }
         codigo.setEtiqueta(ctx.getChild(1).getText()+"_"+etiquetaActual+"_"+scopeActual.getIdScope());
         codigo.setDeclaration(true);
+        codigo.setTipo(ctx.getChild(0).getText());
         tablaCodigo.addCode(codigo);
         
         return super.visitVarDeclarationID(ctx);
@@ -192,18 +193,36 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
 
     @Override
     public Object visitMultExprMultDivOp(programParser.MultExprMultDivOpContext ctx) {
-         String opTemp = "";
+       String opTemp = "";
+        String opTemp2;
+        Stack<String> args = new Stack();
+        int count = 0;
         for (int i = 0;i<ctx.getChildCount();i++){
            T var = (T) this.visit(ctx.getChild(i));
            if (var instanceof IntermediateCode){
-              opTemp = ((IntermediateCode)var).getRes();
+               count++;
+               args.push(((IntermediateCode)var).getRes());
+              
            }
         }
-        String op1 = opTemp;
-        if (opTemp.isEmpty())
+        String op1 = "";
+        if (count > 1){
+            opTemp = args.pop();
+            op1= opTemp;
+        }
+        if (opTemp.isEmpty()){
             op1 = (String)this.visit(ctx.getChild(0));
-        String op2 = (String)this.visit(ctx.getChild(2));
-        
+        } 
+       
+        String op2="";
+        if (count >= 2){
+            opTemp2 = args.pop();
+            op2= opTemp2;
+        }
+        if (opTemp.isEmpty()){
+            op2 = (String)this.visit(ctx.getChild(2));
+        } 
+       
         IntermediateCode codigo = new IntermediateCode();
         codigo.setDir1(op1);
         codigo.setDir2(op2);
@@ -229,7 +248,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         
         
         IntermediateCode etiqueta1 = new IntermediateCode();
-         IntermediateCode etiqueta2 = new IntermediateCode();
+        IntermediateCode etiqueta2 = new IntermediateCode();
         IntermediateCode codigo = new IntermediateCode();
         codigo.setStatementIF(true);
         etiqueta1.setEtiqueta(etiquetaActual+contEtiquetaActual+":");
@@ -295,12 +314,20 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         try{
             int test = Integer.parseInt(dir1);
         }catch(Exception e){
-            dir1+="_"+etiquetaActual+"_"+scopeActual.getIdScope();
+            int amb = tablaCodigo.searchSymbolLastScope(dir1).getAmbito();
+            if (amb==0)
+               dir1+="_"+"_"+amb;
+            else
+                dir1+="_"+etiquetaActual+"_"+amb;
         }
         try{
             int test = Integer.parseInt(dir2);
         }catch(Exception e){
-            dir2+="_"+etiquetaActual+"_"+scopeActual.getIdScope();
+            int amb = tablaCodigo.searchSymbolLastScope(dir2).getAmbito();
+            if (amb==0)
+               dir2+="_"+"_"+amb;
+            else
+                dir2+="_"+etiquetaActual+"_"+amb;
         }
         String op = ctx.getChild(1).getText();
         IntermediateCode codigo = new IntermediateCode();
@@ -359,6 +386,10 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
           IntermediateCode codigo = new IntermediateCode();
         codigo.setRes(ctx.getChild(0).getChild(0).getText());
         return codigo; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public InterCodeTable getTablaCodigo() {
+        return tablaCodigo;
     }
     
     

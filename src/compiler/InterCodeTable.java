@@ -33,6 +33,8 @@ public class InterCodeTable {
     public void setArrayCode(ArrayList<IntermediateCode> arrayCode) {
         this.arrayCode = arrayCode;
     }
+    
+    
 
     @Override
     public String toString() {
@@ -73,8 +75,8 @@ public class InterCodeTable {
        return returnString;
     }
     public void printTable(){
-        for (int i = 0;i<this.arrayCode.size();i++){
-            System.out.println(arrayCode.get(i).toString());
+        for (IntermediateCode arrayCode1 : this.arrayCode) {
+            System.out.println(arrayCode1.toString());
         }
     }
     

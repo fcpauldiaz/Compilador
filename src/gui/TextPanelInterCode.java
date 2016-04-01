@@ -97,7 +97,7 @@ public class TextPanelInterCode extends JPanel{
         String number=digit+"("+digit+")*";
         String id = letter+"("+letter+"|"+number+"|_|\\$)*";
         String regex_character = "\'"+"([^\\\'])*"+"\'";
-        String regex_comment = "(//"+"([^\\\n])*"+"\\\n)";
+        String regex_comment = "(@"+"([^\\\n])*"+"\\\n)";
         String label = "L"+"([^:])*"+":";
         String regex_reserved_1 = "(param|call|return|proc|endp|ret|far|near)";
         String regex_if = "(.)*if .* goto .*\\\n";

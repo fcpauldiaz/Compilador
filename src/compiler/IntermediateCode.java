@@ -23,6 +23,7 @@ public class IntermediateCode {
     private String bandera;
     private IntermediateCode gotoLabel;
     private boolean declaration;
+    private String tipo;
     
     public IntermediateCode(String dir1, String dir2, String op) {
         this.dir1 = dir1;
@@ -126,6 +127,14 @@ public class IntermediateCode {
 
     public void setDeclaration(boolean declaration) {
         this.declaration = declaration;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     

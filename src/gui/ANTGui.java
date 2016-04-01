@@ -11,6 +11,7 @@ import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
+import compiler.CodeGenerator;
 import compiler.CustomOutputStream;
 import compiler.DescriptiveErrorListener;
 import compiler.IntermediateCodeVisitor;
@@ -60,6 +61,7 @@ public class ANTGui extends javax.swing.JFrame {
     private String host = "192.168.1.109";
     private TextPanel jTextArea2;
     public static TextPanelInterCode jTextIntermediate;
+    public static TextPanelInterCode jTextARM ;
     
     /**
      * Creates new form ANTGui
@@ -80,6 +82,9 @@ public class ANTGui extends javax.swing.JFrame {
         jTextIntermediate = new TextPanelInterCode();
         this.jTabbedPane3.add(jTextIntermediate);
        this.jTabbedPane3.setTitleAt(0, "Intermediate Code");
+       jTextARM = new TextPanelInterCode();
+       this.jTabbedPane3.addTab("ARM code",jTextARM );
+     
        this.jTabbedPane1.setTitleAt(0, "IDE");
         
     }
@@ -380,6 +385,7 @@ public class ANTGui extends javax.swing.JFrame {
               
             jTextArea3.setText("");
             jTextIntermediate.setText("");
+            jTextARM.setText("");
            
             String in="";
             try{
@@ -419,6 +425,10 @@ public class ANTGui extends javax.swing.JFrame {
                 vistor.visit(tree);
                 IntermediateCodeVisitor visitCode = new IntermediateCodeVisitor();
                 visitCode.visit(tree);
+                CodeGenerator generator = new CodeGenerator(visitCode.getTablaCodigo().getArrayCode());
+                jTextARM.setText(generator.ponerGlobalVar());
+                jTextARM.setText(generator.genCode());
+               
                
                 if (Visitor.verificadorMain==false){
                     jTextArea3.setText(jTextArea3.getText()+"\n"+"Error: No existe el método MAIN");

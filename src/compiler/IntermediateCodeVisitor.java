@@ -9,6 +9,7 @@ package compiler;
 import antlr4.programBaseVisitor;
 import antlr4.programParser;
 import gui.ANTGui;
+import java.util.ArrayList;
 import java.util.Stack;
 
 /**
@@ -27,8 +28,10 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     private String actualOp = "";
     private IntermediateCode last;
     private IntermediateCode elseInt;
+    private ArrayList<StackControl> stackControl;
 
     public IntermediateCodeVisitor() {
+        this.stackControl = new ArrayList();
         this.globalStack = new Stack();
         Scope.setAmbitoActual(0);
         this.scopeActual = new Scope();
@@ -47,7 +50,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         ANTGui.jTextIntermediate.clear();
         ANTGui.jTextARM.clear();
         ANTGui.jTextIntermediate.setText(tablaCodigo.toString());
-      
+        System.out.println(this.stackControl);
        
         return ""; //To change body of generated methods, choose Tools | Templates.
     }
@@ -62,8 +65,9 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         if (glbl){
             IntermediateCode code = this.tablaCodigo.searchCodeGlobal(res);
             res = code.getEtiqueta();
+           
         }else{
-           res += "_"+this.etiquetaActual+"_"+tablaCodigo.searchSymbolLastScope(res).getAmbito();
+           res = "stack["+this.buscarStack(res)+"]";
         }
         T returnValue = (T)visit(ctx.getChild(2));
         String dir1;
@@ -73,7 +77,23 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         else{
             dir1 = (String)returnValue;
         }
+        if (!dir1.contains("\'")&&!dir1.contains("temp")){
+            try {
+                int num = Integer.parseInt(dir1);
+            }catch(Exception e){
+                boolean glbl2 = tablaCodigo.searchGlobalSymbol(dir1);
+                if (glbl2){
+                       IntermediateCode code = this.tablaCodigo.searchCodeGlobal(dir1);
+                       dir1 = code.getEtiqueta();
+                }
+                else { 
+                    int pos = this.buscarStack(dir1);
+                    dir1 = "stack[" + pos +"]";
+                }
+            }
+        }
         codigo.setDir1(dir1);
+       
         codigo.setOp("=");
         
         //Symbol simbolo = tablaCodigo.searchSymbolLastScope(res);
@@ -83,7 +103,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
        // }
         codigo.setRes(res);
         tablaCodigo.addCode(codigo);
-        
+        this.contadorTemps= 0;
         return ""; //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -117,12 +137,23 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
            
             codigo.setEtiqueta(ctx.getChild(1).getText()+"_global");
             codigo.setGlobal(true);
-           
+            tablaCodigo.addCode(codigo);
+            return super.visitVarDeclarationID(ctx);
         }
-        codigo.setEtiqueta(ctx.getChild(1).getText()+"_"+etiquetaActual+"_"+scopeActual.getIdScope());
-        codigo.setDeclaration(true);
-        codigo.setTipo(ctx.getChild(0).getText());
-        tablaCodigo.addCode(codigo);
+        String tipo = ctx.getChild(0).getText();
+        String identificador = ctx.getChild(1).getText();
+        if (tipo.equals("int")){
+            this.stackControl.add(new StackControl(4, identificador, tipo));
+            
+        }
+        else if (tipo.equals("char")){
+            this.stackControl.add(new StackControl(1, identificador, tipo));
+        }
+        else if (tipo.equals("boolean")){
+             this.stackControl.add(new StackControl(4, identificador, tipo));
+        }
+      
+       
         
         return super.visitVarDeclarationID(ctx);
     }
@@ -145,6 +176,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         tablaCodigo.addCode(codigo);
          super.visitMethodDeclaration(ctx);
         scopeActual = scopeActual.getAnterior();
+        StackControl.staticPos = 0;
         return "";//To change body of generated methods, choose Tools | Templates.
     }
 
@@ -291,6 +323,41 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         scopeActual = scopeActual.getAnterior();
         return ""; //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public Object visitVarDeclarationArray(programParser.VarDeclarationArrayContext ctx) {
+        
+        String tipo = ctx.getChild(0).getText();
+        String identificador = ctx.getChild(1).getText();
+        int tamaño = Integer.parseInt(ctx.getChild(3).getText());
+        
+         IntermediateCode codigo = new IntermediateCode();
+        if (scopeActual.getIdScope() == 0) {
+           
+            codigo.setEtiqueta(ctx.getChild(1).getText()+"_global");
+            codigo.setGlobal(true);
+            tablaCodigo.addCode(codigo);
+            return super.visitVarDeclarationArray(ctx);
+        }
+       
+     
+        if (tipo.equals("int")){
+            this.stackControl.add(new StackControl(4*tamaño, identificador, tipo));
+            
+        }
+        else if (tipo.equals("char")){
+            this.stackControl.add(new StackControl(1*tamaño, identificador, tipo));
+        }
+        else if (tipo.equals("boolean")){
+             this.stackControl.add(new StackControl(4*tamaño, identificador, tipo));
+        }
+      
+        
+        return super.visitVarDeclarationArray(ctx); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+    
   @Override
     public Object visitBlock(programParser.BlockContext ctx) {
         super.visitBlock(ctx); 
@@ -393,6 +460,13 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     }
     
     
-   
+   public int buscarStack(String identificador){
+       for(StackControl control: this.stackControl){
+           if (control.getIdentificador().equals(identificador)){
+               return control.getPosicion();
+           }
+       }
+       return -1;
+   }
 
 }

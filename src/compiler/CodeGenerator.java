@@ -84,10 +84,10 @@ public class CodeGenerator {
      
      public String assignNum(IntermediateCode interCode){
         String returnString="";
-        returnString += "MOV"+" " + r0+"," + "#"+interCode.getDir1() + "\n";
-        returnString += "LDR" +" " +r1 +","+ "="+interCode.getRes()+"\n";
+        returnString += "MOV"+" " + r0+", " + "#"+interCode.getDir1() + "\n";
+        returnString += "LDR" +" " +r1 +", "+ "="+interCode.getRes()+"\n";
         //returnString += "LDR" +" " +r1 + "["+r1+"]"; 
-        returnString +=  "STR" +" " + r0 + ","+"["+r1+"]" +"\n";
+        returnString +=  "STR" +" " + r0 + ", "+"["+r1+"]" +"\n";
         
          return returnString;
      }
@@ -96,9 +96,9 @@ public class CodeGenerator {
         String returnString = "";
         Registro rDynamic = this.searchVar(interCode.getDir1());
         Registro disponible = this.returnFreeRegister(rDynamic);
-        returnString += "LDR" +" " +disponible +","+ "="+interCode.getRes()+"\n";
+        returnString += "LDR" +" " +disponible +", "+ "="+interCode.getRes()+"\n";
         //returnString += "LDR" +" " +r1 + "["+r1+"]"; 
-        returnString +=  "STR" +" " + rDynamic + ","+"["+disponible+"]" +"\n";
+        returnString +=  "STR" +" " + rDynamic + ", "+"["+disponible+"]" +"\n";
         
         
         return returnString;
@@ -106,23 +106,23 @@ public class CodeGenerator {
      
      public String genDouble(IntermediateCode interCode){
         String returnString = "";
-        returnString += "MOV"+" " + r0+"," + "#"+interCode.getDir1() + "\n";
+        returnString += "MOV"+" " + r0+", " + "#"+interCode.getDir1() + "\n";
         if (interCode.getOp().equals("+")){
-            returnString += "ADD" + " "+ r0 + "," + r0 + "," + "#"+interCode.getDir2()+ "\n";
+            returnString += "ADD" + " "+ r0 + "," + r0 + ", " + "#"+interCode.getDir2()+ "\n";
             r0.setVarAssociated(interCode.getRes());
         }
          if (interCode.getOp().equals("-")){
-            returnString += "SUB" + " "+ r0 + "," + r0 + "," + "#"+interCode.getDir2()+ "\n";
+            returnString += "SUB" + " "+ r0 + "," + r0 + ", " + "#"+interCode.getDir2()+ "\n";
             r0.setVarAssociated(interCode.getRes());
         }
         if (interCode.getOp().equals("*")){
-            returnString += "MOV"+" " + r1+"," + "#"+interCode.getDir2() + "\n";
-            returnString += "MUL" + " "+ r0 + "," + r0 + "," + r1+ "\n";
+            returnString += "MOV"+" " + r1+", " + "#"+interCode.getDir2() + "\n";
+            returnString += "MUL" + " "+ r0 + ", " + r0 + ", " + r1+ "\n";
             r0.setVarAssociated(interCode.getRes());
         }
          if (interCode.getOp().equals("/")){
-            returnString += "MOV"+" " + r1+"," + "#"+interCode.getDir2() + "\n";
-            returnString += "SDIV" + " "+ r0 + "," + r0 + "," + r1+ "\n";
+            returnString += "MOV"+" " + r1+", " + "#"+interCode.getDir2() + "\n";
+            returnString += "SDIV" + " "+ r0 + ", " + r0 + ", " + r1+ "\n";
             r0.setVarAssociated(interCode.getRes());
         }
        
@@ -133,23 +133,23 @@ public class CodeGenerator {
         String returnString = "";
         Registro rDynamic = this.searchVar(interCode.getDir2());
         if (interCode.getOp().equals("+")){
-            returnString += "ADD" + " "+ rDynamic + "," + rDynamic + "," + "#"+interCode.getDir1()+ "\n";
+            returnString += "ADD" + " "+ rDynamic + ", " + rDynamic + ", " + "#"+interCode.getDir1()+ "\n";
             rDynamic.setVarAssociated(interCode.getRes());
         }
         if (interCode.getOp().equals("-")){
-             returnString += "SUB" + " "+ rDynamic + "," + rDynamic + "," + "#"+interCode.getDir1()+ "\n";
+             returnString += "SUB" + " "+ rDynamic + ", " + rDynamic + ", " + "#"+interCode.getDir1()+ "\n";
             rDynamic.setVarAssociated(interCode.getRes());
         }
          if (interCode.getOp().equals("*")){
              Registro free = returnFreeRegister(rDynamic);
-             returnString += "MOV" + " " + free+ "," + interCode.getDir1();
-             returnString += "MUL" + " "+ rDynamic + "," + rDynamic + "," + free+  "\n";
+             returnString += "MOV" + " " + free+ ", " + interCode.getDir1();
+             returnString += "MUL" + " "+ rDynamic + ", " + rDynamic + ", " + free+  "\n";
             rDynamic.setVarAssociated(interCode.getRes());
         }
           if (interCode.getOp().equals("/")){
              Registro free = returnFreeRegister(rDynamic);
-             returnString += "MOV" + " " + free+ "," + interCode.getDir1();
-             returnString += "SDIV" + " "+ rDynamic + "," + rDynamic + "," + free+  "\n";
+             returnString += "MOV" + " " + free+ ", " + interCode.getDir1();
+             returnString += "SDIV" + " "+ rDynamic + ", " + rDynamic + ", " + free+  "\n";
             rDynamic.setVarAssociated(interCode.getRes());
         }
        
@@ -160,23 +160,23 @@ public class CodeGenerator {
         String returnString = "";
         Registro rDynamic = this.searchVar(interCode.getDir1());
         if (interCode.getOp().equals("+")){
-            returnString += "ADD" + " "+ rDynamic + "," + rDynamic + "," + "#"+interCode.getDir2()+ "\n";
+            returnString += "ADD" + " "+ rDynamic + ", " + rDynamic + ", " + "#"+interCode.getDir2()+ "\n";
             rDynamic.setVarAssociated(interCode.getRes());
         }
         if (interCode.getOp().equals("-")){
-             returnString += "SUB" + " "+ rDynamic + "," + rDynamic + "," + "#"+interCode.getDir2()+ "\n";
+             returnString += "SUB" + " "+ rDynamic + ", " + rDynamic + ", " + "#"+interCode.getDir2()+ "\n";
             rDynamic.setVarAssociated(interCode.getRes());
         }
          if (interCode.getOp().equals("*")){
              Registro free = returnFreeRegister(rDynamic);
-             returnString += "MOV" + " " + free+ "," + interCode.getDir2();
-             returnString += "MUL" + " "+ rDynamic + "," + rDynamic + "," + free+  "\n";
+             returnString += "MOV" + " " + free+ ", " + interCode.getDir2();
+             returnString += "MUL" + " "+ rDynamic + ", " + rDynamic + ", " + free+  "\n";
             rDynamic.setVarAssociated(interCode.getRes());
         }
           if (interCode.getOp().equals("*")){
              Registro free = returnFreeRegister(rDynamic);
-             returnString += "MOV" + " " + free+ "," + interCode.getDir2();
-             returnString += "SDIV" + " "+ rDynamic + "," + rDynamic + "," + free+  "\n";
+             returnString += "MOV" + " " + free+ ", " + interCode.getDir2();
+             returnString += "SDIV" + " "+ rDynamic + ", " + rDynamic + ", " + free+  "\n";
             rDynamic.setVarAssociated(interCode.getRes());
         }
        

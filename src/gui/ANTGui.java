@@ -410,7 +410,7 @@ public class ANTGui extends javax.swing.JFrame {
             parser.addErrorListener(DescriptiveErrorListener.INSTANCE);
 
             // Specify our entry point
-            ;
+            
             ruleNames = parser.getRuleNames();
             
 
@@ -425,9 +425,9 @@ public class ANTGui extends javax.swing.JFrame {
                 vistor.visit(tree);
                 IntermediateCodeVisitor visitCode = new IntermediateCodeVisitor();
                 visitCode.visit(tree);
-                CodeGenerator generator = new CodeGenerator(visitCode.getTablaCodigo().getArrayCode());
-                jTextARM.setText(generator.ponerGlobalVar());
-                jTextARM.setText(generator.genCode());
+               // CodeGenerator generator = new CodeGenerator(visitCode.getTablaCodigo().getArrayCode());
+               // jTextARM.setText(generator.ponerGlobalVar());
+               // jTextARM.setText(generator.genCode());
                
                
                 if (Visitor.verificadorMain==false){

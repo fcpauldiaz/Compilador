@@ -116,7 +116,17 @@ public class Visitor<T> extends programBaseVisitor {
         
         //param1 = nombre variable
         //param2 = nombre tipo
-        Type tipo = new Type(ctx.getChild(1).getText(),(String)this.visit(ctx.getChild(0)));
+       
+        T var = (T)this.visit(ctx.getChild(0));
+        System.out.println("var");
+        System.out.println(var);
+        String tipito = "";
+        if (var instanceof StructType){
+            tipito = ((StructType)var).getLiteralTipo() + " " +  ((StructType)var).getNombreVariable();
+        }
+        else
+           tipito = (String)var;
+        Type tipo = new Type(ctx.getChild(1).getText(), tipito);
         Symbol simbolo = new Symbol(++autoincrement,scopeActual.getIdScope(),tipo);
        
         
@@ -215,7 +225,13 @@ public class Visitor<T> extends programBaseVisitor {
             return (T)ctx.getChild(1).getText();
         }
         
-        
+        T simbolo = (T)visit(ctx.getChild(0));
+        if (simbolo instanceof Symbol){
+            return (T)((Symbol)simbolo).getTipo();
+        }
+        if (simbolo instanceof StructType){
+            return (T)"struct";
+        }
         return (T)ctx.getText();
         
     }

@@ -425,6 +425,7 @@ public class ANTGui extends javax.swing.JFrame {
 
                 Visitor vistor = new Visitor();
                 vistor.visit(tree);
+                
                 if (verificacion == true){
                     IntermediateCodeVisitor visitCode = new IntermediateCodeVisitor();
                     visitCode.visit(tree);

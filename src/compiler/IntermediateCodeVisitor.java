@@ -22,7 +22,6 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
 
     private final InterCodeTable tablaCodigo = new InterCodeTable();
     private int contadorTemps = 0;
-    private Stack globalStack;
     private Scope scopeActual;
     private String etiquetaActual = "";
     private int contEtiquetaActual = 0;
@@ -35,7 +34,6 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     
     public IntermediateCodeVisitor() {
         this.stackControl = new ArrayList();
-        this.globalStack = new Stack();
         Scope.setAmbitoActual(0);
         this.scopeActual = new Scope();
         checkArray.add("true");
@@ -79,10 +77,20 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         if (returnValue instanceof IntermediateCode ){
             dir1 =((IntermediateCode) returnValue).getRes();
         }
-        else{
+        else if (returnValue instanceof ArrayList){
+           
+            if (((ArrayList)returnValue).get(0) instanceof String){
+                dir1 = ((String)((ArrayList)returnValue).get(0));
+            }
+            else{
+                dir1 = ((IntermediateCode)((ArrayList)returnValue).get(0)).getRes();
+            }
+
+        }
+        else {
             dir1 = (String)returnValue;
         }
-        if (!dir1.contains("\'")&&!dir1.contains("temp")&&!checkArray.contains(dir1)&&!dir1.contains("[")){
+        if (!dir1.contains("\'")&&!dir1.contains("temp")&&!checkArray.contains(dir1)&&!dir1.contains("[")&&!dir1.contains("global")){
             try {
                 int num = Integer.parseInt(dir1);
             }catch(Exception e){
@@ -151,8 +159,18 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         IntermediateCode codigo = new IntermediateCode();
         boolean glbl = tablaCodigo.searchGlobalSymbol(nombreVar);
          if (glbl){
-            IntermediateCode code = this.tablaCodigo.searchCodeGlobal(nombreVar);
-            res = code.getEtiqueta();
+           IntermediateCode globalCode = this.tablaCodigo.searchCodeGlobal(nombreVar);
+               Symbol simbolo =  Visitor.tablaSimbolos.findAllScopes(nombreVar);
+               String tipo = ((Type)simbolo.getTipo()).getLiteralTipo();
+               int index = 0;
+               if (tipo.equals("int")||tipo.equals("boolean")){
+                   index =  posArray * 4;
+               }
+               if (tipo.equals("char")){
+                   index =  posArray *1;
+               }
+                System.out.println(globalCode.getEtiqueta());
+                res= globalCode.getEtiqueta()+"["+index+"]";
            
         }else{
            res = "stack["+(this.buscarStack(nombreVar)+posArray*4)+"]";
@@ -161,7 +179,10 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         String dir1;
         System.out.println("dir1" + returnValue);
         if (returnValue instanceof ArrayList ){
-            dir1 =((IntermediateCode)((ArrayList) returnValue).get(0)).getRes();
+            if (((ArrayList) returnValue).get(0) instanceof IntermediateCode)
+                dir1 =((IntermediateCode)((ArrayList) returnValue).get(0)).getRes();
+            else
+                dir1 = ((String)((ArrayList) returnValue).get(0));
         }
         else if (returnValue instanceof IntermediateCode){
             dir1 = ((IntermediateCode)returnValue).getRes();
@@ -477,6 +498,13 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         modificarSP();
         return super.visitVarDeclarationArray(ctx); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public Object visitStructDeclaration(programParser.StructDeclarationContext ctx) {
+       
+        
+        return super.visitStructDeclaration(ctx); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
     
@@ -589,8 +617,12 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
                 returnArray.add(valor);
                 return returnArray;
             }
-            else{
+            else if (valor instanceof ArrayList){
                 returnArray.addAll((ArrayList) valor);
+                return returnArray;
+            }
+            else{
+                returnArray.add(valor);
                 return returnArray;
             }
         }
@@ -616,9 +648,9 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     public Object visitLocationArray2(programParser.LocationArray2Context ctx) {
         String nombreVar = ctx.getChild(0).getText();
         String valor = ctx.getChild(2).getText();
-      
+      int intVal = Integer.parseInt(valor) - 1;
         try {
-            int intVal = Integer.parseInt(valor) - 1;
+            
             StackControl buscado = this.buscarStackObjeto(nombreVar);
             int searchStack;
             if (buscado.getTipo().equals("int")||buscado.getTipo().equals("boolean")){
@@ -627,13 +659,28 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             else{
                 searchStack = this.buscarStack(nombreVar) + intVal*1;
             }
-            
+            System.out.println("search stack " + searchStack);
             return "stack["+ searchStack+"]";
         }
         catch(Exception e){
+            boolean gbl = this.tablaCodigo.searchGlobalSymbol(nombreVar);
+            if (gbl){
+                IntermediateCode globalCode = this.tablaCodigo.searchCodeGlobal(nombreVar);
+               Symbol simbolo =  Visitor.tablaSimbolos.findAllScopes(nombreVar);
+               String tipo = ((Type)simbolo.getTipo()).getLiteralTipo();
+               int index = 0;
+               if (tipo.equals("int")||tipo.equals("boolean")){
+                   index = intVal * 4;
+               }
+               if (tipo.equals("char")){
+                   index = intVal *1;
+               }
+                System.out.println(globalCode.getEtiqueta());
+                return globalCode.getEtiqueta()+"["+index+"]";
+            }
            //super.visitLocationArray2(ctx);
         }
-        
+       
         
         return super.visitLocationArray2(ctx); //To change body of generated methods, choose Tools | Templates.
     }

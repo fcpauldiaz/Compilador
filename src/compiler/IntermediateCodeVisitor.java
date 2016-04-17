@@ -10,6 +10,7 @@ import antlr4.programBaseVisitor;
 import antlr4.programParser;
 import gui.ANTGui;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Stack;
 
 /**
@@ -30,6 +31,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     private IntermediateCode elseInt;
     private ArrayList<StackControl> stackControl;
     private ArrayList checkArray = new ArrayList();
+    private ArrayList exprOps = new ArrayList();
     
     public IntermediateCodeVisitor() {
         this.stackControl = new ArrayList();
@@ -158,8 +160,11 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
          T returnValue = (T)visit(ctx.getChild(2));
         String dir1;
         System.out.println("dir1" + returnValue);
-        if (returnValue instanceof IntermediateCode ){
-            dir1 =((IntermediateCode) returnValue).getRes();
+        if (returnValue instanceof ArrayList ){
+            dir1 =((IntermediateCode)((ArrayList) returnValue).get(0)).getRes();
+        }
+        else if (returnValue instanceof IntermediateCode){
+            dir1 = ((IntermediateCode)returnValue).getRes();
         }
         else{
             dir1 = (String)returnValue;
@@ -190,9 +195,6 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         return ""; //To change
     }
 
-    
-    
-    
     
     
      @Override
@@ -358,14 +360,51 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         
         IntermediateCode etiqueta1 = new IntermediateCode();
         IntermediateCode etiqueta2 = new IntermediateCode();
-        IntermediateCode codigo = new IntermediateCode();
-        codigo.setStatementIF(true);
-        etiqueta1.setEtiqueta(etiquetaActual+contEtiquetaActual+":");
+       
+        int copyEt = contEtiquetaActual;
+        etiqueta1.setEtiqueta(etiquetaActual+ ++copyEt+":");
        
         System.out.println(actualOp);
-        IntermediateCode midCode = (IntermediateCode)this.visit(ctx.getChild(2));
-        tablaCodigo.addCode(midCode);
-        codigo.setRes("ifFalse");
+        ArrayList midExpr = (ArrayList)this.visit(ctx.getChild(2));
+        System.out.println("midExpr " + midExpr);
+        String bool = "ifTrue";
+        for (int j = 0 ;j<midExpr.size();j++){
+            T actualObj = (T)midExpr.get(j) ;
+            if (j < midExpr.size()-1){
+                if (midExpr.get(j+1) instanceof String){
+                    if (midExpr.get(j+1).equals("&&"))
+                        bool = "ifFalse";
+                    else
+                        bool = "ifTrue";
+                }
+            }
+            if (actualObj instanceof IntermediateCode){
+                IntermediateCode actualCode = (IntermediateCode)actualObj;
+                IntermediateCode codigo = new IntermediateCode();
+                codigo.setStatementIF(true);
+                IntermediateCode midCode = actualCode;
+                tablaCodigo.addCode(midCode);
+                codigo.setRes(bool);
+
+                codigo.setDir1(midCode.getRes());
+                if (bool.equals("ifFalse")){
+                    codigo.setDir2(etiquetaActual+ copyEt);
+                }
+                else
+                    codigo.setDir2(etiquetaActual+ contEtiquetaActual);
+                codigo.setOp("GOTO");
+
+                tablaCodigo.addCode(codigo);
+            }
+        }
+        IntermediateCode prevLast = new IntermediateCode(); 
+        if (bool.equals("ifFalse")){
+            
+        }else{
+            prevLast.setDir2(etiquetaActual+ copyEt);
+            prevLast.setOp("GOTO");
+            tablaCodigo.addCode(prevLast);
+        }
         
         Scope scopeIF = new Scope();
         
@@ -373,19 +412,25 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         scopeIF.setAnterior(scopeActual);
         scopeActual = scopeIF;
         
-        
-        codigo.setDir1(midCode.getRes());
-        codigo.setDir2(etiquetaActual+contEtiquetaActual++);
-        codigo.setOp("GOTO");
-        
-        tablaCodigo.addCode(codigo);
+      
         last = etiqueta1;
       
         if (ctx.getChildCount() > 5){
+            IntermediateCode etiqueta = new IntermediateCode();
+            etiqueta.setEtiqueta(etiquetaActual+contEtiquetaActual+++":");
+            
+            this.tablaCodigo.addCode(etiqueta);
             IntermediateCode gotoElse = new IntermediateCode();
             gotoElse.setOp("GOTO");
-            gotoElse.setDir2(etiquetaActual+contEtiquetaActual);
+            gotoElse.setDir2(etiquetaActual+(++contEtiquetaActual));
+            
             elseInt = gotoElse;
+        }
+        else{
+            IntermediateCode etiqueta = new IntermediateCode();
+            etiqueta.setEtiqueta(etiquetaActual+contEtiquetaActual+++":");
+            
+            this.tablaCodigo.addCode(etiqueta);
         }
         
         this.visit(ctx.getChild(4));
@@ -408,7 +453,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         String identificador = ctx.getChild(1).getText();
         int tamaño = Integer.parseInt(ctx.getChild(3).getText());
         
-         IntermediateCode codigo = new IntermediateCode();
+        IntermediateCode codigo = new IntermediateCode();
         if (scopeActual.getIdScope() == 0) {
            
             codigo.setEtiqueta(ctx.getChild(1).getText()+"_global");
@@ -429,7 +474,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
              this.stackControl.add(new StackControl((4*tamaño), identificador, tipo));
         }
       
-       modificarSP();
+        modificarSP();
         return super.visitVarDeclarationArray(ctx); //To change body of generated methods, choose Tools | Templates.
     }
     
@@ -453,16 +498,31 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     public Object visitEqExprEqOp(programParser.EqExprEqOpContext ctx) {
         actualOp = ctx.getChild(1).getChild(0).getText();
          if (ctx.getChildCount()>1){
-        String dir1 = ((IntermediateCode)visit(ctx.getChild(0))).getRes();
-        String dir2 = ((IntermediateCode)visit(ctx.getChild(2))).getRes();
+             T val1 = (T)visit(ctx.getChild(0));
+             T val2 = (T)visit(ctx.getChild(2));
+             String dir1;
+             String dir2;
+             if (val1 instanceof IntermediateCode){
+                 dir1 = ((IntermediateCode)(val1)).getRes();
+             }else
+                 dir1 = (String)val1;
+             
+             if (val2 instanceof IntermediateCode){
+                 dir2 =  ((IntermediateCode)(val2)).getRes();
+             }else
+                 dir2 = (String)val2;
+          
         try{
             int test = Integer.parseInt(dir1);
         }catch(Exception e){
-            int amb = tablaCodigo.searchSymbolLastScope(dir1).getAmbito();
-            if (amb==0)
+            if (!dir1.contains("[")){
+                boolean amb = tablaCodigo.searchGlobalSymbol(dir1);
+            if (amb)
                dir1+="_"+"_"+amb;
             else
-                dir1+="_"+etiquetaActual+"_"+amb;
+                dir1 = "stack["+this.buscarStack(dir1)+"]";
+            }
+            
         }
         try{
             int test = Integer.parseInt(dir2);
@@ -475,10 +535,12 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         }
         String op = ctx.getChild(1).getText();
         IntermediateCode codigo = new IntermediateCode();
+             System.out.println("dir1 " + dir1);
+             System.out.println("dir2 " + dir2);
         codigo.setDir1(dir1);
         codigo.setDir2(dir2);
         codigo.setOp(op);
-        codigo.setRes("temp"+this.contadorTemps);
+        codigo.setRes("temp"+this.contadorTemps++);
         
         return codigo; //To change body of generated methods, choose Tools | Templates.
         }
@@ -515,26 +577,97 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         }
         return super.visitRelationExpr(ctx);
     }
+
+    @Override
+    public Object visitExpression(programParser.ExpressionContext ctx) {
+    
+        ArrayList returnArray = new ArrayList();
+        System.out.println(ctx.getChildCount());
+        if (ctx.getChildCount() < 2 ){
+            T valor = (T)visit(ctx.getChild(0));
+            if (valor instanceof IntermediateCode){
+                returnArray.add(valor);
+                return returnArray;
+            }
+            else{
+                returnArray.addAll((ArrayList) valor);
+                return returnArray;
+            }
+        }
+        for (int i = 0;i<ctx.getChildCount();i++){
+            T expr1 = (T)visit(ctx.getChild(i));
+            
+            if (expr1 instanceof ArrayList)
+               returnArray.addAll((ArrayList)expr1);
+            
+            else if (expr1 instanceof IntermediateCode)
+               returnArray.add(expr1);
+            else
+                returnArray.add(expr1);
+               
+        }
+        
+        return returnArray; //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
     
     @Override
     public Object visitLocationArray2(programParser.LocationArray2Context ctx) {
-         String nombreVar = ctx.getChild(0).getText();
+        String nombreVar = ctx.getChild(0).getText();
         String valor = ctx.getChild(2).getText();
-       
+      
         try {
             int intVal = Integer.parseInt(valor) - 1;
-            int searchStack = this.buscarStack(nombreVar) + intVal*4;
+            StackControl buscado = this.buscarStackObjeto(nombreVar);
+            int searchStack;
+            if (buscado.getTipo().equals("int")||buscado.getTipo().equals("boolean")){
+                searchStack= this.buscarStack(nombreVar) + intVal*4;
+            }
+            else{
+                searchStack = this.buscarStack(nombreVar) + intVal*1;
+            }
             
             return "stack["+ searchStack+"]";
         }
         catch(Exception e){
-           super.visitLocationArray2(ctx);
+           //super.visitLocationArray2(ctx);
         }
         
         
         return super.visitLocationArray2(ctx); //To change body of generated methods, choose Tools | Templates.
     }
+
+
+    
+    @Override
+    public Object visitAndExprCondOpAnd(programParser.AndExprCondOpAndContext ctx) {
+        ArrayList returnArray = new ArrayList();
+        for (int i = 0;i<ctx.getChildCount();i++){
+            T val = (T)visit(ctx.getChild(i));
+            if (val instanceof ArrayList){
+                returnArray.addAll((ArrayList)val);
+            }
+            if (val instanceof IntermediateCode){
+                returnArray.add(val);
+            }
+            else
+                returnArray.add(val);
+        }
+        
+        return returnArray; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitCond_op_and(programParser.Cond_op_andContext ctx) {
+        return ctx.getChild(0).getText(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitCond_op_or(programParser.Cond_op_orContext ctx) {
+        return ctx.getChild(0).getText(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
     
     
@@ -560,9 +693,20 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
        return -1;
    }
    
+    public StackControl buscarStackObjeto(String identificador){
+       for(StackControl control: this.stackControl){
+           if (control.getIdentificador().equals(identificador)){
+               return control;
+           }
+       }
+       return null;
+   }
+   
    public void modificarSP(){
         int tamaño = this.stackControl.size();
+       
         if (tamaño >= 2){
+             System.out.println(stackControl);
             for (int i = tamaño-1;i!=0;i--){
                 StackControl lastStack = this.stackControl.get(i);
                 StackControl prevLastStack = this.stackControl.get(i-1);
@@ -571,8 +715,9 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
                 lastStack.setPosicion(lastPrevPos);
                 prevLastStack.setPosicion(lastPos);
             }
-      
+            System.out.println(stackControl);
         }
+      
        
    }
 

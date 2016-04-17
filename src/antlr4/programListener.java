@@ -75,18 +75,6 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitRel_op(@NotNull programParser.Rel_opContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code expressionAndExpr}
-	 * labeled alternative in {@link programParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpressionAndExpr(@NotNull programParser.ExpressionAndExprContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code expressionAndExpr}
-	 * labeled alternative in {@link programParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpressionAndExpr(@NotNull programParser.ExpressionAndExprContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code statementLocation}
 	 * labeled alternative in {@link programParser#statement}.
 	 * @param ctx the parse tree
@@ -138,18 +126,6 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCond_op_or(@NotNull programParser.Cond_op_orContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code expressionCondOpOr}
-	 * labeled alternative in {@link programParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpressionCondOpOr(@NotNull programParser.ExpressionCondOpOrContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code expressionCondOpOr}
-	 * labeled alternative in {@link programParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpressionCondOpOr(@NotNull programParser.ExpressionCondOpOrContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link programParser#block}.
 	 * @param ctx the parse tree
@@ -516,6 +492,16 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCond_op_and(@NotNull programParser.Cond_op_andContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link programParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpression(@NotNull programParser.ExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link programParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpression(@NotNull programParser.ExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link programParser#locationArray}.
 	 * @param ctx the parse tree

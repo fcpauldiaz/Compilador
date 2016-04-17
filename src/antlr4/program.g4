@@ -133,8 +133,8 @@ locationMethod
         '.' locationMember
     ;    
 expression 
-	:	andExpr				#expressionAndExpr
-	| 	expression cond_op_or andExpr  	#expressionCondOpOr
+	:	andExpr				
+	| 	expression cond_op_or andExpr  	
 	;
 
 andExpr

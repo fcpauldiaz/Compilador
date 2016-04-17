@@ -1476,17 +1476,6 @@ public class programParser extends Parser {
 	}
 
 	public static class ExpressionContext extends ParserRuleContext {
-		public ExpressionContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_expression; }
-	 
-		public ExpressionContext() { }
-		public void copyFrom(ExpressionContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class ExpressionCondOpOrContext extends ExpressionContext {
 		public AndExprContext andExpr() {
 			return getRuleContext(AndExprContext.class,0);
 		}
@@ -1496,37 +1485,21 @@ public class programParser extends Parser {
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
-		public ExpressionCondOpOrContext(ExpressionContext ctx) { copyFrom(ctx); }
+		public ExpressionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_expression; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).enterExpressionCondOpOr(this);
+			if ( listener instanceof programListener ) ((programListener)listener).enterExpression(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).exitExpressionCondOpOr(this);
+			if ( listener instanceof programListener ) ((programListener)listener).exitExpression(this);
 		}
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitExpressionCondOpOr(this);
-			else return visitor.visitChildren(this);
-		}
-	}
-	public static class ExpressionAndExprContext extends ExpressionContext {
-		public AndExprContext andExpr() {
-			return getRuleContext(AndExprContext.class,0);
-		}
-		public ExpressionAndExprContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).enterExpressionAndExpr(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof programListener ) ((programListener)listener).exitExpressionAndExpr(this);
-		}
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitExpressionAndExpr(this);
+			if ( visitor instanceof programVisitor ) return ((programVisitor<? extends T>)visitor).visitExpression(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -1547,10 +1520,6 @@ public class programParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			{
-			_localctx = new ExpressionAndExprContext(_localctx);
-			_ctx = _localctx;
-			_prevctx = _localctx;
-
 			setState(241); andExpr(0);
 			}
 			_ctx.stop = _input.LT(-1);
@@ -1563,7 +1532,7 @@ public class programParser extends Parser {
 					_prevctx = _localctx;
 					{
 					{
-					_localctx = new ExpressionCondOpOrContext(new ExpressionContext(_parentctx, _parentState));
+					_localctx = new ExpressionContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_expression);
 					setState(243);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");

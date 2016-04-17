@@ -51,13 +51,6 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRel_op(@NotNull programParser.Rel_opContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code expressionAndExpr}
-	 * labeled alternative in {@link programParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExpressionAndExpr(@NotNull programParser.ExpressionAndExprContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code statementLocation}
 	 * labeled alternative in {@link programParser#statement}.
 	 * @param ctx the parse tree
@@ -88,13 +81,6 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCond_op_or(@NotNull programParser.Cond_op_orContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code expressionCondOpOr}
-	 * labeled alternative in {@link programParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExpressionCondOpOr(@NotNull programParser.ExpressionCondOpOrContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link programParser#block}.
 	 * @param ctx the parse tree
@@ -311,6 +297,12 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCond_op_and(@NotNull programParser.Cond_op_andContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link programParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpression(@NotNull programParser.ExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link programParser#locationArray}.
 	 * @param ctx the parse tree

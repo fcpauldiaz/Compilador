@@ -638,16 +638,6 @@ public class Visitor<T> extends programBaseVisitor {
         return this.visit(ctx.getChild(0));
     }
 
-    @Override
-    public Object visitExpressionCondOpOr(programParser.ExpressionCondOpOrContext ctx) {
-        for (int i = 0;i<ctx.getChildCount();i++){
-            this.visit(ctx.getChild(i));
-        }
-        return this.visit(ctx.getChild(1)); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
-    
     
     @Override
     public Object visitCond_op_or(programParser.Cond_op_orContext ctx) {
@@ -655,7 +645,7 @@ public class Visitor<T> extends programBaseVisitor {
         for (int i = 0;i<ctx.getChildCount();i++){
             this.visit(ctx.getChild(i));
         }
-        System.out.println(cant + "CANT OP OR");
+        //System.out.println(cant + "CANT OP OR");
         return "boolean_literal";
         
         //return this.visit(ctx.getChild(0));

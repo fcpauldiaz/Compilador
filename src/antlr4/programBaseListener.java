@@ -89,18 +89,6 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterExpressionAndExpr(@NotNull programParser.ExpressionAndExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExpressionAndExpr(@NotNull programParser.ExpressionAndExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterStatementLocation(@NotNull programParser.StatementLocationContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -156,18 +144,6 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCond_op_or(@NotNull programParser.Cond_op_orContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterExpressionCondOpOr(@NotNull programParser.ExpressionCondOpOrContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitExpressionCondOpOr(@NotNull programParser.ExpressionCondOpOrContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -564,6 +540,18 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitCond_op_and(@NotNull programParser.Cond_op_andContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterExpression(@NotNull programParser.ExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitExpression(@NotNull programParser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

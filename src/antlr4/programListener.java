@@ -21,6 +21,16 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitStatementReturn(@NotNull programParser.StatementReturnContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link programParser#locationArray2}.
+	 * @param ctx the parse tree
+	 */
+	void enterLocationArray2(@NotNull programParser.LocationArray2Context ctx);
+	/**
+	 * Exit a parse tree produced by {@link programParser#locationArray2}.
+	 * @param ctx the parse tree
+	 */
+	void exitLocationArray2(@NotNull programParser.LocationArray2Context ctx);
+	/**
 	 * Enter a parse tree produced by the {@code locationMemberArray}
 	 * labeled alternative in {@link programParser#locationMember}.
 	 * @param ctx the parse tree
@@ -54,18 +64,6 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitProgram(@NotNull programParser.ProgramContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code unaryExprNot}
-	 * labeled alternative in {@link programParser#unaryExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterUnaryExprNot(@NotNull programParser.UnaryExprNotContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code unaryExprNot}
-	 * labeled alternative in {@link programParser#unaryExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitUnaryExprNot(@NotNull programParser.UnaryExprNotContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link programParser#rel_op}.
 	 * @param ctx the parse tree
@@ -245,18 +243,6 @@ public interface programListener extends ParseTreeListener {
 	 */
 	void exitValueLocation(@NotNull programParser.ValueLocationContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code unaryExprCast}
-	 * labeled alternative in {@link programParser#unaryExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterUnaryExprCast(@NotNull programParser.UnaryExprCastContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code unaryExprCast}
-	 * labeled alternative in {@link programParser#unaryExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitUnaryExprCast(@NotNull programParser.UnaryExprCastContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link programParser#minusplus_op}.
 	 * @param ctx the parse tree
 	 */
@@ -288,18 +274,6 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitLocationMethod(@NotNull programParser.LocationMethodContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code unaryExprMinus}
-	 * labeled alternative in {@link programParser#unaryExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterUnaryExprMinus(@NotNull programParser.UnaryExprMinusContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code unaryExprMinus}
-	 * labeled alternative in {@link programParser#unaryExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitUnaryExprMinus(@NotNull programParser.UnaryExprMinusContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code varDeclarationArray}
 	 * labeled alternative in {@link programParser#varDeclaration}.
@@ -420,6 +394,16 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMethodType(@NotNull programParser.MethodTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link programParser#unaryExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterUnaryExpr(@NotNull programParser.UnaryExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link programParser#unaryExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitUnaryExpr(@NotNull programParser.UnaryExprContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code parameterArray}
 	 * labeled alternative in {@link programParser#parameter}.
@@ -576,18 +560,6 @@ public interface programListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAddExprMinusPlusOp(@NotNull programParser.AddExprMinusPlusOpContext ctx);
-	/**
-	 * Enter a parse tree produced by the {@code unaryExprOther}
-	 * labeled alternative in {@link programParser#unaryExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterUnaryExprOther(@NotNull programParser.UnaryExprOtherContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code unaryExprOther}
-	 * labeled alternative in {@link programParser#unaryExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitUnaryExprOther(@NotNull programParser.UnaryExprOtherContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link programParser#powmod_op}.
 	 * @param ctx the parse tree

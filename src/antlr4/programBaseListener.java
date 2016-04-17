@@ -29,6 +29,18 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterLocationArray2(@NotNull programParser.LocationArray2Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLocationArray2(@NotNull programParser.LocationArray2Context ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLocationMemberArray(@NotNull programParser.LocationMemberArrayContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -60,18 +72,6 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitProgram(@NotNull programParser.ProgramContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterUnaryExprNot(@NotNull programParser.UnaryExprNotContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitUnaryExprNot(@NotNull programParser.UnaryExprNotContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -269,18 +269,6 @@ public class programBaseListener implements programListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterUnaryExprCast(@NotNull programParser.UnaryExprCastContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitUnaryExprCast(@NotNull programParser.UnaryExprCastContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterMinusplus_op(@NotNull programParser.Minusplus_opContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -312,18 +300,6 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitLocationMethod(@NotNull programParser.LocationMethodContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterUnaryExprMinus(@NotNull programParser.UnaryExprMinusContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitUnaryExprMinus(@NotNull programParser.UnaryExprMinusContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -456,6 +432,18 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMethodType(@NotNull programParser.MethodTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterUnaryExpr(@NotNull programParser.UnaryExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitUnaryExpr(@NotNull programParser.UnaryExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -624,18 +612,6 @@ public class programBaseListener implements programListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAddExprMinusPlusOp(@NotNull programParser.AddExprMinusPlusOpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterUnaryExprOther(@NotNull programParser.UnaryExprOtherContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitUnaryExprOther(@NotNull programParser.UnaryExprOtherContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

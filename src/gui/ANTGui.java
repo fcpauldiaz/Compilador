@@ -17,9 +17,11 @@ import compiler.DescriptiveErrorListener;
 import compiler.IntermediateCodeVisitor;
 import compiler.MethodType;
 import compiler.Scope;
+import compiler.StackControl;
 import compiler.StructType;
 import compiler.Symbol;
 import compiler.Visitor;
+import static compiler.Visitor.verificacion;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -423,12 +425,15 @@ public class ANTGui extends javax.swing.JFrame {
 
                 Visitor vistor = new Visitor();
                 vistor.visit(tree);
-                IntermediateCodeVisitor visitCode = new IntermediateCodeVisitor();
-                visitCode.visit(tree);
+                if (verificacion == true){
+                    IntermediateCodeVisitor visitCode = new IntermediateCodeVisitor();
+                    visitCode.visit(tree);
+                }
+                verificacion = true;
                // CodeGenerator generator = new CodeGenerator(visitCode.getTablaCodigo().getArrayCode());
                // jTextARM.setText(generator.ponerGlobalVar());
                // jTextARM.setText(generator.genCode());
-               
+               StackControl.staticPos=0;
                
                 if (Visitor.verificadorMain==false){
                     jTextArea3.setText(jTextArea3.getText()+"\n"+"Error: No existe el método MAIN");

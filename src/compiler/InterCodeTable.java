@@ -99,6 +99,7 @@ public class InterCodeTable {
                 simbolos.add(simbol);
             }
         }
+     
         return simbolos.get(simbolos.size()-1);
     }
     

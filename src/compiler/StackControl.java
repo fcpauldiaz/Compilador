@@ -24,9 +24,9 @@ public class StackControl {
         this.valor = valor;
     }
       public StackControl(int posicion, String identificador, String tipo) {
-         this.posicion = StackControl.staticPos + posicion;
+         this.posicion = StackControl.staticPos;
          
-         StackControl.staticPos = this.posicion;
+         StackControl.staticPos = this.posicion + posicion;
          this.identificador = identificador;
          this.tipo = tipo;
     }
@@ -62,6 +62,12 @@ public class StackControl {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
+    public void setPosicion(int posicion) {
+        this.posicion = posicion;
+    }
+    
+    
 
     @Override
     public String toString() {

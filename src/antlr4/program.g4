@@ -123,7 +123,11 @@ locationArray
         :   ID '[' expression ']' (locationMethod)?
             
         ;
-    
+locationArray2
+        :   ID '[' expression ']' (locationMethod)?
+            
+        ;
+
 locationMethod
     :
         '.' locationMember
@@ -161,15 +165,16 @@ multExpr
 
 
 unaryExpr
-	:  	'('(INT|CHAR)')'  value		#unaryExprCast
-	| 	'-' value 			#unaryExprMinus
-	|	'!' value 			#unaryExprNot
-	|	value   			#unaryExprOther
+	:  	'('(INT|CHAR)')'  value		
+	| 	'-' value 			
+	|	'!' value 			
+	|	value   	
+        
 	;
 
 value
 	:	location			#valueLocation
-        |       locationArray                   #valueLocationArray
+        |       locationArray2                   #valueLocationArray
 	|	methodCall			#valueMethodCall
 	|	literal				#valueLiteral
 	|	'(' expression ')'		#valueExprWithParent

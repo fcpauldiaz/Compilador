@@ -19,6 +19,12 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStatementReturn(@NotNull programParser.StatementReturnContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link programParser#locationArray2}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLocationArray2(@NotNull programParser.LocationArray2Context ctx);
+	/**
 	 * Visit a parse tree produced by the {@code locationMemberArray}
 	 * labeled alternative in {@link programParser#locationMember}.
 	 * @param ctx the parse tree
@@ -38,13 +44,6 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitProgram(@NotNull programParser.ProgramContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code unaryExprNot}
-	 * labeled alternative in {@link programParser#unaryExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUnaryExprNot(@NotNull programParser.UnaryExprNotContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link programParser#rel_op}.
 	 * @param ctx the parse tree
@@ -151,13 +150,6 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitValueLocation(@NotNull programParser.ValueLocationContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code unaryExprCast}
-	 * labeled alternative in {@link programParser#unaryExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUnaryExprCast(@NotNull programParser.UnaryExprCastContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link programParser#minusplus_op}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -176,13 +168,6 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitLocationMethod(@NotNull programParser.LocationMethodContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code unaryExprMinus}
-	 * labeled alternative in {@link programParser#unaryExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUnaryExprMinus(@NotNull programParser.UnaryExprMinusContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code varDeclarationArray}
 	 * labeled alternative in {@link programParser#varDeclaration}.
@@ -254,6 +239,12 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMethodType(@NotNull programParser.MethodTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link programParser#unaryExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryExpr(@NotNull programParser.UnaryExprContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code parameterArray}
 	 * labeled alternative in {@link programParser#parameter}.
@@ -346,13 +337,6 @@ public interface programVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAddExprMinusPlusOp(@NotNull programParser.AddExprMinusPlusOpContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code unaryExprOther}
-	 * labeled alternative in {@link programParser#unaryExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUnaryExprOther(@NotNull programParser.UnaryExprOtherContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link programParser#powmod_op}.
 	 * @param ctx the parse tree

@@ -335,11 +335,16 @@ public class Visitor<T> extends programBaseVisitor {
         }
         System.out.println("");
         if (encontrado){
-            Symbol simboloEncontrado = this.tablaSimbolos.showSymbol(nombreVar, scopeActual);
+            Symbol simboloEncontrado = tablaSimbolos.showSymbol(nombreVar, scopeActual);
 
             String tipo =   ((Type)simboloEncontrado.getTipo()).getLiteralTipo();
+            boolean array = ((Type)simboloEncontrado.getTipo()).isArreglo();
+            if (array && ctx.getChild(0).getChildCount() == 1){
+                
+                  agregarLog("Error: array tipo incorrecto",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
+            }
             String tipoDeclarado =  (String)this.visit(ctx.getChild(2));
-            
+            System.out.println("tipos");
             System.out.println(tipo);
             System.out.println(tipoDeclarado);
             if (tipoDeclarado.contains("literal")){
@@ -427,10 +432,23 @@ public class Visitor<T> extends programBaseVisitor {
         
         return null;
     }
+
+    @Override
+    public Object visitUnaryExpr(programParser.UnaryExprContext ctx) {
+        if (ctx.getChildCount() ==  1)
+            literals.push(ctx.getChild(0).getText());
+        else{
+            literals.push(ctx.getChild(0).getText()
+            +
+            literals.push(ctx.getChild(1).getText()));
+        }
+        return super.visitUnaryExpr(ctx); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
     
     @Override
     public Object visitInt_literal(programParser.Int_literalContext ctx) {
-        literals.push(ctx.getChild(0).getText());
         return "int_literal";
         
     }
@@ -583,7 +601,7 @@ public class Visitor<T> extends programBaseVisitor {
             if (verArray){
                 int tamañoArray = ((Type)simboloArray.getTipo()).getTamaño();
                 int tamañoActual = Integer.parseInt((String)literals.pop());
-                if (tamañoActual > tamañoArray-1 || tamañoActual < 0){
+                if (tamañoActual > tamañoArray || tamañoActual <= 0){
                     agregarLog("Error: index "+tipoArray.getNombreVariable()+" out of bounds ", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
                     verArray = false;
                
@@ -651,13 +669,7 @@ public class Visitor<T> extends programBaseVisitor {
         return "boolean_literal"; //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Object visitUnaryExprNot(programParser.UnaryExprNotContext ctx) {
-        for (int i = 0;i<ctx.getChildCount();i++){
-             this.visit(ctx.getChild(i));
-        }
-        return "boolean_literal"; //To change body of generated methods, choose Tools | Templates.
-    }
+  
 
     @Override
     public Object visitAddExprMinusPlusOp(programParser.AddExprMinusPlusOpContext ctx) {
@@ -832,6 +844,53 @@ public class Visitor<T> extends programBaseVisitor {
        return ctx.getChild(0).getText();
     }
 
+    @Override
+    public Object visitLocationArray2(programParser.LocationArray2Context ctx) {
+      for (int i = 0;i<ctx.getChildCount();i++){
+                visit(ctx.getChild(i));
+            }
+        
+            String compare = ((String)this.visit(ctx.getChild(2)));
+            boolean verArray = true;
+            if (!compare.contains("int") && !compare.isEmpty()){
+                agregarLog("Error: invalid return type " + ((String)this.visit(ctx.getChild(2))), ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
+                verArray = false;
+              
+            }
+            String nombreArray = ctx.getChild(0).getText();
+            Symbol simboloArray = tablaSimbolos.findAllScopes(nombreArray);
+            if (simboloArray == null){
+               
+                return null;
+            }
+            Type tipoArray = ((Type)simboloArray.getTipo());
+            if (tipoArray.isArreglo()== false){
+                agregarLog("Error: " + tipoArray.getNombreVariable() + " no es un array", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true );
+                verArray = false;
+               
+              
+            }
+            if (verArray){
+                int tamañoArray = ((Type)simboloArray.getTipo()).getTamaño();
+                int tamañoActual = Integer.parseInt((String)literals.pop());
+                if (tamañoActual > tamañoArray || tamañoActual <= 0){
+                    agregarLog("Error: index "+tipoArray.getNombreVariable()+" out of bounds ", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),true);
+                    verArray = false;
+               
+                   
+                }
+                
+            }
+            
+            if (verArray){
+                agregarLog("Array " + tipoArray.getNombreVariable()+" tipo correcto" , ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(),false);
+                
+            }
+           
+            
+        return (T)compare;
+    }
+    
     
     
     

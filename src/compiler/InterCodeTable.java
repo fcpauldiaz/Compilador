@@ -108,6 +108,11 @@ public class InterCodeTable {
         return simbol.getAmbito()==0;
     }
     
+     public boolean searchGlobalSymbol(String nombreVar, int ambitoActual){
+        Symbol simbol = tablaSimbolos.showSymbol(nombreVar, ambitoActual);
+        return simbol.getAmbito()==0;
+    }
+    
     
     
     

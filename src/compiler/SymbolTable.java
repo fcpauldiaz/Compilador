@@ -155,6 +155,28 @@ public class SymbolTable {
         return null;
     
     }
+     public Symbol showSymbol(String nombreVar,int ambitoActual){
+         
+         
+       
+            for (Map.Entry<Integer, Symbol> entry : tabla.entrySet()) {
+                int key = entry.getKey();
+                Symbol value = entry.getValue();
+                
+                String varName = ((Type)value.getTipo()).getNombreVariable();
+                int ambito = value.getAmbito();
+                //System.out.println(varName);
+                //System.out.println(nombreVar);
+                if (varName.trim().equals(nombreVar.trim())
+                    && 
+                   ambito == ambitoActual)
+                    return value;
+            }
+           
+      
+        return null;
+    
+    }
     
     public Symbol findAllScopes(String nombreVar){
        

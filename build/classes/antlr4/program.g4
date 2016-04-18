@@ -111,12 +111,12 @@ statementElse
     ;
 	
 location
-	:	(ID)(locationMethod)?
+	:	(ID)('.' locationMember)?
 	;
 	
 locationMember
-	:	(ID)(locationMethod)?       #locationMemberMethod
-        |       locationArray               #locationMemberArray
+	:	(ID)('.' locationMember)?    #locationMemberMethod
+        |       locationArray                #locationMemberArray
 	;
 
 locationArray

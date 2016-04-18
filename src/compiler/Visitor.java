@@ -34,6 +34,7 @@ public class Visitor<T> extends programBaseVisitor {
     public static boolean verificadorMain;
     public Stack literals = new Stack();
     public Stack<String> methods = new Stack();
+    public String varLocation = "";
     
     public Visitor() {
        
@@ -307,11 +308,15 @@ public class Visitor<T> extends programBaseVisitor {
 
     @Override
     public T visitLocation(programParser.LocationContext ctx) {
-        for (int i = 0;i<ctx.getChildCount();i++){
-            T var = (T)this.visit(ctx.getChild(i));
-            if (i==1){
-                return var;
-            }
+       
+        System.out.println(ctx.getChildCount());
+        if (ctx.getChildCount()>1){
+            this.varLocation = ctx.getChild(0).getText();
+            String type = (String)visit(ctx.getChild(2));
+             System.out.println("sale location");
+            System.out.println(type);
+            this.varLocation = "";
+            return (T)type;
         }
         
         
@@ -845,16 +850,68 @@ public class Visitor<T> extends programBaseVisitor {
 
     @Override
     public Object visitLocationMemberArray(programParser.LocationMemberArrayContext ctx) {
-        for (int i = 0;i<ctx.getChildCount();i++){
-            visit(ctx.getChild(i));
+        
+        this.varLocation += "€"+ctx.getChild(0).getChild(0).getText();
+        String[] locations = this.varLocation.split("€");
+        Symbol methodSymbol = null;
+        for (int i = 0;i<locations.length;i++){
+            if (i == 0){
+                methodSymbol = tablaSimbolos.showSymbol(locations[i], scopeActual);
+            }
+            else{
+                methodSymbol = tablaSimbolos.findAllScopes(((Type)methodSymbol.getTipo()).getLiteralTipo());
+                ArrayList members = ((StructType)methodSymbol.getTipo()).getMembers();
+                for (int k = 0;k<members.size();k++){
+                     Symbol innerSymbol =  (Symbol)members.get(k);
+                     if (((Type)innerSymbol.getTipo()).getNombreVariable().equals(
+                             locations[i]
+                     ))
+                         methodSymbol = innerSymbol;
+                }
+            }
         }
-        return ctx.getChild(0).getChild(0).getText(); //To change body of generated methods, choose Tools | Templates.
+        this.varLocation = ((Type)methodSymbol.getTipo()).getLiteralTipo();
+        super.visitLocationMemberArray(ctx);
+        System.out.println("member array " +  ctx.getChild(0).getText());
+        return this.varLocation;
+        //return ctx.getChild(0).getChild(0).getText(); //To change body of generated methods, choose Tools | Templates.
     }
+
+    
 
     @Override
     public Object visitLocationMemberMethod(programParser.LocationMemberMethodContext ctx) {
         
-        Symbol methodSymbol = tablaSimbolos.findAllScopes(ctx.getChild(0).getText());
+        try {
+        if (ctx.getChildCount()>1) {
+            this.varLocation = this.varLocation+"€" + ctx.getChild(0).getText();
+            super.visitLocationMemberMethod(ctx);
+            return this.varLocation;
+        }
+        this.varLocation += "€"+ctx.getChild(0).getText();
+        String[] locations = this.varLocation.split("€");
+        Symbol methodSymbol = null;
+        for (int i = 0;i<locations.length;i++){
+            if (i == 0){
+                methodSymbol = tablaSimbolos.showSymbol(locations[i], scopeActual);
+            }
+            else{
+                methodSymbol = tablaSimbolos.findAllScopes(((Type)methodSymbol.getTipo()).getLiteralTipo());
+                ArrayList members = ((StructType)methodSymbol.getTipo()).getMembers();
+                for (int k = 0;k<members.size();k++){
+                     Symbol innerSymbol =  (Symbol)members.get(k);
+                     if (((Type)innerSymbol.getTipo()).getNombreVariable().equals(
+                             locations[i]
+                     ))
+                         methodSymbol = innerSymbol;
+                }
+            }
+        }
+        this.varLocation = ((Type)methodSymbol.getTipo()).getLiteralTipo();
+        }catch(Exception e){
+            agregarLog("Error al buscar sub estructuras", ctx.getStart().getLine(), ctx.getStart().getCharPositionInLine(), true);
+        }
+       /* Symbol methodSymbol = tablaSimbolos.showSymbol(ctx.getChild(0).getText(), this.scopeActual);
         if (methodSymbol != null){
             if (((Type)methodSymbol.getTipo()).isArreglo()){
                 agregarLog("Error: la variable " +((Type)methodSymbol.getTipo()).getNombreVariable() + " es un array", ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true );
@@ -862,8 +919,8 @@ public class Visitor<T> extends programBaseVisitor {
         }
         for (int i = 0;i<ctx.getChildCount();i++){
             visit(ctx.getChild(i));
-        }
-       return ctx.getChild(0).getText();
+        }*/
+       return this.varLocation;
     }
 
     @Override
@@ -912,8 +969,6 @@ public class Visitor<T> extends programBaseVisitor {
             
         return (T)compare;
     }
-    
-    
     
     
     public void agregarLog(String mensaje, int linea, int columna, boolean error){

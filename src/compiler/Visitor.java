@@ -122,7 +122,7 @@ public class Visitor<T> extends programBaseVisitor {
         System.out.println(var);
         String tipito = "";
         if (var instanceof StructType){
-            tipito = ((StructType)var).getLiteralTipo() + " " +  ((StructType)var).getNombreVariable();
+            tipito =  ((StructType)var).getNombreVariable();
         }
         else
            tipito = (String)var;
@@ -686,7 +686,7 @@ public class Visitor<T> extends programBaseVisitor {
             
         }
           if (!secondOpType.contains("literal")){
-            Symbol secondSymbol = tablaSimbolos.showSymbol(firstOp, scopeActual);
+            Symbol secondSymbol = tablaSimbolos.showSymbol(secondOp, scopeActual);
             secondOpType = ((Type)secondSymbol.getTipo()).getLiteralTipo();
         }
         if (!firstOpType.contains("int")){
@@ -701,6 +701,38 @@ public class Visitor<T> extends programBaseVisitor {
         return "int_literal";//se propaga el exito
     }
 
+    @Override
+    public Object visitMultExprMultDivOp(programParser.MultExprMultDivOpContext ctx) {
+        String firstType = (String)visit(ctx.getChild(0));
+        String secondType = (String)visit(ctx.getChild(2));
+        System.out.println("MULT");
+        System.out.println(firstType);
+        System.out.println(secondType);
+        String secondOpType = secondType;
+        String firstOpType = firstType;
+        
+        if (!firstType.contains("literal")){
+            Symbol secondSymbol = tablaSimbolos.showSymbol(firstType, scopeActual);
+            firstOpType = ((Type)secondSymbol.getTipo()).getLiteralTipo();
+        }
+        if (!secondType.contains("literal")){
+            Symbol secondSymbol = tablaSimbolos.showSymbol(secondType, scopeActual);
+            secondOpType = ((Type)secondSymbol.getTipo()).getLiteralTipo();
+        }
+        
+        if (!firstOpType.contains("int")){
+            agregarLog(firstOpType+" no es de tipo int en la suma/resta",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
+            return "";//se propaga el error
+        }
+        if(!secondOpType.contains("int")){
+             agregarLog(secondOpType+" no es de tipo int en la suma/resta",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
+             return "";//se propagar el error
+        }
+        super.visitMultExprMultDivOp(ctx);
+        return  "int_literal" ;//To change body of generated methods, choose Tools | Templates.
+    }
+
+    
     @Override
     public Object visitLocationMethod(programParser.LocationMethodContext ctx) {
         

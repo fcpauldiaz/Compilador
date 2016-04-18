@@ -99,12 +99,12 @@ public class InterCodeTable {
                 simbolos.add(simbol);
             }
         }
-     
+        
         return simbolos.get(simbolos.size()-1);
     }
     
-    public boolean searchGlobalSymbol(String nombreVar){
-        Symbol simbol = this.searchSymbolLastScope(nombreVar);
+    public boolean searchGlobalSymbol(String nombreVar, Scope ambitoActual){
+        Symbol simbol = tablaSimbolos.showSymbol(nombreVar, ambitoActual);
         return simbol.getAmbito()==0;
     }
     

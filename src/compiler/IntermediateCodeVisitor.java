@@ -10,8 +10,8 @@ import antlr4.programBaseVisitor;
 import antlr4.programParser;
 import gui.ANTGui;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Stack;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -26,11 +26,12 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     private String etiquetaActual = "";
     private int contEtiquetaActual = 0;
     private String actualOp = "";
-    private IntermediateCode last;
     private IntermediateCode elseInt;
     private ArrayList<StackControl> stackControl;
     private ArrayList checkArray = new ArrayList();
     private ArrayList exprOps = new ArrayList();
+    private int contWhile = 0;
+    private int cantidadIF = 0;
     
     public IntermediateCodeVisitor() {
         this.stackControl = new ArrayList();
@@ -64,7 +65,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     public Object visitStatementLocation(programParser.StatementLocationContext ctx) {
         IntermediateCode codigo = new IntermediateCode();
         String res = ((String)visit(ctx.getChild(0)));
-        boolean glbl = tablaCodigo.searchGlobalSymbol(res);
+        boolean glbl = tablaCodigo.searchGlobalSymbol(res, scopeActual);
         if (glbl){
             IntermediateCode code = this.tablaCodigo.searchCodeGlobal(res);
             res = code.getEtiqueta();
@@ -94,7 +95,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             try {
                 int num = Integer.parseInt(dir1);
             }catch(Exception e){
-                boolean glbl2 = tablaCodigo.searchGlobalSymbol(dir1);
+                boolean glbl2 = tablaCodigo.searchGlobalSymbol(dir1, scopeActual);
                 if (glbl2){
                        IntermediateCode code = this.tablaCodigo.searchCodeGlobal(dir1);
                        dir1 = code.getEtiqueta();
@@ -157,7 +158,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         int posArray = (int)locArray.get(1)-1;
         
         IntermediateCode codigo = new IntermediateCode();
-        boolean glbl = tablaCodigo.searchGlobalSymbol(nombreVar);
+        boolean glbl = tablaCodigo.searchGlobalSymbol(nombreVar, scopeActual);
          if (glbl){
            IntermediateCode globalCode = this.tablaCodigo.searchCodeGlobal(nombreVar);
                Symbol simbolo =  Visitor.tablaSimbolos.findAllScopes(nombreVar);
@@ -194,7 +195,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             try {
                 int num = Integer.parseInt(dir1);
             }catch(Exception e){
-                boolean glbl2 = tablaCodigo.searchGlobalSymbol(dir1);
+                boolean glbl2 = tablaCodigo.searchGlobalSymbol(dir1, scopeActual);
                 if (glbl2){
                        IntermediateCode code = this.tablaCodigo.searchCodeGlobal(dir1);
                        dir1 = code.getEtiqueta();
@@ -378,13 +379,17 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     @Override
     public Object visitStatementIF(programParser.StatementIFContext ctx) {
         
-        
-        IntermediateCode etiqueta1 = new IntermediateCode();
+         IntermediateCode etiqueta1 = new IntermediateCode();
         IntermediateCode etiqueta2 = new IntermediateCode();
-       
+        
         int copyEt = contEtiquetaActual;
+        int cantidad = 1+ this.countStrings(ctx.getChild(4).getText(), "if")*2;
+        if (scopeActual.getIdScope()!=1){
+            cantidad++;
+        }
+     
         etiqueta1.setEtiqueta(etiquetaActual+ ++copyEt+":");
-       
+        //copyEt = copyEt + cantidad;
         System.out.println(actualOp);
         ArrayList midExpr = (ArrayList)this.visit(ctx.getChild(2));
         System.out.println("midExpr " + midExpr);
@@ -422,7 +427,11 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         if (bool.equals("ifFalse")){
             
         }else{
-            prevLast.setDir2(etiquetaActual+ copyEt);
+            
+            System.out.println(ctx.getChild(4).getText());
+            System.out.println("cantidad" + cantidad);
+           
+           prevLast.setDir2(etiquetaActual+ (cantidad));
             prevLast.setOp("GOTO");
             tablaCodigo.addCode(prevLast);
         }
@@ -433,8 +442,9 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         scopeIF.setAnterior(scopeActual);
         scopeActual = scopeIF;
         
-      
-        last = etiqueta1;
+       
+        
+        
       
         if (ctx.getChildCount() > 5){
             IntermediateCode etiqueta = new IntermediateCode();
@@ -455,7 +465,9 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         }
         
         this.visit(ctx.getChild(4));
-         
+         IntermediateCode label = new IntermediateCode();
+         label.setEtiqueta(etiquetaActual+contEtiquetaActual+++":");
+         tablaCodigo.addCode(label);
         
        if (ctx.getChildCount() > 5){
          
@@ -464,7 +476,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             tablaCodigo.addCode(etiqueta2);
        }
         scopeActual = scopeActual.getAnterior();
-        return ""; //To change body of generated methods, choose Tools | Templates.
+        return "";
     }
 
     @Override
@@ -501,9 +513,14 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
 
     @Override
     public Object visitStructDeclaration(programParser.StructDeclarationContext ctx) {
-       
+         Scope scopeIF = new Scope();
         
-        return super.visitStructDeclaration(ctx); //To change body of generated methods, choose Tools | Templates.
+        scopeActual.addSiguiente(scopeIF);
+        scopeIF.setAnterior(scopeActual);
+        scopeActual = scopeIF;
+        super.visitStructDeclaration(ctx);
+         scopeActual = scopeActual.getAnterior();
+        return ""; //To change body of generated methods, choose Tools | Templates.
     }
     
     
@@ -515,10 +532,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             this.tablaCodigo.addCode(elseInt);
             elseInt = null;
         }
-        if (last!=null){
-            this.tablaCodigo.addCode(last);
-            last = null;
-        }
+       
         return "";//To change body of generated methods, choose Tools | Templates.
     }
 
@@ -544,7 +558,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             int test = Integer.parseInt(dir1);
         }catch(Exception e){
             if (!dir1.contains("[")){
-                boolean amb = tablaCodigo.searchGlobalSymbol(dir1);
+                boolean amb = tablaCodigo.searchGlobalSymbol(dir1, scopeActual);
             if (amb)
                dir1+="_"+"_"+amb;
             else
@@ -578,34 +592,151 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
 
     @Override
     public Object visitRelationExpr(programParser.RelationExprContext ctx) {
-        if (ctx.getChildCount()>1){
-        String dir1 = ((IntermediateCode)visit(ctx.getChild(0))).getRes();
-        String dir2 = ((IntermediateCode)visit(ctx.getChild(2))).getRes();
+//        actualOp = ctx.getChild(1).getChild(0).getText();
+         if (ctx.getChildCount()>1){
+             T val1 = (T)visit(ctx.getChild(0));
+             T val2 = (T)visit(ctx.getChild(2));
+             String dir1;
+             String dir2;
+             if (val1 instanceof IntermediateCode){
+                 dir1 = ((IntermediateCode)(val1)).getRes();
+             }else
+                 dir1 = (String)val1;
+             
+             if (val2 instanceof IntermediateCode){
+                 dir2 =  ((IntermediateCode)(val2)).getRes();
+             }else
+                 dir2 = (String)val2;
+          
         try{
             int test = Integer.parseInt(dir1);
         }catch(Exception e){
-            dir1+="_"+etiquetaActual+"_"+scopeActual.getIdScope();
+            if (!dir1.contains("[")){
+                boolean amb = tablaCodigo.searchGlobalSymbol(dir1, scopeActual);
+            if (amb)
+               dir1+="_"+"_"+amb;
+            else
+                dir1 = "stack["+this.buscarStack(dir1)+"]";
+            }
+            
         }
         try{
             int test = Integer.parseInt(dir2);
         }catch(Exception e){
-            dir2+="_"+etiquetaActual+"_"+scopeActual.getIdScope();
+            int amb = tablaCodigo.searchSymbolLastScope(dir2).getAmbito();
+            if (amb==0)
+               dir2+="_"+"_"+amb;
+            else
+                dir2+="_"+etiquetaActual+"_"+amb;
         }
-        
-        
-       
         String op = ctx.getChild(1).getText();
         IntermediateCode codigo = new IntermediateCode();
+        System.out.println("dir1 " + dir1);
+        System.out.println("dir2 " + dir2);
         codigo.setDir1(dir1);
         codigo.setDir2(dir2);
         codigo.setOp(op);
-        codigo.setRes("temp"+this.contadorTemps);
+        codigo.setRes("temp"+this.contadorTemps++);
         
         return codigo; //To change body of generated methods, choose Tools | Templates.
         }
         return super.visitRelationExpr(ctx);
     }
 
+    @Override
+    public Object visitStatementWhile(programParser.StatementWhileContext ctx) {
+        Scope scopeIF = new Scope();
+        contWhile++;
+        scopeActual.addSiguiente(scopeIF);
+        scopeIF.setAnterior(scopeActual);
+        scopeActual = scopeIF;
+       
+        
+        IntermediateCode etiqueta1 = new IntermediateCode();
+        IntermediateCode etiqueta2 = new IntermediateCode();
+        IntermediateCode etiquetaWhile = new IntermediateCode();
+        etiquetaWhile.setEtiqueta("whileLoop" + "_"+etiquetaActual+contEtiquetaActual+":");
+        this.tablaCodigo.addCode(etiquetaWhile);
+            
+        int copyEt = contEtiquetaActual;
+        etiqueta1.setEtiqueta(etiquetaActual+ ++copyEt+":");
+        ArrayList midExpr = (ArrayList)this.visit(ctx.getChild(2));
+        System.out.println("midExpr " + midExpr);
+        String bool = "ifTrue";
+        for (int j = 0 ;j<midExpr.size();j++){
+            T actualObj = (T)midExpr.get(j) ;
+            if (j < midExpr.size()-1){
+                if (midExpr.get(j+1) instanceof String){
+                    if (midExpr.get(j+1).equals("&&"))
+                        bool = "ifFalse";
+                    else
+                        bool = "ifTrue";
+                }
+            }
+            if (actualObj instanceof IntermediateCode){
+                IntermediateCode actualCode = (IntermediateCode)actualObj;
+                IntermediateCode codigo = new IntermediateCode();
+                codigo.setStatementIF(true);
+                IntermediateCode midCode = actualCode;
+                tablaCodigo.addCode(midCode);
+                codigo.setRes(bool);
+
+                codigo.setDir1(midCode.getRes());
+                if (bool.equals("ifFalse")){
+                    codigo.setDir2(etiquetaActual+ copyEt);
+                }
+                else
+                    codigo.setDir2(etiquetaActual+ contEtiquetaActual);
+                codigo.setOp("GOTO");
+
+                tablaCodigo.addCode(codigo);
+            }
+        }
+        
+        IntermediateCode prevLast = new IntermediateCode(); 
+        if (bool.equals("ifFalse")){
+            
+        }else{
+            
+            if (ctx.getChild(4).getText().contains("while")){
+               int offset = this.countStrings(ctx.getChild(4).getText(), "while");
+                prevLast.setDir2(etiquetaActual+ (copyEt+1+offset));
+            }
+            else
+                prevLast.setDir2(etiquetaActual + (copyEt));
+            prevLast.setOp("GOTO");
+            tablaCodigo.addCode(prevLast);
+        }
+        
+       
+       
+        IntermediateCode etiqueta = new IntermediateCode();
+        etiqueta.setEtiqueta(etiquetaActual+contEtiquetaActual+++":");
+            
+        this.tablaCodigo.addCode(etiqueta);
+        
+        visit(ctx.getChild(4));
+         
+      
+        IntermediateCode finalGoto = new IntermediateCode();
+        finalGoto.setOp("GOTO");
+        int copyCont =contEtiquetaActual;
+        copyCont = --contWhile;
+        finalGoto.setDir2("whileLoop" + "_"+etiquetaActual+(copyCont));
+        tablaCodigo.addCode(finalGoto);
+        
+        
+        etiqueta2.setEtiqueta(etiquetaActual+contEtiquetaActual+++":");
+        tablaCodigo.addCode(etiqueta2);
+        
+        scopeActual = scopeActual.getAnterior();
+        
+        
+        return "";
+    }
+
+    
+    
     @Override
     public Object visitExpression(programParser.ExpressionContext ctx) {
     
@@ -663,7 +794,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             return "stack["+ searchStack+"]";
         }
         catch(Exception e){
-            boolean gbl = this.tablaCodigo.searchGlobalSymbol(nombreVar);
+            boolean gbl = this.tablaCodigo.searchGlobalSymbol(nombreVar, scopeActual);
             if (gbl){
                 IntermediateCode globalCode = this.tablaCodigo.searchCodeGlobal(nombreVar);
                Symbol simbolo =  Visitor.tablaSimbolos.findAllScopes(nombreVar);
@@ -748,6 +879,11 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
        }
        return null;
    }
+    
+    public int countStrings(String haystack, String needle){
+    
+        return haystack.split(Pattern.quote(needle), -1).length - 1;
+    }
    
    public void modificarSP(){
         int tamaño = this.stackControl.size();

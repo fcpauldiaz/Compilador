@@ -870,8 +870,9 @@ public class Visitor<T> extends programBaseVisitor {
                 }
             }
         }
-        this.varLocation = ((Type)methodSymbol.getTipo()).getLiteralTipo();
         super.visitLocationMemberArray(ctx);
+        this.varLocation = ((Type)methodSymbol.getTipo()).getLiteralTipo();
+       
         System.out.println("member array " +  ctx.getChild(0).getText());
         return this.varLocation;
         //return ctx.getChild(0).getChild(0).getText(); //To change body of generated methods, choose Tools | Templates.
@@ -925,10 +926,12 @@ public class Visitor<T> extends programBaseVisitor {
 
     @Override
     public Object visitLocationArray2(programParser.LocationArray2Context ctx) {
-      for (int i = 0;i<ctx.getChildCount();i++){
-                visit(ctx.getChild(i));
+     
+            if (ctx.getChildCount() == 6){
+                this.varLocation = ctx.getChild(0).getText();
+                super.visitLocationArray2(ctx);
             }
-        
+      
             String compare = ((String)this.visit(ctx.getChild(2)));
             boolean verArray = true;
             if (!compare.contains("int") && !compare.isEmpty()){

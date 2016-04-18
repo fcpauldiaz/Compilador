@@ -146,6 +146,10 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     @Override
     public Object visitLocationArray(programParser.LocationArrayContext ctx) {
         
+         if (ctx.getChildCount() == 6){
+               return super.visitLocationArray(ctx);
+        }
+        
         String nombreVar = ctx.getChild(0).getText();
         int locationSave = Integer.parseInt(ctx.getChild(2).getText());
         ArrayList returnArray = new ArrayList();
@@ -304,7 +308,17 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
                 }
             }
         }
-        this.varLocation = ((Type)methodSymbol.getTipo()).getNombreVariable();
+       
+        super.visitLocationMemberArray(ctx);
+    
+     
+        int valPos =  Integer.parseInt(ctx.getChild(0).getChild(2).getText());
+        valPos = valPos -1;
+        if (!this.varLocation.contains("global"))
+            this.varLocation = ((Type)methodSymbol.getTipo()).getNombreVariable()+"_global["+
+               (valPos*4)+"]"
+                ;
+        
        
         System.out.println("member array " +  ctx.getChild(0).getText());
         return this.varLocation; 
@@ -591,7 +605,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         int tamaño = Integer.parseInt(ctx.getChild(3).getText());
         
         IntermediateCode codigo = new IntermediateCode();
-        if (scopeActual.getIdScope() == 0) {
+        if (scopeActual.getIdScope() == 0 || structValidation) {
            
             codigo.setEtiqueta(ctx.getChild(1).getText()+"_global");
             codigo.setGlobal(true);
@@ -889,6 +903,10 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     
     @Override
     public Object visitLocationArray2(programParser.LocationArray2Context ctx) {
+        if (ctx.getChildCount() == 6){
+                this.varLocation = ctx.getChild(0).getText();
+                super.visitLocationArray2(ctx);
+        }
         String nombreVar = ctx.getChild(0).getText();
         String valor = ctx.getChild(2).getText();
         int intVal = Integer.parseInt(valor) - 1;
@@ -923,7 +941,9 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             }
            //super.visitLocationArray2(ctx);
         }
-       
+        if (ctx.getChildCount() == 6){
+            this.varLocation = ctx.getChild(0).getText();
+        }
         
         return super.visitLocationArray2(ctx); //To change body of generated methods, choose Tools | Templates.
     }
@@ -964,7 +984,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
 
     @Override
     public Object visitValueLiteral(programParser.ValueLiteralContext ctx) {
-          IntermediateCode codigo = new IntermediateCode();
+        IntermediateCode codigo = new IntermediateCode();
         codigo.setRes(ctx.getChild(0).getChild(0).getText());
         return codigo; //To change body of generated methods, choose Tools | Templates.
     }

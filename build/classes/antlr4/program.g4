@@ -120,11 +120,11 @@ locationMember
 	;
 
 locationArray
-        :   ID '[' expression ']' (locationMethod)?
+        :   ID '[' expression ']' ('.' locationMember)?
             
         ;
 locationArray2
-        :   ID '[' expression ']' (locationMethod)?
+        :   ID '[' expression ']' ('.' locationMember)?
             
         ;
 

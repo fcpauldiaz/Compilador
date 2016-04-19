@@ -578,9 +578,9 @@ public class Visitor<T> extends programBaseVisitor {
 
     @Override
     public T visitLocationArray(programParser.LocationArrayContext ctx) {
-            
-            for (int i = 0;i<ctx.getChildCount();i++){
-                visit(ctx.getChild(i));
+            if (ctx.getChildCount() == 6){
+                this.varLocation += ctx.getChild(0).getText();
+                super.visitLocationArray(ctx);
             }
         
             String compare = ((String)this.visit(ctx.getChild(2)));

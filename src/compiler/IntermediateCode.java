@@ -136,10 +136,8 @@ public class IntermediateCode {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-
     
     
-
     @Override
     public String toString() {
         return "IntermediateCode{" + "dir1=" + dir1 + ", dir2=" + dir2 + ", res=" + res + ", op=" + op + ", tamaño=" + tamaño + ", etiqueta=" + etiqueta + '}';

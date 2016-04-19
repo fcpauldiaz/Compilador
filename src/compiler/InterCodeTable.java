@@ -69,6 +69,14 @@ public class InterCodeTable {
             if (dir1 == null && op != null && dir2 != null){
                 returnString += op +" "+ dir2 + "\n";
             }
+            //method call
+            if (dir1 != null && dir2 != null && res != null && op == null){
+                returnString += res +" = "+ dir1 + " " + dir2 +"\n ";
+            }
+            //param
+            if (dir1 != null && dir2 != null && op == null && res == null){
+                returnString += dir1 + " " + dir2 + "\n";           
+            }
             
         }
         

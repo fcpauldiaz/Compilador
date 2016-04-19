@@ -358,7 +358,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
 
         codigo.setEtiqueta(etiqueta+":");
         tablaCodigo.addCode(codigo);
-         super.visitMethodDeclaration(ctx);
+        super.visitMethodDeclaration(ctx);
         scopeActual = scopeActual.getAnterior();
         StackControl.staticPos = 0;
         return "";//To change body of generated methods, choose Tools | Templates.
@@ -958,6 +958,55 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         
         return returnArray; //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public Object visitMethodCall(programParser.MethodCallContext ctx) {
+        //manejo de parámetros
+        
+        for (int i = 1;i<ctx.getChildCount();i++){
+           T param = (T)this.visit(ctx.getChild(i));
+            System.out.println(param);
+           if (param instanceof IntermediateCode){
+             
+               IntermediateCode sendParam = new IntermediateCode();
+               sendParam.setDir1("PARAM");
+               sendParam.setDir2(((IntermediateCode)param).getRes());
+               this.tablaCodigo.addCode(sendParam);
+           }
+            if (param instanceof ArrayList){
+                IntermediateCode sendParam = new IntermediateCode();
+                sendParam.setDir1("PARAM");
+                if (((ArrayList)param).get(0) instanceof String){
+                    String nombreVAr = (String)((ArrayList)param).get(0);
+                         boolean amb = tablaCodigo.searchGlobalSymbol(nombreVAr, scopeActual);
+                        if (amb)
+                            sendParam.setDir2( "stack_global[" + this.buscarGlobalStack(nombreVAr) +"]");
+                        else
+                            sendParam.setDir2( "stack[" + this.buscarStack(nombreVAr) +"]");
+                        
+                   
+                }
+                else
+                    sendParam.setDir2(((IntermediateCode)((ArrayList)param).get(0)).getRes());
+                
+               this.tablaCodigo.addCode(sendParam);
+           }
+        }
+        
+        
+        //llamada al método
+        IntermediateCode intermedicateMethod  = new IntermediateCode();
+        intermedicateMethod.setRes("temp0");
+       
+        intermedicateMethod.setDir1("CALL");
+        intermedicateMethod.setDir2(ctx.getChild(0).getText());
+        this.tablaCodigo.addCode(intermedicateMethod);
+        return  intermedicateMethod;//To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+    
+    
 
     @Override
     public Object visitCond_op_and(programParser.Cond_op_andContext ctx) {

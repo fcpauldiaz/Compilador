@@ -884,7 +884,7 @@ public class Visitor<T> extends programBaseVisitor {
     public Object visitLocationMemberMethod(programParser.LocationMemberMethodContext ctx) {
         
         try {
-        if (ctx.getChildCount()>1) {
+        if (ctx.getChildCount() > 1) {
             this.varLocation = this.varLocation+"€" + ctx.getChild(0).getText();
             super.visitLocationMemberMethod(ctx);
             return this.varLocation;

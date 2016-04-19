@@ -14,6 +14,7 @@ import com.jcraft.jsch.Session;
 import compiler.CodeGenerator;
 import compiler.CustomOutputStream;
 import compiler.DescriptiveErrorListener;
+import compiler.GlobalStackControl;
 import compiler.IntermediateCodeVisitor;
 import compiler.MethodType;
 import compiler.Scope;
@@ -435,6 +436,7 @@ public class ANTGui extends javax.swing.JFrame {
                // jTextARM.setText(generator.ponerGlobalVar());
                // jTextARM.setText(generator.genCode());
                StackControl.staticPos=0;
+               GlobalStackControl.staticPos=0;
                
                 if (Visitor.verificadorMain==false){
                     jTextArea3.setText(jTextArea3.getText()+"\n"+"Error: No existe el método MAIN");

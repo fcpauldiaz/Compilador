@@ -10,7 +10,6 @@ import antlr4.programBaseVisitor;
 import antlr4.programParser;
 import gui.ANTGui;
 import java.util.ArrayList;
-import java.util.Stack;
 import java.util.regex.Pattern;
 import static compiler.Visitor.tablaSimbolos;
 
@@ -29,6 +28,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     private String actualOp = "";
     private IntermediateCode elseInt;
     private ArrayList<StackControl> stackControl;
+     private ArrayList<GlobalStackControl> globalStack;
     private ArrayList checkArray = new ArrayList();
     private ArrayList exprOps = new ArrayList();
     private int contWhile = 0;
@@ -39,6 +39,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     
     public IntermediateCodeVisitor() {
         this.stackControl = new ArrayList();
+        this.globalStack = new ArrayList();
         Scope.setAmbitoActual(0);
         this.scopeActual = new Scope();
         checkArray.add("true");
@@ -72,8 +73,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         System.out.println("res " + res);
         boolean glbl = tablaCodigo.searchGlobalSymbol(res, scopeActual);
         if (glbl){
-            IntermediateCode code = this.tablaCodigo.searchCodeGlobal(res);
-            res = code.getEtiqueta();
+           res = "stack_global["+this.buscarGlobalStack(res)+"]";
            
         }else{
            res = "stack["+this.buscarStack(res)+"]";
@@ -102,8 +102,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             }catch(Exception e){
                 boolean glbl2 = tablaCodigo.searchGlobalSymbol(dir1, scopeActual);
                 if (glbl2){
-                       IntermediateCode code = this.tablaCodigo.searchCodeGlobal(dir1);
-                       dir1 = code.getEtiqueta();
+                      dir1 = "stack_global["+this.buscarGlobalStack(dir1)+"]";
                 }
                 else { 
                     int pos = this.buscarStack(dir1);
@@ -169,18 +168,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         IntermediateCode codigo = new IntermediateCode();
         boolean glbl = tablaCodigo.searchGlobalSymbol(nombreVar, scopeActual);
          if (glbl){
-           IntermediateCode globalCode = this.tablaCodigo.searchCodeGlobal(nombreVar);
-               Symbol simbolo =  Visitor.tablaSimbolos.findAllScopes(nombreVar);
-               String tipo = ((Type)simbolo.getTipo()).getLiteralTipo();
-               int index = 0;
-               if (tipo.equals("int")||tipo.equals("boolean")){
-                   index =  posArray * OFFSET;
-               }
-               if (tipo.equals("char")){
-                   index =  posArray * OFFSET;
-               }
-                System.out.println(globalCode.getEtiqueta());
-                res= globalCode.getEtiqueta()+"["+index+"]";
+            res = "stack_global["+(this.buscarGlobalStack(nombreVar)+posArray*OFFSET)+"]";;
            
         }else{
            res = "stack["+(this.buscarStack(nombreVar)+posArray*OFFSET)+"]";
@@ -206,8 +194,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             }catch(Exception e){
                 boolean glbl2 = tablaCodigo.searchGlobalSymbol(dir1, scopeActual);
                 if (glbl2){
-                       IntermediateCode code = this.tablaCodigo.searchCodeGlobal(dir1);
-                       dir1 = code.getEtiqueta();
+                      dir1 = "stack_global[" + this.buscarGlobalStack(dir1) +"]";
                 }
                 else { 
                     int pos = this.buscarStack(dir1);
@@ -261,7 +248,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         String nombreFinalVar = ((Type)methodSymbol.getTipo()).getNombreVariable();
         System.out.println("");
         
-       this.varLocation = nombreFinalVar+"_global";
+       this.varLocation =  "stack_global[" + this.buscarGlobalStack(nombreFinalVar) +"]";
        
         
         return this.varLocation; //To change body of generated methods, choose Tools | Templates.
@@ -314,10 +301,12 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
      
         int valPos =  Integer.parseInt(ctx.getChild(0).getChild(2).getText());
         valPos = valPos -1;
+        String nombreVar = ((Type)methodSymbol.getTipo()).getNombreVariable();
         if (!this.varLocation.contains("global"))
-            this.varLocation = ((Type)methodSymbol.getTipo()).getNombreVariable()+"_global["+
-               (valPos*4)+"]"
-                ;
+            this.varLocation = 
+            "stack_global["+(this.buscarGlobalStack(nombreVar)+valPos*OFFSET)+"]";
+                
+       
         
        
         System.out.println("member array " +  ctx.getChild(0).getText());
@@ -329,17 +318,16 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     public Object visitVarDeclarationID(programParser.VarDeclarationIDContext ctx){
         //System.out.println(ctx.getChildCount()+"cantidad var declaration");
         IntermediateCode codigo = new IntermediateCode();
-        if (scopeActual.getIdScope() == 0|| structValidation) {
-           
-            codigo.setEtiqueta(ctx.getChild(1).getText()+"_global");
-            codigo.setGlobal(true);
-            tablaCodigo.addCode(codigo);
-            return super.visitVarDeclarationID(ctx);
-        }
         String tipo = ctx.getChild(0).getText();
         String identificador = ctx.getChild(1).getText();
+        if (scopeActual.getIdScope() == 0|| structValidation) {
+           
+            this.globalStack.add(new GlobalStackControl(OFFSET,identificador, tipo));
+            return super.visitVarDeclarationID(ctx);
+        }
+       
         if (tipo.equals("int")){
-            this.stackControl.add(new StackControl(4, identificador, tipo));
+            this.stackControl.add(new StackControl(OFFSET, identificador, tipo));
             
         }
         else if (tipo.equals("char")){
@@ -489,10 +477,20 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
 
     @Override
     public Object visitUnaryExpr(programParser.UnaryExprContext ctx) {
+       T val = (T)visit(ctx.getChild(0));
        
-        return visit(ctx.getChild(0));//To change body of generated methods, choose Tools | Templates.
+        return val;//To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public Object visitValueExprWithParent(programParser.ValueExprWithParentContext ctx) {
+        T val = (T)visit(ctx.getChild(1));
+        //agregar precedencia
+        
+        return val; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
   
     @Override
     public Object visitStatementIF(programParser.StatementIFContext ctx) {
@@ -607,9 +605,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         IntermediateCode codigo = new IntermediateCode();
         if (scopeActual.getIdScope() == 0 || structValidation) {
            
-            codigo.setEtiqueta(ctx.getChild(1).getText()+"_global");
-            codigo.setGlobal(true);
-            tablaCodigo.addCode(codigo);
+            this.globalStack.add(new GlobalStackControl(OFFSET*tamaño,identificador, tipo));
             return super.visitVarDeclarationArray(ctx);
         }
        
@@ -667,7 +663,9 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         actualOp = ctx.getChild(1).getChild(0).getText();
          if (ctx.getChildCount()>1){
              T val1 = (T)visit(ctx.getChild(0));
+             System.out.println(val1);
              T val2 = (T)visit(ctx.getChild(2));
+             System.out.println(val2);
              String dir1;
              String dir2;
              if (val1 instanceof IntermediateCode){
@@ -686,7 +684,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             if (!dir1.contains("[")){
                 boolean amb = tablaCodigo.searchGlobalSymbol(dir1, scopeActual);
             if (amb)
-               dir1+="_"+"_"+amb;
+               dir1 =  "stack_global[" + this.buscarGlobalStack(dir1) +"]";
             else
                 dir1 = "stack["+this.buscarStack(dir1)+"]";
             }
@@ -697,7 +695,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         }catch(Exception e){
             int amb = tablaCodigo.searchSymbolLastScope(dir2).getAmbito();
             if (amb==0)
-               dir2+="_"+"_"+amb;
+               dir2 = "stack_global[" + this.buscarGlobalStack(dir2) +"]";
             else
                 dir2+="_"+etiquetaActual+"_"+amb;
         }
@@ -740,7 +738,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             if (!dir1.contains("[")){
                 boolean amb = tablaCodigo.searchGlobalSymbol(dir1, scopeActual);
             if (amb)
-               dir1+="_"+"_"+amb;
+               dir1 = "stack_global[" + this.buscarGlobalStack(dir1) +"]";
             else
                 dir1 = "stack["+this.buscarStack(dir1)+"]";
             }
@@ -751,9 +749,9 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         }catch(Exception e){
             int amb = tablaCodigo.searchSymbolLastScope(dir2).getAmbito();
             if (amb==0)
-               dir2+="_"+"_"+amb;
+               dir2 =  "stack_global[" + this.buscarGlobalStack(dir2) +"]";
             else
-                dir2+="_"+etiquetaActual+"_"+amb;
+                dir2 = "stack["+this.buscarStack(dir2)+"]";
         }
         String op = ctx.getChild(1).getText();
         IntermediateCode codigo = new IntermediateCode();
@@ -885,7 +883,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         }
         for (int i = 0;i<ctx.getChildCount();i++){
             T expr1 = (T)visit(ctx.getChild(i));
-            
+            System.out.println(expr1);
             if (expr1 instanceof ArrayList)
                returnArray.addAll((ArrayList)expr1);
             
@@ -895,6 +893,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
                 returnArray.add(expr1);
                
         }
+        System.out.println(returnArray);
         
         return returnArray; //To change body of generated methods, choose Tools | Templates.
     }
@@ -926,18 +925,9 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         catch(Exception e){
             boolean gbl = this.tablaCodigo.searchGlobalSymbol(nombreVar, scopeActual);
             if (gbl){
-                IntermediateCode globalCode = this.tablaCodigo.searchCodeGlobal(nombreVar);
-               Symbol simbolo =  Visitor.tablaSimbolos.findAllScopes(nombreVar);
-               String tipo = ((Type)simbolo.getTipo()).getLiteralTipo();
-               int index = 0;
-               if (tipo.equals("int")||tipo.equals("boolean")){
-                   index = intVal * OFFSET;
-               }
-               if (tipo.equals("char")){
-                   index = intVal *OFFSET;
-               }
-                System.out.println(globalCode.getEtiqueta());
-                return globalCode.getEtiqueta()+"["+index+"]";
+               
+             
+                return  "stack_global[" + this.buscarGlobalStack(nombreVar) + intVal*OFFSET +"]";
             }
            //super.visitLocationArray2(ctx);
         }
@@ -955,6 +945,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         ArrayList returnArray = new ArrayList();
         for (int i = 0;i<ctx.getChildCount();i++){
             T val = (T)visit(ctx.getChild(i));
+            System.out.println(val);
             if (val instanceof ArrayList){
                 returnArray.addAll((ArrayList)val);
             }
@@ -996,6 +987,15 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     
    public int buscarStack(String identificador){
        for(StackControl control: this.stackControl){
+           if (control.getIdentificador().equals(identificador)){
+               return control.getPosicion();
+           }
+       }
+       return -1;
+   }
+   
+    public int buscarGlobalStack(String identificador){
+       for(GlobalStackControl control: this.globalStack){
            if (control.getIdentificador().equals(identificador)){
                return control.getPosicion();
            }

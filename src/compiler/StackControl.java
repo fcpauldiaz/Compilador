@@ -23,7 +23,7 @@ public class StackControl {
       
         this.valor = valor;
     }
-      public StackControl(int posicion, String identificador, String tipo) {
+    public StackControl(int posicion, String identificador, String tipo) {
          this.posicion = StackControl.staticPos;
          
          StackControl.staticPos = this.posicion + posicion;

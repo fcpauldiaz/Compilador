@@ -2,6 +2,28 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/IntermediateCode.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/ANTLRListener.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/antlr4/program.tokens</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/antlr4/programBaseVisitor.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Type.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/CodeGenerator.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Antlr4.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/gui/ANTGui.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/antlr4/programListener.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Symbol.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/StackControl.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/antlr4/programVisitor.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/IntermediateCodeVisitor.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Visitor.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/DescriptiveErrorListener.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Scope.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/SymbolTable.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/antlr4/programParser.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/gui/TextPanel.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/InterCodeTable.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/antlr4/program.g4</file>
+        </group>
     </open-files>
 </project-private>

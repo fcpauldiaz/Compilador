@@ -66,7 +66,22 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         return ""; //To change body of generated methods, choose Tools | Templates.
     }
     
-    
+      @Override
+    public T visitStatementElse(programParser.StatementElseContext ctx) {
+         Scope scopeElse = new Scope();
+        
+        scopeActual.addSiguiente(scopeElse);
+        scopeElse.setAnterior(scopeActual);
+        scopeActual = scopeElse;
+        
+        for (int i = 0;i<ctx.getChildCount();i++){
+            this.visit(ctx.getChild(i));
+        }
+        scopeActual = scopeActual.getAnterior();
+         
+      
+        return (T)null;
+    }
     
     @Override
     public Object visitStatementLocation(programParser.StatementLocationContext ctx) {
@@ -362,7 +377,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         String etiqueta = ctx.getChild(1).getText();
         etiquetaActual = etiqueta;
         contEtiquetaActual = 0;
-
+        
         codigo.setEtiqueta(etiqueta+":");
         tablaCodigo.addCode(codigo);
         super.visitMethodDeclaration(ctx);
@@ -483,6 +498,28 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         return codigo; //To change 
     }
 
+    @Override
+    public Object visitParameterID(programParser.ParameterIDContext ctx) {
+        
+        StackControl param = new StackControl(4,ctx.getChild(1).getText(), ctx.getChild(0).getText());
+        this.stackControl.add(param);
+        
+        return super.visitParameterID(ctx); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object visitParameterArray(programParser.ParameterArrayContext ctx) {
+        
+        int valArray = Integer.parseInt(ctx.getChild(3).getText());
+        
+        StackControl param = new StackControl(4*valArray,ctx.getChild(1).getText(), ctx.getChild(0).getText());
+        this.stackControl.add(param);
+        
+        return super.visitParameterArray(ctx); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
+    
     @Override
     public Object visitUnaryExpr(programParser.UnaryExprContext ctx) {
        T val = (T)visit(ctx.getChild(0));
@@ -853,9 +890,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
                 if (midCode.getRes().contains("temp"))
                     tablaCodigo.addCode(codigo);
                     
-            
-          
-
+           
             
         }
         

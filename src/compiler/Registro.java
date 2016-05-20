@@ -6,6 +6,8 @@
 
 package compiler;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Pablo
@@ -14,37 +16,66 @@ public class Registro {
     
     private String registro;
     private int numRegistro;
-    private boolean ocupado;
-    private String varAssociated;
-
-    public Registro(int num) {
+    private ArrayList variables =  new ArrayList();; 
+    public static int numStatic = 1;
+  
+    public Registro() {
         this.registro = "R";
-        this.numRegistro=num;
+        this.numRegistro=numStatic;
         this.registro +=this.numRegistro;
-        this.ocupado = false;
+        numStatic += numRegistro;
+     
+    }
+    
+    public Registro(ArrayList vals){
+         this.registro = "R";
+        this.numRegistro=numStatic;
+        this.registro +=this.numRegistro;
+        this.variables = vals;
+        numStatic += numRegistro;
+        
+    }
+    
+      public Registro(String val){
+        this.registro = "R";
+        this.numRegistro=numStatic;
+        this.registro +=this.numRegistro;
+        this.variables.add(val);
+        numStatic += numRegistro;
+        
     }
 
-    public boolean isOcupado() {
-        return ocupado;
+    public String getRegistro() {
+        return registro;
     }
 
-    public void setOcupado(boolean ocupado) {
-        this.ocupado = ocupado;
+    public void setRegistro(String registro) {
+        this.registro = registro;
     }
 
-    public String getVarAssociated() {
-        return varAssociated;
+    public int getNumRegistro() {
+        return numRegistro;
     }
 
-    public void setVarAssociated(String varAssociated) {
-        this.varAssociated = varAssociated;
+    public void setNumRegistro(int numRegistro) {
+        this.numRegistro = numRegistro;
     }
+
+    public ArrayList getVariables() {
+        return variables;
+    }
+
+    public void setVariables(ArrayList variables) {
+        this.variables = variables;
+    }
+    
+    
 
     
     
     @Override
     public String toString() {
-        return this.registro;
+        return this.registro + this.variables.toString();
     }
     
     

@@ -381,6 +381,10 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         scopeActual = scopeActual.getAnterior();
         StackControl.staticPos = 0;
         this.contEtiquetaActual= 0;
+        IntermediateCode codigoSalida = new IntermediateCode();
+        codigoSalida.setSalidaMetodo(true);
+        this.tablaCodigo.addCode(codigoSalida);
+                
         return "";//To change body of generated methods, choose Tools | Templates.
     }
 

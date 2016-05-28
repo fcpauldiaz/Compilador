@@ -16,7 +16,10 @@ public class PreCompilation {
     private AddressDescriptor address;
     private RegisterDescriptor registers;
     private CodeGenerator asm = new CodeGenerator();
-    private int stackPointer = 0;
+    private int stackPointer = -4;
+    private int offset = 0;
+    private String lastMethod="";
+    
    
     public PreCompilation(InterCodeTable table){
         this.address = new AddressDescriptor();
@@ -39,7 +42,7 @@ public class PreCompilation {
             boolean stIF = inter.isStatementIF();
             boolean declaration =inter.isDeclaration();
             StackControl localStack = inter.getLocalStack();
-            
+            boolean salidaMetodo = inter.isSalidaMetodo();
             //cuadrupla de código intermedio
             if (dir1 != null && dir2 != null && op != null &&
                   res != null && !stIF){
@@ -47,7 +50,7 @@ public class PreCompilation {
             }
             //cuando se asigna un valor
             else if (dir1 != null &&op!= null &&
-                 res != null && !stIF){
+                 res != null && !stIF&&!global){
                getRegDir1(inter);
             }
             //cuando es una etiqueta
@@ -56,6 +59,7 @@ public class PreCompilation {
                 if (etiqueta.equals("main:")){
                     asm.insertCode(etiqueta, 0, 1);
                     asm.insertCode("stmfd sp!, {fp, lr}", 1, 2);
+                    lastMethod = "main";
                     //registro de activación
                     //cargar offset para el método
                     //cargar parametros
@@ -67,7 +71,20 @@ public class PreCompilation {
             else if(localStack != null){
                 genDeclarations(inter);
             }
-           
+            else if (salidaMetodo){
+                //registro de activación para el retorono del método
+                this.offset += this.stackPointer;
+                if (stackPointer >=0){
+                    asm.insertCode("ADD SP, SP, #"+stackPointer, 1, 2, "Mover StackPointer para olvidar variables");
+                }
+                if (lastMethod.equals("main")){
+       
+                    asm.insertCode("MOV R0, #0", 1, 1, "Salida al SO");
+                    asm.insertCode("MOV R3, #0", 1, 1);
+                    asm.insertCode("ldmfd sp!, {fp, pc}", 1, 1);
+                    asm.insertCode("bx lr", 1, 1);
+                }
+            }
         }
     }
     
@@ -126,7 +143,9 @@ public class PreCompilation {
             if (registerDescriptionR2.isEmpty()){
               Registro rg2 = this.registers.agregarRegistro(dir2);
               registerDescriptionR2 = rg2.getRegistro();
-              String instruccion = "MOV " + rg2.getRegistro()+", #"+dir2;
+            
+              int num = Integer.parseInt(dir2.substring(dir2.indexOf("[")+1, dir2.indexOf("]")));
+              String instruccion = "LDR " + rg2.getRegistro()+", " + "[sp , #"+(this.stackPointer-num)+"]";
               asm.insertCode(instruccion, 1, 1, "Set value " + dir2);
               
             }
@@ -186,14 +205,28 @@ public class PreCompilation {
             registerDescriptionR1 = rg.getRegistro();
         }
         String output = "";
-        if (op.equals("=")){
-            Registro rRes = this.registers.buscarRegistroMenor();
-            output = "MOV "+rRes.getRegistro()+ ", " + registerDescriptionR1;
-        }
-        System.out.println("aqui");
-        System.out.println(registerDescriptionR1);
-        this.asm.insertCode(output, 1, 1, "Assgin " + codigo.getRes() + " " + op + " " + dir1);
+       
+        Registro rRes = this.registers.buscarRegistroMenor();
+        //output = "MOV "+rRes.getRegistro()+ ", " + registerDescriptionR1;
         
+        //System.out.println("aqui");
+        //System.out.println(registerDescriptionR1);
+        //this.asm.insertCode(output, 1, 1, "Assgin " + codigo.getRes() + " " + op + " " + dir1);
+        if (!codigo.getRes().contains("global")){
+            int num = Integer.parseInt(codigo.getRes().substring(codigo.getRes().indexOf("[")+1, codigo.getRes().indexOf("]")));
+            String saveLocal = "STR " + rRes.getRegistro() + ", [sp, #"+(this.stackPointer-num)+"]";
+            this.asm.insertCode(saveLocal, 1, 2, "LocalStack " + (this.stackPointer-num));
+        }
+        else {
+            //es una asignacion global
+            int num = Integer.parseInt(codigo.getRes().substring(codigo.getRes().indexOf("[")+1, codigo.getRes().indexOf("]")));
+          
+            Registro rGlobal = this.registers.buscarRegistroMenor(rRes);
+            String loadGlobal = "LDR " + rGlobal.getRegistro() + ", =global";
+            this.asm.insertCode(loadGlobal, 1, 1, "Cargar etiqueta global");
+            String saveLocal = "STR " +rRes.getRegistro()+ ", "+ "["+rGlobal.getRegistro() +", #"+(num)+"]";
+            this.asm.insertCode(saveLocal, 1, 2, "GlobalStack " + (num));
+        }
         
     }
     

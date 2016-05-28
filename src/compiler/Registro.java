@@ -40,7 +40,6 @@ public class Registro {
       public Registro(String val){
         this.registro = "R";
         this.numRegistro=numStatic;
-          System.out.println("statci " + numStatic);
         this.registro +=this.numRegistro;
         this.variables.add(val);
         numStatic += 1;

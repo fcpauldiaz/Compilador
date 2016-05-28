@@ -56,6 +56,14 @@ public class RegisterDescriptor {
         return null;
         
     }
+     public Registro buscarRegistroMenor(Registro actual){
+         Registro metodo = buscarRegistroMenor();
+         if (metodo.getRegistro().equals(actual.getRegistro())){
+            Registro nuevo = agregarRegistro(actual.getVariables().get(0).toString());
+            metodo = nuevo;
+         }
+        return metodo;
+    }
     
     public void setRegistroValor(Registro r, String var){
         r.getVariables().clear();

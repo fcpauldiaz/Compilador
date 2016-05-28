@@ -20,11 +20,14 @@ global: .space
 main:
 	stmfd sp!, {fp, lr}
 
-	MOV R0, #0	//Valor default
-	push {r0}	//Reservar espacio para c
+	MOV R0, #4
+	ADD R0, R0, #2	//temp0 = 4 + 2
+	ADD R0, R0, #3	//temp1 = temp0 + 3
+	LDR R1, =global	//Cargar etiqueta global
+	STR R0, [R1, #0]	//GlobalStack 0
 
-	MOV R0, #1
-	MOV R1, #2	//Set value 2
-	MUL R0, R0, R1	//temp0 = 1 * 2
-	MOV R0, R0	//Assgin stack[0] = temp0
+	MOV R0, #0	//Salida al SO
+	MOV R3, #0
+	ldmfd sp!, {fp, pc}
+	bx lr
 

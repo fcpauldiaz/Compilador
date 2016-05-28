@@ -19,11 +19,12 @@
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/PreCompilation.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Type.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Antlr4.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/MethodType.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Symbol.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/antlr4/programVisitor.java</file>
-            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/IntermediateCodeVisitor.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Visitor.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/DescriptiveErrorListener.java</file>
+            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/IntermediateCodeVisitor.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Scope.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/SymbolTable.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/gui/TextPanel.java</file>

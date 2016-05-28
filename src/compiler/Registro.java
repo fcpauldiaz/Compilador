@@ -17,13 +17,14 @@ public class Registro {
     private String registro;
     private int numRegistro;
     private ArrayList variables =  new ArrayList();; 
-    public static int numStatic = 1;
+    public static int numStatic = 0;
   
     public Registro() {
         this.registro = "R";
         this.numRegistro=numStatic;
         this.registro +=this.numRegistro;
-        numStatic += numRegistro;
+        numStatic += 1;
+       
      
     }
     
@@ -32,17 +33,18 @@ public class Registro {
         this.numRegistro=numStatic;
         this.registro +=this.numRegistro;
         this.variables = vals;
-        numStatic += numRegistro;
+        numStatic += 1;
         
     }
     
       public Registro(String val){
         this.registro = "R";
         this.numRegistro=numStatic;
+          System.out.println("statci " + numStatic);
         this.registro +=this.numRegistro;
         this.variables.add(val);
-        numStatic += numRegistro;
-        
+        numStatic += 1;
+         
     }
 
     public String getRegistro() {
@@ -69,9 +71,10 @@ public class Registro {
         this.variables = variables;
     }
     
-    
-
-    
+    public void addVariable(String var){
+        this.variables.add(var);
+    } 
+   
     
     @Override
     public String toString() {

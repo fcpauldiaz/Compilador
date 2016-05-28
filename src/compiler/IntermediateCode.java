@@ -24,6 +24,7 @@ public class IntermediateCode {
     private IntermediateCode gotoLabel;
     private boolean declaration;
     private String tipo;
+    private StackControl localStack;
     
     public IntermediateCode(String dir1, String dir2, String op) {
         this.dir1 = dir1;
@@ -135,6 +136,14 @@ public class IntermediateCode {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public StackControl getLocalStack() {
+        return localStack;
+    }
+
+    public void setLocalStack(StackControl localStack) {
+        this.localStack = localStack;
     }
     
     

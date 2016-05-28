@@ -348,16 +348,13 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             return super.visitVarDeclarationID(ctx);
         }
        
-        if (tipo.equals("int")){
-            this.stackControl.add(new StackControl(OFFSET, identificador, tipo));
+     
+        StackControl stackC = new StackControl(OFFSET, identificador, tipo);
+        this.stackControl.add(stackC);
+        codigo.setLocalStack(stackC);
+        this.tablaCodigo.addCode(codigo);
             
-        }
-        else if (tipo.equals("char")){
-            this.stackControl.add(new StackControl(OFFSET, identificador, tipo));
-        }
-        else if (tipo.equals("boolean")){
-             this.stackControl.add(new StackControl(OFFSET, identificador, tipo));
-        }
+   
       
         //modificarSP();
         
@@ -691,17 +688,12 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         }
        
      
-        if (tipo.equals("int")){
-            this.stackControl.add(new StackControl((OFFSET*tamaño), identificador, tipo));
+        StackControl stackC = new StackControl((OFFSET*tamaño), identificador, tipo);
+        this.stackControl.add(stackC);
+        codigo.setLocalStack(stackC);
+        this.tablaCodigo.addCode(codigo);
             
-        }
-        else if (tipo.equals("char")){
-            this.stackControl.add(new StackControl((OFFSET*tamaño), identificador, tipo));
-        }
-        else if (tipo.equals("boolean")){
-             this.stackControl.add(new StackControl((OFFSET*tamaño), identificador, tipo));
-        }
-      
+       
        // modificarSP();
         return super.visitVarDeclarationArray(ctx); //To change body of generated methods, choose Tools | Templates.
     }

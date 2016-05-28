@@ -17,6 +17,8 @@ import compiler.DescriptiveErrorListener;
 import compiler.GlobalStackControl;
 import compiler.IntermediateCodeVisitor;
 import compiler.MethodType;
+import compiler.PreCompilation;
+import compiler.Registro;
 import compiler.Scope;
 import compiler.StackControl;
 import compiler.StructType;
@@ -430,6 +432,8 @@ public class ANTGui extends javax.swing.JFrame {
                 if (verificacion == true){
                     IntermediateCodeVisitor visitCode = new IntermediateCodeVisitor();
                     visitCode.visit(tree);
+                    Registro.numStatic = 0;
+                    PreCompilation preC = new PreCompilation(visitCode.getTablaCodigo());
                 }
                 verificacion = true;
                // CodeGenerator generator = new CodeGenerator(visitCode.getTablaCodigo().getArrayCode());

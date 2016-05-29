@@ -328,21 +328,18 @@ public class Visitor<T> extends programBaseVisitor {
         
         //aqui tengo el nombre de la variable
         String nombreVar = (String)this.visit(ctx.getChild(0));
-        if (nombreVar.contains("€")){
-            nombreVar = nombreVar.substring(nombreVar.indexOf("€")+1);
-        }
-        System.out.println("Nombre array-> "+ nombreVar);
+     
         
         //ahora verifico que ya esté declarada.
         boolean encontrado = tablaSimbolos.revisarNombreVar(nombreVar, scopeActual);
         System.out.println("");
-        if (!encontrado&&nombreVar.contains("int")&&nombreVar.contains("char")){
+        if (!encontrado){
             agregarLog("Error: Usando variable no declarada " + nombreVar, ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
             System.out.println("Variable no declarada " + nombreVar+ ": línea " + ctx.getStart().getLine()+
                     " columna: " + ctx.getStart().getCharPositionInLine());
         }
         System.out.println("");
-        if (encontrado||nombreVar.contains("int")||nombreVar.contains("char")){
+        if (encontrado){
             Symbol simboloEncontrado = tablaSimbolos.showSymbol(nombreVar, scopeActual);
             String tipo = nombreVar;
             if (simboloEncontrado != null){

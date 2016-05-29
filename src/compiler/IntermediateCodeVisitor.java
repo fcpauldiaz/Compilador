@@ -94,7 +94,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
                res = "stack_global["+this.buscarGlobalStack(res)+"]";
 
             }else{
-               res = "stack["+this.buscarStack(res)+"]";
+               res = "stack["+this.buscarStack(res, this.scopeActual)+"]";
             }
         }
         T returnValue = (T)visit(ctx.getChild(2));
@@ -124,7 +124,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
                       dir1 = "stack_global["+this.buscarGlobalStack(dir1)+"]";
                 }
                 else { 
-                    int pos = this.buscarStack(dir1);
+                    int pos = this.buscarStack(dir1, this.scopeActual);
                     dir1 = "stack[" + pos +"]";
                 }
             }
@@ -190,7 +190,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             res = "stack_global["+(this.buscarGlobalStack(nombreVar)+posArray*OFFSET)+"]";;
            
         }else{
-           res = "stack["+(this.buscarStack(nombreVar)+posArray*OFFSET)+"]";
+           res = "stack["+(this.buscarStack(nombreVar, this.scopeActual)+posArray*OFFSET)+"]";
         }
          T returnValue = (T)visit(ctx.getChild(2));
         String dir1;
@@ -216,7 +216,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
                       dir1 = "stack_global[" + this.buscarGlobalStack(dir1) +"]";
                 }
                 else { 
-                    int pos = this.buscarStack(dir1);
+                    int pos = this.buscarStack(dir1, this.scopeActual);
                     dir1 = "stack[" + pos +"]";
                 }
             }
@@ -351,7 +351,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         }
        
      
-        StackControl stackC = new StackControl(OFFSET, identificador, tipo);
+        StackControl stackC = new StackControl(OFFSET, identificador, tipo, this.scopeActual);
         this.stackControl.add(stackC);
         codigo.setLocalStack(stackC);
         this.tablaCodigo.addCode(codigo);
@@ -424,14 +424,14 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         }catch(Exception e){
             //si no es numérico busco en el stack
             if (!op1.contains("temp")&&!op1.contains("[")&&!op1.contains("global"))
-                op1 = "stack"+"["+this.buscarStack(op1)+"]";
+                op1 = "stack"+"["+this.buscarStack(op1, this.scopeActual)+"]";
         }
         try {
             int valor = Integer.parseInt(op2);
             //si es valor numérico no hago nada
         }catch(Exception e){
            if (!op2.contains("temp")&&!op2.contains("[")&&!op2.contains("global"))
-                op2 = "stack"+"["+this.buscarStack(op2)+"]";
+                op2 = "stack"+"["+this.buscarStack(op2, this.scopeActual)+"]";
         }
         
        
@@ -479,14 +479,14 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         }catch(Exception e){
             //si no es numérico busco en el stack
              if (!op1.contains("temp")&&!op1.contains("[")&&!op1.contains("global"))
-                op1 = "stack"+"["+this.buscarStack(op1)+"]";
+                op1 = "stack"+"["+this.buscarStack(op1, this.scopeActual)+"]";
         }
         try {
             int valor = Integer.parseInt(op2);
             //si es valor numérico no hago nada
         }catch(Exception e){
             if (!op2.contains("temp")&&!op2.contains("[")&&!op2.contains("global"))
-                op2 = "stack"+"["+this.buscarStack(op2)+"]";
+                op2 = "stack"+"["+this.buscarStack(op2, this.scopeActual)+"]";
         }
         
        
@@ -504,7 +504,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     @Override
     public Object visitParameterID(programParser.ParameterIDContext ctx) {
         
-        StackControl param = new StackControl(4,ctx.getChild(1).getText(), ctx.getChild(0).getText());
+        StackControl param = new StackControl(4,ctx.getChild(1).getText(), ctx.getChild(0).getText(), this.scopeActual);
         this.stackControl.add(param);
         IntermediateCode codigo = new IntermediateCode();
         codigo.setLocalStack(param);
@@ -518,7 +518,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         
         int valArray = Integer.parseInt(ctx.getChild(3).getText());
         
-        StackControl param = new StackControl(4*valArray,ctx.getChild(1).getText(), ctx.getChild(0).getText());
+        StackControl param = new StackControl(4*valArray,ctx.getChild(1).getText(), ctx.getChild(0).getText(), this.scopeActual);
         this.stackControl.add(param);
         
         return super.visitParameterArray(ctx); //To change body of generated methods, choose Tools | Templates.
@@ -697,7 +697,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         }
        
      
-        StackControl stackC = new StackControl((OFFSET*tamaño), identificador, tipo);
+        StackControl stackC = new StackControl((OFFSET*tamaño), identificador, tipo, this.scopeActual);
         this.stackControl.add(stackC);
         codigo.setLocalStack(stackC);
         this.tablaCodigo.addCode(codigo);
@@ -768,7 +768,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             if (amb)
                dir1 =  "stack_global[" + this.buscarGlobalStack(dir1) +"]";
             else
-                dir1 = "stack["+this.buscarStack(dir1)+"]";
+                dir1 = "stack["+this.buscarStack(dir1, this.scopeActual)+"]";
             }
             
         }
@@ -822,7 +822,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             if (amb)
                dir1 = "stack_global[" + this.buscarGlobalStack(dir1) +"]";
             else
-                dir1 = "stack["+this.buscarStack(dir1)+"]";
+                dir1 = "stack["+this.buscarStack(dir1, this.scopeActual)+"]";
             }
             
         }
@@ -833,7 +833,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             if (amb==0)
                dir2 =  "stack_global[" + this.buscarGlobalStack(dir2) +"]";
             else
-                dir2 = "stack["+this.buscarStack(dir2)+"]";
+                dir2 = "stack["+this.buscarStack(dir2, this.scopeActual)+"]";
         }
         String op = ctx.getChild(1).getText();
         IntermediateCode codigo = new IntermediateCode();
@@ -1094,10 +1094,10 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             StackControl buscado = this.buscarStackObjeto(nombreVar);
             int searchStack;
             if (buscado.getTipo().equals("int")||buscado.getTipo().equals("boolean")){
-                searchStack= this.buscarStack(nombreVar) + intVal*OFFSET;
+                searchStack= this.buscarStack(nombreVar, this.scopeActual) + intVal*OFFSET;
             }
             else{
-                searchStack = this.buscarStack(nombreVar) + intVal*OFFSET;
+                searchStack = this.buscarStack(nombreVar,this.scopeActual) + intVal*OFFSET;
             }
             System.out.println("search stack " + searchStack);
             return "stack["+ searchStack+"]";
@@ -1162,7 +1162,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
                         if (amb)
                             sendParam.setDir2( "stack_global[" + this.buscarGlobalStack(nombreVAr) +"]");
                         else
-                            sendParam.setDir2( "stack[" + this.buscarStack(nombreVAr) +"]");
+                            sendParam.setDir2( "stack[" + this.buscarStack(nombreVAr, this.scopeActual) +"]");
                         
                    
                 }
@@ -1213,10 +1213,16 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         return tablaCodigo;
     }
     
-    
-   public int buscarStack(String identificador){
+   /**
+    * Este método da problemas cuando se declara una variable en otro scope
+    * @param identificador
+     * @param scope
+    * @return 
+    */
+   public int buscarStack(String identificador, Scope scope){
        for(StackControl control: this.stackControl){
-           if (control.getIdentificador().equals(identificador)){
+           if (control.getIdentificador().equals(identificador)&&
+               control.verificarScope(scope)){
                return control.getPosicion();
            }
        }

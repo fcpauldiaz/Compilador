@@ -17,18 +17,21 @@ public class StackControl {
     private String identificador;
     private String tipo;
     public static int staticPos = 0;
+    public Scope scope;
 
   
-    public StackControl(String valor) {
+    public StackControl(String valor, Scope scope) {
       
         this.valor = valor;
+        this.scope = scope;
     }
-    public StackControl(int posicion, String identificador, String tipo) {
+    public StackControl(int posicion, String identificador, String tipo, Scope scope) {
          this.posicion = StackControl.staticPos;
          
          StackControl.staticPos = this.posicion + posicion;
          this.identificador = identificador;
          this.tipo = tipo;
+         this.scope = scope;
     }
 
     public int getPosicion() {
@@ -66,6 +69,25 @@ public class StackControl {
     public void setPosicion(int posicion) {
         this.posicion = posicion;
     }
+
+   public boolean verificarScope(Scope actual){
+      Scope verificador = actual;
+      while (verificador != null){
+          if (verificador.getIdScope() == scope.getIdScope()){
+              return true;
+          }
+          else {
+              verificador = verificador.getAnterior();
+          }
+          
+      }
+      return false;
+   }
+
+    public void setScope(Scope scope) {
+        this.scope = scope;
+    }
+    
     
     
 

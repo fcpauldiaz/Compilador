@@ -25,7 +25,8 @@ public class CodeGenerator {
                 ".align 2"+"\n"+"\n"+
                 "salida_num:    .asciz \"%d \\n\""+"\n"+
                 "salida_str:    .asciz \"%f \\n\""+"\n"+
-                "global: .space"+"\n"+"\n"+
+                "global: .space"+"\n"+
+                "offset: .space"+"\n"+"\n"+
                 ".text"+"\n"+
                 ".align 2"+"\n"+"\n"+
                 ".global main"+"\n"+

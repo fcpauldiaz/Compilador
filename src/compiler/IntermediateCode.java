@@ -26,6 +26,7 @@ public class IntermediateCode {
     private String tipo;
     private StackControl localStack;
     private boolean salidaMetodo;
+    private boolean param;
     
     public IntermediateCode(String dir1, String dir2, String op) {
         this.dir1 = dir1;
@@ -154,8 +155,14 @@ public class IntermediateCode {
     public void setSalidaMetodo(boolean salidaMetodo) {
         this.salidaMetodo = salidaMetodo;
     }
-    
-    
+
+    public boolean isParam() {
+        return param;
+    }
+
+    public void setParam(boolean param) {
+        this.param = param;
+    }
     
     
     @Override

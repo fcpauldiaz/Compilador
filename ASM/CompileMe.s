@@ -18,16 +18,24 @@ offset: .space
 
 .global main
 .type main, %function
-test:
+printNum:
 	MOV R10, LR 
 
-	MOV R0, #0	//Valor default
-	push {r0}	//Reservar espacio para d
+	LDR R0, [SP, #0]	//Valor del param se saca de la pila
+	push {r0}	//Reservar espacio para param x
 
-	MOV R0, #1
-	STR R0, [sp, #0]	//LocalStack 0
+	LDR R1, [sp, #0]	//Cargar en offset
+	LDR R0, =salida_num
+	bl printf
 
-	ADD SP, SP, #4	//Mover StackPointer para olvidar variables
+	LDR R0, [SP, #0]	//Valor del param se saca de la pila
+	push {r0}	//Reservar espacio para param y
+
+	LDR R1, [sp, #0]	//Cargar en offset
+	LDR R0, =salida_num
+	bl printf
+
+	ADD SP, SP, #16	//Mover StackPointer para olvidar variables
 
 	MOV PC, R10
 
@@ -49,6 +57,7 @@ main:
 	MOV R0, #0	//Valor default
 	push {r0}	//Reservar espacio para g
 
+	MOV R0, #0
 	STR R0, [sp, #16]	//LocalStack 16
 
 	MOV R1, #4
@@ -63,16 +72,18 @@ main:
 	MOV R0, #16
 	STR R0, [sp, #0]	//LocalStack 0
 
-	LDR R0, [sp ,#12]
-		//temp0 = stack[4] == 5
-main0:
-	MOV R10, LR 
+	LDR R0, [sp , #0]	//Set value param stack[16]
+	PUSH {R0}	//push param localStack
 
-	STR R1, [sp, #-8]	//LocalStack -8
+	LDR R0, [sp , #4]	//Set value param stack[12]
+	PUSH {R0}	//push param localStack
 
-main1:
-	MOV R10, LR 
+	bl printNum
 
-	MOV PC, R10
+	ADD SP, SP, #20	//Mover StackPointer para olvidar variables
 
+	MOV R0, #0	//Salida al SO
+	MOV R3, #0
+	ldmfd sp!, {fp, pc}
+	bx lr
 

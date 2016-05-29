@@ -19,6 +19,7 @@ public class PreCompilation {
     private int stackPointer = -4;
     private int offset = 0;
     private String lastMethod="";
+   
     
    
     public PreCompilation(InterCodeTable table){
@@ -111,6 +112,7 @@ public class PreCompilation {
             else if (dir1 != null && dir2 != null && op == null && res == null){
                 //DIR1 LITERAL PARAM
                 //DIR2 VALUE PARAM
+                
                  String param = this.registers.revisarRegistros(dir2);
                  boolean cambia = false;
                  if (param.isEmpty()){
@@ -260,9 +262,9 @@ public class PreCompilation {
     public void genDeclarations(IntermediateCode codigo){
         StackControl localStack = codigo.getLocalStack();
      
-       
+        this.stackPointer = this.stackPointer + 4;
         if (codigo.isParam()== false){
-            this.stackPointer = this.stackPointer + 4;
+           
             asm.insertCode("MOV R0, #0", 1, 1, "Valor default");
             asm.insertCode("push {r0}", 1, 2, "Reservar espacio para " + localStack.getIdentificador());
             //modificar descriptor de registros

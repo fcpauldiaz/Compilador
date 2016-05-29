@@ -37,6 +37,9 @@ public class RegisterDescriptor {
     }
     
     public Registro agregarRegistro(String nombreVar) {
+        if (this.registros.size() == 4){
+            return this.buscarRegistroMenor();
+        }
         Registro rg  = new Registro(nombreVar);
         this.registros.add(rg);
         return rg;

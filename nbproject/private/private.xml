@@ -5,14 +5,11 @@
         <group>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/RegisterDescriptor.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/ANTLRListener.java</file>
-            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/antlr4/program.tokens</file>
-            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/antlr4/programBaseVisitor.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/CodeGenerator.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/gui/ANTGui.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/antlr4/programListener.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/StackControl.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/AddressDescriptor.java</file>
-            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/antlr4/programParser.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Address.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Registro.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/IntermediateCode.java</file>
@@ -23,10 +20,8 @@
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Symbol.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/antlr4/programVisitor.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Visitor.java</file>
-            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/DescriptiveErrorListener.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/IntermediateCodeVisitor.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/Scope.java</file>
-            <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/SymbolTable.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/gui/TextPanel.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/InterCodeTable.java</file>
             <file>file:/Users/usuario/NetBeansProjects/Antlr4/src/compiler/FileCreator.java</file>

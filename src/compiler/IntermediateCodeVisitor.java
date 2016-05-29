@@ -88,12 +88,14 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         IntermediateCode codigo = new IntermediateCode();
         String res = ((String)visit(ctx.getChild(0)));
         System.out.println("res " + res);
-        boolean glbl = tablaCodigo.searchGlobalSymbol(res, scopeActual);
-        if (glbl){
-           res = "stack_global["+this.buscarGlobalStack(res)+"]";
-           
-        }else{
-           res = "stack["+this.buscarStack(res)+"]";
+        if (!res.contains("stack")){
+            boolean glbl = tablaCodigo.searchGlobalSymbol(res, scopeActual);
+            if (glbl){
+               res = "stack_global["+this.buscarGlobalStack(res)+"]";
+
+            }else{
+               res = "stack["+this.buscarStack(res)+"]";
+            }
         }
         T returnValue = (T)visit(ctx.getChild(2));
         String dir1;
@@ -504,7 +506,10 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         
         StackControl param = new StackControl(4,ctx.getChild(1).getText(), ctx.getChild(0).getText());
         this.stackControl.add(param);
-        
+        IntermediateCode codigo = new IntermediateCode();
+        codigo.setLocalStack(param);
+        codigo.setParam(true);
+        this.tablaCodigo.addCode(codigo);
         return super.visitParameterID(ctx); //To change body of generated methods, choose Tools | Templates.
     }
 

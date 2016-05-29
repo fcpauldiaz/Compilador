@@ -328,25 +328,30 @@ public class Visitor<T> extends programBaseVisitor {
         
         //aqui tengo el nombre de la variable
         String nombreVar = (String)this.visit(ctx.getChild(0));
+        if (nombreVar.contains("€")){
+            nombreVar = nombreVar.substring(nombreVar.indexOf("€")+1);
+        }
         System.out.println("Nombre array-> "+ nombreVar);
         
         //ahora verifico que ya esté declarada.
         boolean encontrado = tablaSimbolos.revisarNombreVar(nombreVar, scopeActual);
         System.out.println("");
-        if (!encontrado){
+        if (!encontrado&&nombreVar.contains("int")&&nombreVar.contains("char")){
             agregarLog("Error: Usando variable no declarada " + nombreVar, ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
             System.out.println("Variable no declarada " + nombreVar+ ": línea " + ctx.getStart().getLine()+
                     " columna: " + ctx.getStart().getCharPositionInLine());
         }
         System.out.println("");
-        if (encontrado){
+        if (encontrado||nombreVar.contains("int")||nombreVar.contains("char")){
             Symbol simboloEncontrado = tablaSimbolos.showSymbol(nombreVar, scopeActual);
+            String tipo = nombreVar;
+            if (simboloEncontrado != null){
+                tipo =   ((Type)simboloEncontrado.getTipo()).getLiteralTipo();
+                boolean array = ((Type)simboloEncontrado.getTipo()).isArreglo();
+                if (array && ctx.getChild(0).getChildCount() == 1){
 
-            String tipo =   ((Type)simboloEncontrado.getTipo()).getLiteralTipo();
-            boolean array = ((Type)simboloEncontrado.getTipo()).isArreglo();
-            if (array && ctx.getChild(0).getChildCount() == 1){
-                
-                  agregarLog("Error: array tipo incorrecto",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
+                      agregarLog("Error: array tipo incorrecto",ctx.getStart().getLine(),ctx.getStart().getCharPositionInLine(),true);
+                }
             }
             String tipoDeclarado =  (String)this.visit(ctx.getChild(2));
             System.out.println("tipos");
@@ -892,13 +897,18 @@ public class Visitor<T> extends programBaseVisitor {
         this.varLocation += "€"+ctx.getChild(0).getText();
         String[] locations = this.varLocation.split("€");
         Symbol methodSymbol = null;
+        ArrayList members = null;
         for (int i = 0;i<locations.length;i++){
+             
             if (i == 0){
                 methodSymbol = tablaSimbolos.showSymbol(locations[i], scopeActual);
+                 
             }
             else{
                 methodSymbol = tablaSimbolos.findAllScopes(((Type)methodSymbol.getTipo()).getLiteralTipo());
-                ArrayList members = ((StructType)methodSymbol.getTipo()).getMembers();
+                if (methodSymbol != null){
+                    members = ((StructType)methodSymbol.getTipo()).getMembers();
+                }
                 for (int k = 0;k<members.size();k++){
                      Symbol innerSymbol =  (Symbol)members.get(k);
                      if (((Type)innerSymbol.getTipo()).getNombreVariable().equals(

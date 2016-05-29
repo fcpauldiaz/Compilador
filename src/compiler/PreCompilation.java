@@ -64,17 +64,34 @@ public class PreCompilation {
                     //cargar offset para el método
                     //cargar parametros
                 }
+                else if (etiqueta.equals("printNum:")){
+                    asm.insertCode(etiqueta, 0, 1);
+                    asm.insertCode("LDR R5, =offset",1,1);
+                    asm.insertCode("LDR R5, [R5]", 1,2, "Cargar offset actual");
+                    asm.insertCode("MOV R10, LR ",1,2);
+                    asm.insertCode("LDR R0, =salida_num", 1, 1);
+                    asm.insertCode("bl printf", 1, 2);
+                   
+                }
                 else{
                     asm.insertCode(etiqueta, 0, 1);
+                    asm.insertCode("LDR R5, =offset",1,1);
+                    asm.insertCode("LDR R5, [R5]", 1,1, "Cargar offset actual");
+                    asm.insertCode("MOV R10, LR ",1,2);
+                    
                 }
+                this.stackPointer = -4;
             }
             else if(localStack != null){
                 genDeclarations(inter);
             }
             else if (salidaMetodo){
                 //registro de activación para el retorono del método
-                this.offset += this.stackPointer;
+              
                 if (stackPointer >=0){
+                  
+                    stackPointer+=4;
+                   
                     asm.insertCode("ADD SP, SP, #"+stackPointer, 1, 2, "Mover StackPointer para olvidar variables");
                 }
                 if (lastMethod.equals("main")){
@@ -84,6 +101,64 @@ public class PreCompilation {
                     asm.insertCode("ldmfd sp!, {fp, pc}", 1, 1);
                     asm.insertCode("bx lr", 1, 1);
                 }
+                else {
+                    //AL FINALIZAR UNA SUBRUTINA
+                    asm.insertCode("MOV PC, R10", 1,2);
+                }
+            }
+            //PARAMS    
+            else if (dir1 != null && dir2 != null && op == null && res == null){
+                //DIR1 LITERAL PARAM
+                //DIR2 VALUE PARAM
+                 String param = this.registers.revisarRegistros(dir2);
+                 boolean cambia = false;
+                 if (param.isEmpty()){
+                       Registro rg = this.registers.agregarRegistro(dir2);
+                       param = rg.getRegistro();
+                       cambia = true;
+                 }
+                try{
+                    int num = Integer.parseInt(dir2);
+                    String output = "MOV " + param + ", #"+ num;
+                    asm.insertCode(output, 1, 1);
+                    String push = "PUSH {"+ param+ "}";
+                    asm.insertCode(push, 1, 2, "push param");
+                }catch(Exception e){
+                    //aqui entra si el param no es un número
+                    if (!dir2.contains("global")){
+                        int num = Integer.parseInt(dir2.substring(dir2.indexOf("[")+1, dir2.indexOf("]")));
+                        String instruccion = "LDR " + param+", " + "[sp , #"+(this.stackPointer-num)+"]";
+                        if (cambia)
+                            asm.insertCode(instruccion, 1, 1, "Set value param " + dir2);
+                        String push = "PUSH {"+ param+ "}";
+                        asm.insertCode(push, 1, 2, "push param localStack");
+                    }else{
+                        int num = Integer.parseInt(dir2.substring(dir2.indexOf("[")+1, dir2.indexOf("]")));
+                        String loadGlobal = "LDR " + param + ", =global";
+                        if (cambia)
+                            this.asm.insertCode(loadGlobal, 1, 1, "Cargar etiqueta global");
+                        String instruccion = "LDR " +param+ ", "+ "["+param +", #"+(num)+"]";
+                        asm.insertCode(instruccion, 1, 1, "Set value param " + dir2);
+                        String push = "PUSH {"+ param+ "}";
+                        asm.insertCode(push, 1, 2, "push param localStack");
+                    }
+                }
+               
+            }
+            //method call
+            else if (dir1 != null && dir2 != null && res != null && op == null){
+                //DIR1 CALL literal
+                //dir2 method that is called
+                //res temporal value saved
+                this.offset += this.stackPointer;
+                String saveOffset = "LDR R0, =offset";
+                String save = "MOV R1, #"+this.offset;
+                String off = "STR R1, [R0]";
+                asm.insertCode(saveOffset, 1, 1);
+                asm.insertCode(save, 1, 1);
+                asm.insertCode(off, 1, 2, "Guardar offset actual");
+                asm.insertCode("bl " + dir2, 1, 2);
+              
             }
         }
     }
@@ -101,13 +176,17 @@ public class PreCompilation {
         if (registerDescriptionR1.isEmpty()){
             Registro rg = this.registers.agregarRegistro(dir1);
             System.out.println(rg);
-            String instruccion = "LDR " + rg.getRegistro();
+            String instruccion="";
+            //int num1 = Integer.parseInt(dir1.substring(dir1.indexOf("[")+1, dir1.indexOf("]")));
+            //String instruccion = "LDR " + rg.getRegistro()+", " + "[sp , #"+(this.stackPointer-num1)+"]";
             try {
                 int num = Integer.parseInt(dir1);
                 instruccion = "MOV " + rg.getRegistro()+", #"+num;
             }
             catch(Exception e){
                 //cargar desde memoria, stackpointer, etc.
+                int num1 = Integer.parseInt(dir1.substring(dir1.indexOf("[")+1, dir1.indexOf("]")));
+                instruccion = "LDR " + rg.getRegistro()+", " + "[sp , #"+(this.stackPointer-num1)+"]";
             }
             asm.insertCode(instruccion, 1, 1);  
             registerDescriptionR1 = rg.getRegistro();
@@ -174,11 +253,18 @@ public class PreCompilation {
         
     public void genDeclarations(IntermediateCode codigo){
         StackControl localStack = codigo.getLocalStack();
+     
         this.stackPointer = this.stackPointer + 4;
-        asm.insertCode("MOV R0, #0", 1, 1, "Valor default");
-        asm.insertCode("push {r0}", 1, 2, "Reservar espacio para " + localStack.getIdentificador());
-        //modificar descriptor de registros
-        this.registers.setRegistroValor("R0", "0");
+        if (codigo.isParam()== false){
+            asm.insertCode("MOV R0, #0", 1, 1, "Valor default");
+            asm.insertCode("push {r0}", 1, 2, "Reservar espacio para " + localStack.getIdentificador());
+            //modificar descriptor de registros
+            this.registers.setRegistroValor("R0", "0");
+        }
+        //si es  parametro no volvemos hacer push
+        else{
+            asm.insertCode("", 1, 0, "hay un param");
+        }
     }
     
     
@@ -191,7 +277,7 @@ public class PreCompilation {
         String registerDescriptionR1 = this.registers.revisarRegistros(dir1);
         
         if (registerDescriptionR1.isEmpty()){
-           Registro rg = this.registers.agregarRegistro(dir1);
+            Registro rg = this.registers.agregarRegistro(dir1);
             System.out.println(rg);
             String instruccion = "LDR " + rg.getRegistro();
             try {
@@ -214,17 +300,23 @@ public class PreCompilation {
         //this.asm.insertCode(output, 1, 1, "Assgin " + codigo.getRes() + " " + op + " " + dir1);
         if (!codigo.getRes().contains("global")){
             int num = Integer.parseInt(codigo.getRes().substring(codigo.getRes().indexOf("[")+1, codigo.getRes().indexOf("]")));
-            String saveLocal = "STR " + rRes.getRegistro() + ", [sp, #"+(this.stackPointer-num)+"]";
+            String saveLocal = "STR " + registerDescriptionR1 + ", [sp, #"+(this.stackPointer-num)+"]";
             this.asm.insertCode(saveLocal, 1, 2, "LocalStack " + (this.stackPointer-num));
+          
         }
         else {
             //es una asignacion global
             int num = Integer.parseInt(codigo.getRes().substring(codigo.getRes().indexOf("[")+1, codigo.getRes().indexOf("]")));
           
-            Registro rGlobal = this.registers.buscarRegistroMenor(rRes);
-            String loadGlobal = "LDR " + rGlobal.getRegistro() + ", =global";
+            String rGlobal = this.registers.revisarRegistros(res);
+            if (rGlobal.isEmpty()){
+                Registro rg = this.registers.agregarRegistro(res);
+                rGlobal = rg.getRegistro();
+                
+            }
+            String loadGlobal = "LDR " + rGlobal + ", =global";
             this.asm.insertCode(loadGlobal, 1, 1, "Cargar etiqueta global");
-            String saveLocal = "STR " +rRes.getRegistro()+ ", "+ "["+rGlobal.getRegistro() +", #"+(num)+"]";
+            String saveLocal = "STR " +rRes.getRegistro()+ ", "+ "["+rGlobal +", #"+(num)+"]";
             this.asm.insertCode(saveLocal, 1, 2, "GlobalStack " + (num));
         }
         

@@ -19,6 +19,7 @@ public class PreCompilation {
     private int stackPointer = -4;
     private int offset = 0;
     private String lastMethod="";
+    private String lastOp = "";
    
     
    
@@ -232,7 +233,40 @@ public class PreCompilation {
                     output = "SUB "+ rRes.getRegistro() +", "+ registerDescriptionR1 + ", #"+dir2;
                 }
                 if (op.equals("==")){
-                    output = "CMP " + rRes.getRegistro() + ", " + registerDescriptionR1;
+                    lastOp = ">";
+                    String preOutPut = "MOV " + rRes.getRegistro()+ ", #" +dir2;
+                    asm.insertCode(preOutPut, 1, 1, "Cargar valor literal");
+                    output = "CMP " + registerDescriptionR1 + ", " + rRes.getRegistro();
+                }
+                if (op.equals("<=")){
+                    lastOp = ">";
+                    String preOutPut = "MOV " + rRes.getRegistro()+ ", #" +dir2;
+                    asm.insertCode(preOutPut, 1, 1, "Cargar valor literal");
+                    output = "CMP " + registerDescriptionR1 + ", " + rRes.getRegistro();
+                }
+                if (op.equals("<")){
+                  lastOp = ">";
+                    String preOutPut = "MOV " + rRes.getRegistro()+ ", #" +dir2;
+                    asm.insertCode(preOutPut, 1, 1, "Cargar valor literal");
+                    output = "CMP " + registerDescriptionR1 + ", " + rRes.getRegistro();
+                }
+                  if (op.equals(">=")){
+                    lastOp = ">";
+                    String preOutPut = "MOV " + rRes.getRegistro()+ ", #" +dir2;
+                    asm.insertCode(preOutPut, 1, 1, "Cargar valor literal");
+                    output = "CMP " + registerDescriptionR1 + ", " + rRes.getRegistro();
+                }
+                    if (op.equals(">")){
+                    lastOp = ">";
+                    String preOutPut = "MOV " + rRes.getRegistro()+ ", #" +dir2;
+                    asm.insertCode(preOutPut, 1, 1, "Cargar valor literal");
+                    output = "CMP " + registerDescriptionR1 + ", " + rRes.getRegistro();
+                }
+                if (op.equals("!=")||op.equals("<>")){
+                    lastOp = ">";
+                    String preOutPut = "MOV " + rRes.getRegistro()+ ", #" +dir2;
+                    asm.insertCode(preOutPut, 1, 1, "Cargar valor literal");
+                    output = "CMP " + registerDescriptionR1 + ", " + rRes.getRegistro();
                 }
 
                 System.out.println(output);
@@ -286,6 +320,30 @@ public class PreCompilation {
                 if (op.equals("/")){
                     //cargar valores en r0 y r1
                     asm.insertCode("bl dividir", 1, 2, "Llamar a la subrutina de division");
+                }
+                if (op.equals("==")){
+                    lastOp = "==";
+                    output = "CMP " + registerDescriptionR1 + ", " + registerDescriptionR2;
+                }
+                if (op.equals("<=")){
+                    lastOp = "<=";
+                     output = "CMP " + registerDescriptionR1 + ", " + registerDescriptionR2;
+                }
+                if (op.equals("<")){
+                    lastOp = "<";
+                    output = "CMP " + registerDescriptionR1 + ", " + registerDescriptionR2;
+                }
+                if (op.equals(">=")){
+                    lastOp = ">=";
+                    output = "CMP " + registerDescriptionR1 + ", " + registerDescriptionR2;
+                }
+                if (op.equals(">")){
+                    lastOp = ">";
+                    output = "CMP " + registerDescriptionR1 + ", " + registerDescriptionR2;
+                }
+                if (op.equals("!=")||op.equals("<>")){
+                    lastOp = "!=";
+                    output = "CMP " + registerDescriptionR1 + ", " + registerDescriptionR2;
                 }
 
                 System.out.println(output);
@@ -385,14 +443,46 @@ public class PreCompilation {
         String res = codigo.getRes(); //la condicion
         String dir2 = codigo.getDir2(); //la etiqueta a saltar
         String branch ="Error";
-        if (res.contains("True")){
+        if (res.contains("True")&&lastOp.equals("==")){
             //insertar branch con eq
              branch = "beq " + dir2;
         }
-        if (res.contains("False")){
-            //insertar branch cuando no es igual, es decir false
+        if (res.contains("True")&&lastOp.equals("<")){
+            branch = "blt " + dir2;
+        }
+        if (res.contains("True")&&lastOp.equals("<=")){
+            branch = "ble " + dir2; 
+        }
+        if (res.contains("True")&&lastOp.equals(">")){
+            branch = "bgt " + dir2;
+        }
+        if (res.contains("True")&&lastOp.equals(">=")){
+            branch = "bge " + dir2;
+        }
+        if (res.contains("True")&&lastOp.equals("!=")){
             branch = "bne " + dir2;
         }
+        if (res.contains("False")&&lastOp.equals("==")){
+            //insertar branch con eq
+             branch = "bne " + dir2;
+        }
+        if (res.contains("False")&&lastOp.equals("<")){
+            branch = "bgt " + dir2;
+        }
+        if (res.contains("False")&&lastOp.equals("<=")){
+            branch = "bge " + dir2; 
+        }
+        if (res.contains("False")&&lastOp.equals(">")){
+            branch = "blt " + dir2;
+        }
+        if (res.contains("False")&&lastOp.equals(">=")){
+            branch = "ble " + dir2;
+        }
+        if (res.contains("False")&&lastOp.equals("!=")){
+            branch = "beq " + dir2;
+        }
+         
+       
         asm.insertCode(branch, 1, 1, "Realizar salto condicional");
     }
 

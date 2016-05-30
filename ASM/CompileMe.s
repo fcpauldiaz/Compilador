@@ -18,47 +18,32 @@ offset: .space
 
 .global main
 .type main, %function
-printNum:
-	MOV R10, LR 
-
-	LDR R0, [SP, #0]	//Valor del param se saca de la pila
-	push {r0}	//Reservar espacio para param x
-
-	LDR R1, [sp, #0]	//Cargar en offset
-	LDR R0, =salida_num
-	bl printf
-
-	ADD SP, SP, #8	//Mover StackPointer para olvidar variables
-
-	MOV PC, R10
-
 main:
 	stmfd sp!, {fp, lr}
 
 	MOV R0, #0	//Valor default
 	push {r0}	//Reservar espacio para c
 
-	MOV R0, #2
-	STR R0, [sp, #12]	//LocalStack 12
+	MOV R0, #0	//Valor default
+	push {r0}	//Reservar espacio para d
 
-whileLoop_main0:
-	LDR R1, [sp ,#12]
-	CMP R0, R1	//temp0 = stack[0] == 2
+	MOV R0, #10
+	STR R0, [sp, #4]	//LocalStack 4
+
+	STR R0, [sp, #0]	//LocalStack 0
+
+	LDR R1, [sp ,#4]
+	LDR R2, [sp , #0]	//Set value stack[4]
+	CMP R1, R2	//temp0 = stack[0] == stack[4]
 	beq main0	//Realizar salto condicional
 	b main1	//Goto main1
 
 main0:
-	MOV R2, #1
-	STR R2, [sp, #12]	//LocalStack 12
-
-	b whileLoop_main0	//Goto whileLoop_main0
+	SUB R0, R1, #1	//temp1 = stack[0] - 1
+	STR R0, [sp, #4]	//LocalStack 4
 
 main1:
-	PUSH {R1}	//push param localStack
-
-	bl printNum
-
-	ADD SP, SP, #16	//Mover StackPointer para olvidar variables
+	ADD SP, SP, #8	//Mover StackPointer para olvidar variables
 
 	MOV R0, #0	//Salida al SO
 	MOV R3, #0

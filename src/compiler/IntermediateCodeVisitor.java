@@ -780,7 +780,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
             if (amb==0)
                dir2 = "stack_global[" + this.buscarGlobalStack(dir2) +"]";
             else
-                dir2+="_"+etiquetaActual+"_"+amb;
+                dir2 =  "stack["+this.buscarStack(dir2, this.scopeActual)+"]";
         }
         String op = ctx.getChild(1).getText();
         IntermediateCode codigo = new IntermediateCode();

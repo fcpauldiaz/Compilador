@@ -67,6 +67,12 @@ public class RegisterDescriptor {
          }
         return metodo;
     }
+     
+     public void resetAll(){
+         for(Registro rg: this.registros){
+             rg.getVariables().clear();
+         }
+     }
     
     public void setRegistroValor(Registro r, String var){
         r.getVariables().clear();

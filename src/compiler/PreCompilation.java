@@ -20,6 +20,7 @@ public class PreCompilation {
     private int offset = 0;
     private String lastMethod="";
     private String lastOp = "";
+    private int paramsCounter = 0;
    
     
    
@@ -73,7 +74,7 @@ public class PreCompilation {
                     //asm.insertCode("LDR R5, [R5]", 1,2, "Cargar offset actual");
                     asm.insertCode("PUSH {LR} ",1,2);
                    // asm.insertCode("ADD R6, R5, #0", 1, 1, "Calcular offset donde viene el param");
-                    this.stackPointer -= 4;
+                    //this.stackPointer -= 4;
                     lastMethod = "printNum";
                    
                 }
@@ -83,6 +84,7 @@ public class PreCompilation {
                    // asm.insertCode("LDR R5, [R5]", 1,1, "Cargar offset actual");
                     if (method){
                         asm.insertCode("PUSH {LR} ",1,2);
+                        lastMethod = etiqueta;
                    // asm.insertCode("ADD R6, R5, #0", 1, 1, "Calcular offset donde viene el param");
                     }
                     
@@ -94,7 +96,7 @@ public class PreCompilation {
             }
             else if (salidaMetodo){
                 //registro de activación para el retorono del método
-              
+                 this.registers.resetAll();
                 if (stackPointer >=0){
                   
                     stackPointer+=4;
@@ -112,6 +114,7 @@ public class PreCompilation {
                 else {
                     //AL FINALIZAR UNA SUBRUTINA
                     asm.insertCode("POP {pc}", 1,2);
+                    paramsCounter = 0;
                 }
             }
             //PARAMS    
@@ -137,6 +140,7 @@ public class PreCompilation {
                     if (!dir2.contains("global")){
                         int num = Integer.parseInt(dir2.substring(dir2.indexOf("[")+1, dir2.indexOf("]")));
                         String instruccion = "LDR " + param+", " + "[sp , #"+(this.stackPointer-num)+"]";
+                        
                         if (cambia)
                             asm.insertCode(instruccion, 1, 1, "Set value param " + dir2);
                         String push = "PUSH {"+ param+ "}";
@@ -168,6 +172,7 @@ public class PreCompilation {
                 //asm.insertCode(save, 1, 1);
                // asm.insertCode(off, 1, 2, "Guardar offset actual");
                 asm.insertCode("bl " + dir2, 1, 2);
+                paramsCounter = 0;
               
             }
             else if (stIF){
@@ -368,9 +373,10 @@ public class PreCompilation {
         //si es  parametro se le pone el valor que trae y se le reserva el espacio en pila.
         else{
             //asm.insertCode("ADD R6, R5, #0", 1, 1, "Offset del param dentro la pila");
-            asm.insertCode("LDR R0, [SP, #4]", 1, 1, "Valor del param se saca de la pila");
+            paramsCounter += 1;
+            asm.insertCode("LDR R0, [SP, #"+(stackPointer+paramsCounter*4)+"]", 1, 1, "Valor del param se saca de la pila");
             asm.insertCode("push {r0}", 1, 2, "Reservar espacio para param " + localStack.getIdentificador());
-            this.stackPointer = this.stackPointer + 4;
+            //this.stackPointer = this.stackPointer + 4;
             if (lastMethod.equals("printNum")){
                 //colocar instruccion de print después de reservar espacio para el param.
                 asm.insertCode("LDR R1, [sp, #0]",1, 1, "Cargar en offset");

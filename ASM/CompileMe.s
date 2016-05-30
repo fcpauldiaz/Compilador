@@ -36,30 +36,24 @@ test:
 	PUSH {LR} 
 
 	LDR R0, [SP, #4]	//Valor del param se saca de la pila
-	push {r0}	//Reservar espacio para param x
+	push {r0}	//Reservar espacio para param d
 
-	LDR R1, [sp, #0]	//Cargar en offset
-	LDR R0, =salida_num
-	bl printf
-
-	LDR R0, [SP, #4]	//Valor del param se saca de la pila
-	push {r0}	//Reservar espacio para param y
-
-	LDR R1, [sp, #0]	//Cargar en offset
-	LDR R0, =salida_num
-	bl printf
+	LDR R0, [SP, #12]	//Valor del param se saca de la pila
+	push {r0}	//Reservar espacio para param c
 
 	MOV R0, #0	//Valor default
 	push {r0}	//Reservar espacio para c
 
-	MOV R0, #100
-	MOV R1 , #2	//Cargar valor literal
-	bl dividir	//Llamar a la subrutina de division
+	MOV R0, #5
+	SUB R0, R0, #2	//temp0 = 5 - 2
+	STR R0, [sp, #4]	//LocalStack 4
 
-		//temp0 = 100 / 2
-	STR R0, [sp, #8]	//LocalStack 8
+	LDR R1, [sp , #8]	//Set value param stack[0]
+	PUSH {R1}	//push param localStack
 
-	ADD SP, SP, #20	//Mover StackPointer para olvidar variables
+	bl printNum
+
+	ADD SP, SP, #16	//Mover StackPointer para olvidar variables
 
 	POP {pc}
 
@@ -75,11 +69,14 @@ main:
 	MOV R2, #10
 	STR R2, [sp, #4]	//LocalStack 4
 
-	LDR R3, [sp , #4]	//Set value param stack[0]
-	PUSH {R3}	//push param localStack
+	MOV R3, #1
+	STR R3, [sp, #0]	//LocalStack 0
 
-	LDR R0, [sp , #4]	//Set value param stack[4]
-	PUSH {R0}	//push param localStack
+	LDR R1, [sp , #4]	//Set value param stack[0]
+	PUSH {R1}	//push param localStack
+
+	LDR R1, [sp , #4]	//Set value param stack[4]
+	PUSH {R1}	//push param localStack
 
 	bl test
 

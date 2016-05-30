@@ -38,25 +38,27 @@ main:
 	MOV R0, #0	//Valor default
 	push {r0}	//Reservar espacio para c
 
-	MOV R0, #0	//Valor default
-	push {r0}	//Reservar espacio para d
+	MOV R0, #2
+	STR R0, [sp, #12]	//LocalStack 12
 
-	MOV R0, #1
-	STR R0, [sp, #4]	//LocalStack 4
+whileLoop_main0:
+	LDR R1, [sp ,#12]
+	CMP R0, R1	//temp0 = stack[0] == 2
+	beq main0	//Realizar salto condicional
+	b main1	//Goto main1
 
-	MOV R0, #4
-	MOV R1 , #2	//Cargar valor literal
-	bl dividir	//Llamar a la subrutina de division
+main0:
+	MOV R2, #1
+	STR R2, [sp, #12]	//LocalStack 12
 
-		//temp0 = 4 / 2
-	STR R0, [sp, #0]	//LocalStack 0
+	b whileLoop_main0	//Goto whileLoop_main0
 
-	LDR R3, [sp , #0]	//Set value param stack[4]
-	PUSH {R3}	//push param localStack
+main1:
+	PUSH {R1}	//push param localStack
 
 	bl printNum
 
-	ADD SP, SP, #8	//Mover StackPointer para olvidar variables
+	ADD SP, SP, #16	//Mover StackPointer para olvidar variables
 
 	MOV R0, #0	//Salida al SO
 	MOV R3, #0

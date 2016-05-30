@@ -44,6 +44,7 @@ public class PreCompilation {
             boolean declaration =inter.isDeclaration();
             StackControl localStack = inter.getLocalStack();
             boolean salidaMetodo = inter.isSalidaMetodo();
+            boolean method = inter.isMethod();
             //cuadrupla de código intermedio
             if (dir1 != null && dir2 != null && op != null &&
                   res != null && !stIF){
@@ -78,11 +79,13 @@ public class PreCompilation {
                     asm.insertCode(etiqueta, 0, 1);
                    // asm.insertCode("LDR R5, =offset",1,1);
                    // asm.insertCode("LDR R5, [R5]", 1,1, "Cargar offset actual");
-                    asm.insertCode("MOV R10, LR ",1,2);
-                    lastMethod = etiqueta;
+                    if (method){
+                        asm.insertCode("MOV R10, LR ",1,2);
+                        this.stackPointer = -4;
+                    }
                     
                 }
-                this.stackPointer = -4;
+                
             }
             else if(localStack != null){
                 genDeclarations(inter);
@@ -163,6 +166,18 @@ public class PreCompilation {
                 asm.insertCode("bl " + dir2, 1, 2);
               
             }
+            else if (stIF){
+            
+                booleanStatement(inter);
+            }
+            //Goto statements
+            else if (dir1 == null && op != null && dir2 != null){
+                String goTo = "b " + dir2;
+                asm.insertCode(goTo, 1, 2, "Goto " + dir2);
+            }
+            else {
+                 System.out.println("Caso no contemplado" + inter);
+            }
         }
     }
     
@@ -215,6 +230,9 @@ public class PreCompilation {
                 }
                 if (op.equals("-")){
                     output = "SUB "+ rRes.getRegistro() +", "+ registerDescriptionR1 + ", #"+dir2;
+                }
+                if (op.equals("==")){
+                    output = "CMP " + rRes.getRegistro() + ", " + registerDescriptionR1;
                 }
 
                 System.out.println(output);
@@ -363,6 +381,19 @@ public class PreCompilation {
         
     }
     
-    
+    public void booleanStatement(IntermediateCode codigo){
+        String res = codigo.getRes(); //la condicion
+        String dir2 = codigo.getDir2(); //la etiqueta a saltar
+        String branch ="Error";
+        if (res.contains("True")){
+            //insertar branch con eq
+             branch = "beq " + dir2;
+        }
+        if (res.contains("False")){
+            //insertar branch cuando no es igual, es decir false
+            branch = "bne " + dir2;
+        }
+        asm.insertCode(branch, 1, 1, "Realizar salto condicional");
+    }
 
 }

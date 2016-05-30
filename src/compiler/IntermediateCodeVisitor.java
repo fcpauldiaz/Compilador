@@ -378,6 +378,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         contEtiquetaActual = 0;
         
         codigo.setEtiqueta(etiqueta+":");
+        codigo.setMethod(true);
         tablaCodigo.addCode(codigo);
         super.visitMethodDeclaration(ctx);
         scopeActual = scopeActual.getAnterior();

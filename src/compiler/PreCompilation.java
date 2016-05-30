@@ -71,8 +71,9 @@ public class PreCompilation {
                     asm.insertCode(etiqueta, 0, 1);
                     //asm.insertCode("LDR R5, =offset",1,1);
                     //asm.insertCode("LDR R5, [R5]", 1,2, "Cargar offset actual");
-                    asm.insertCode("MOV R10, LR ",1,2);
+                    asm.insertCode("PUSH {LR} ",1,2);
                    // asm.insertCode("ADD R6, R5, #0", 1, 1, "Calcular offset donde viene el param");
+                    this.stackPointer -= 4;
                     lastMethod = "printNum";
                    
                 }
@@ -81,8 +82,8 @@ public class PreCompilation {
                    // asm.insertCode("LDR R5, =offset",1,1);
                    // asm.insertCode("LDR R5, [R5]", 1,1, "Cargar offset actual");
                     if (method){
-                        asm.insertCode("MOV R10, LR ",1,2);
-                        this.stackPointer = -4;
+                        asm.insertCode("PUSH {LR} ",1,2);
+                   // asm.insertCode("ADD R6, R5, #0", 1, 1, "Calcular offset donde viene el param");
                     }
                     
                 }
@@ -99,6 +100,7 @@ public class PreCompilation {
                     stackPointer+=4;
                    
                     asm.insertCode("ADD SP, SP, #"+stackPointer, 1, 2, "Mover StackPointer para olvidar variables");
+                    this.stackPointer = -4;
                 }
                 if (lastMethod.equals("main")){
        
@@ -109,14 +111,14 @@ public class PreCompilation {
                 }
                 else {
                     //AL FINALIZAR UNA SUBRUTINA
-                    asm.insertCode("MOV PC, R10", 1,2);
+                    asm.insertCode("POP {pc}", 1,2);
                 }
             }
             //PARAMS    
             else if (dir1 != null && dir2 != null && op == null && res == null){
                 //DIR1 LITERAL PARAM
                 //DIR2 VALUE PARAM
-                
+              
                  String param = this.registers.revisarRegistros(dir2);
                  boolean cambia = false;
                  if (param.isEmpty()){
@@ -149,6 +151,7 @@ public class PreCompilation {
                         String push = "PUSH {"+ param+ "}";
                         asm.insertCode(push, 1, 2, "push param localStack");
                     }
+                    this.stackPointer += 4;
                 }
                
             }
@@ -365,7 +368,7 @@ public class PreCompilation {
         //si es  parametro se le pone el valor que trae y se le reserva el espacio en pila.
         else{
             //asm.insertCode("ADD R6, R5, #0", 1, 1, "Offset del param dentro la pila");
-            asm.insertCode("LDR R0, [SP, #0]", 1, 1, "Valor del param se saca de la pila");
+            asm.insertCode("LDR R0, [SP, #4]", 1, 1, "Valor del param se saca de la pila");
             asm.insertCode("push {r0}", 1, 2, "Reservar espacio para param " + localStack.getIdentificador());
             this.stackPointer = this.stackPointer + 4;
             if (lastMethod.equals("printNum")){

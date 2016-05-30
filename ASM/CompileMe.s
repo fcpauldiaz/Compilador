@@ -18,6 +18,51 @@ offset: .space
 
 .global main
 .type main, %function
+printNum:
+	PUSH {LR} 
+
+	LDR R0, [SP, #4]	//Valor del param se saca de la pila
+	push {r0}	//Reservar espacio para param x
+
+	LDR R1, [sp, #0]	//Cargar en offset
+	LDR R0, =salida_num
+	bl printf
+
+	ADD SP, SP, #4	//Mover StackPointer para olvidar variables
+
+	POP {pc}
+
+test:
+	PUSH {LR} 
+
+	LDR R0, [SP, #4]	//Valor del param se saca de la pila
+	push {r0}	//Reservar espacio para param x
+
+	LDR R1, [sp, #0]	//Cargar en offset
+	LDR R0, =salida_num
+	bl printf
+
+	LDR R0, [SP, #4]	//Valor del param se saca de la pila
+	push {r0}	//Reservar espacio para param y
+
+	LDR R1, [sp, #0]	//Cargar en offset
+	LDR R0, =salida_num
+	bl printf
+
+	MOV R0, #0	//Valor default
+	push {r0}	//Reservar espacio para c
+
+	MOV R0, #100
+	MOV R1 , #2	//Cargar valor literal
+	bl dividir	//Llamar a la subrutina de division
+
+		//temp0 = 100 / 2
+	STR R0, [sp, #8]	//LocalStack 8
+
+	ADD SP, SP, #20	//Mover StackPointer para olvidar variables
+
+	POP {pc}
+
 main:
 	stmfd sp!, {fp, lr}
 
@@ -27,23 +72,18 @@ main:
 	MOV R0, #0	//Valor default
 	push {r0}	//Reservar espacio para d
 
-	MOV R0, #10
-	STR R0, [sp, #4]	//LocalStack 4
+	MOV R2, #10
+	STR R2, [sp, #4]	//LocalStack 4
 
-	STR R0, [sp, #0]	//LocalStack 0
+	LDR R3, [sp , #4]	//Set value param stack[0]
+	PUSH {R3}	//push param localStack
 
-	LDR R1, [sp ,#4]
-	LDR R2, [sp , #0]	//Set value stack[4]
-	CMP R1, R2	//temp0 = stack[0] == stack[4]
-	beq main0	//Realizar salto condicional
-	b main1	//Goto main1
+	LDR R0, [sp , #4]	//Set value param stack[4]
+	PUSH {R0}	//push param localStack
 
-main0:
-	SUB R0, R1, #1	//temp1 = stack[0] - 1
-	STR R0, [sp, #4]	//LocalStack 4
+	bl test
 
-main1:
-	ADD SP, SP, #8	//Mover StackPointer para olvidar variables
+	ADD SP, SP, #16	//Mover StackPointer para olvidar variables
 
 	MOV R0, #0	//Salida al SO
 	MOV R3, #0

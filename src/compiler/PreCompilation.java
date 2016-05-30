@@ -184,8 +184,12 @@ public class PreCompilation {
             //String instruccion = "LDR " + rg.getRegistro()+", " + "[sp , #"+(this.stackPointer-num1)+"]";
             try {
                 int num = Integer.parseInt(dir1);
-                instruccion = "MOV " + rg.getRegistro()+", #"+num;
-            }
+                if (op.equals("/")){
+                    instruccion = "MOV " +"R0" + ", #"+ num; 
+                }else{
+                    instruccion = "MOV " + rg.getRegistro()+", #"+num;
+                }
+            }        
             catch(Exception e){
                 //cargar desde memoria, stackpointer, etc.
                 int num1 = Integer.parseInt(dir1.substring(dir1.indexOf("[")+1, dir1.indexOf("]")));
@@ -228,13 +232,25 @@ public class PreCompilation {
             if (registerDescriptionR2.isEmpty()){
               Registro rg2 = this.registers.agregarRegistro(dir2);
               registerDescriptionR2 = rg2.getRegistro();
-            
-              int num = Integer.parseInt(dir2.substring(dir2.indexOf("[")+1, dir2.indexOf("]")));
-              //String offSet = "ADD R6, R5, #" + (this.stackPointer-num);
-             // asm.insertCode(offSet, 1, 1, "Cargar offset a un registro");
-              String instruccion = "LDR " + rg2.getRegistro()+", " + "[sp , #"+ (this.stackPointer-num)+"]";
-              asm.insertCode(instruccion, 1, 1, "Set value " + dir2);
-              
+                System.out.println(dir2);
+                if (dir2.contains("[")){
+                    int num = Integer.parseInt(dir2.substring(dir2.indexOf("[")+1, dir2.indexOf("]")));
+                    //String offSet = "ADD R6, R5, #" + (this.stackPointer-num);
+                   // asm.insertCode(offSet, 1, 1, "Cargar offset a un registro");
+                    String instruccion = "LDR " + rg2.getRegistro()+", " + "[sp , #"+ (this.stackPointer-num)+"]";
+                    asm.insertCode(instruccion, 1, 1, "Set value " + dir2);
+              }
+                //es u numero
+              else {
+                    String instruccion;
+                    if (op.equals("/")){
+                        instruccion = "MOV R1 , #"+dir2;
+                    }
+                    else {
+                        instruccion = "MOV " + rg2.getRegistro() + ", #" + dir2;
+                    }
+                    asm.insertCode(instruccion, 1, 1, "Cargar valor literal");
+                }
             }
             
               Registro rRes = this.registers.buscarRegistroMenor();

@@ -1012,7 +1012,7 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
 
                         codigo.setDir1(midCode.getRes());
                         if (bool.equals("ifFalse")){
-                            codigo.setDir2(etiquetaActual+ copyEt);
+                            codigo.setDir2(etiquetaActual+ (this.contEtiquetaActual+1));
                         }
                         else
                             codigo.setDir2(etiquetaActual+ contEtiquetaActual);

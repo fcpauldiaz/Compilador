@@ -177,6 +177,36 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
     }
 
     @Override
+    public Object visitStatementReturn(programParser.StatementReturnContext ctx) {
+       
+        IntermediateCode codigo = new IntermediateCode();
+        codigo.setReturnStatement(true);
+        T valor = (T)this.visit(ctx.getChild(1));
+        if (valor instanceof ArrayList ){
+            
+            
+            int local = this.buscarStack((String)((ArrayList)valor).get(0), scopeActual);
+            String output = "stack["+local+"]";
+            if (local == -1){
+                //entonces estará en global stack?
+                local = this.buscarGlobalStack((String)((ArrayList)valor).get(0));
+                output = "global_stack["+local+"]";
+            }
+            
+            codigo.setRes(output);
+           
+        }
+      
+        this.tablaCodigo.addCode(codigo);
+        
+        return null;
+        
+        
+    }
+
+    
+    
+    @Override
     public Object visitStatementLocationArray(programParser.StatementLocationArrayContext ctx) {
         
         String res = "";

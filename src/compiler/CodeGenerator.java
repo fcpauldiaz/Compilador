@@ -23,10 +23,12 @@ public class CodeGenerator {
                 "*/"+"\n"+"\n"+
                 ".data"+"\n"+
                 ".align 2"+"\n"+"\n"+
-                "salida_num:    .asciz \"%d \\n\""+"\n"+
-                "salida_str:    .asciz \"%f \\n\""+"\n"+
+                "salida_num:    .asciz \"El resultado es: %d \\n\""+"\n"+
+                "salida_str:    .asciz \"El character es: %s \\n\""+"\n"+
+                "input_num:     .asciz \"Ingrese el input %s \\n\""+"\n"+
                 "global: .space"+"\n"+
-                "offset: .space"+"\n"+"\n"+
+                ".global offset" + "\n"+
+                "offset: .word 0"+"\n"+"\n"+
                 ".text"+"\n"+
                 ".align 2"+"\n"+"\n"+
                 ".global main"+"\n"+

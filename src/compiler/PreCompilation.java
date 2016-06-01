@@ -21,7 +21,7 @@ public class PreCompilation {
     private String lastMethod="";
     private String lastOp = "";
     private int paramsCounter = 0;
-   
+    private int sendParams = 0;
     
    
     public PreCompilation(InterCodeTable table){
@@ -64,26 +64,38 @@ public class PreCompilation {
                     asm.insertCode(etiqueta, 0, 1);
                     asm.insertCode("stmfd sp!, {fp, lr}", 1, 2);
                     lastMethod = "main";
+                   
+                   
+                    asm.insertCode("bl initStack",1, 2, "aumentar stack pointer");
                     //registro de activación
                     //cargar offset para el método
                     //cargar parametros
+                  
                 }
                 else if (etiqueta.equals("printNum:")){
                     asm.insertCode(etiqueta, 0, 1);
                     //asm.insertCode("LDR R5, =offset",1,1);
                     //asm.insertCode("LDR R5, [R5]", 1,2, "Cargar offset actual");
-                    asm.insertCode("PUSH {LR} ",1,2);
+                    asm.insertCode("PUSH {R4-R12, LR} ",1,2);
                    // asm.insertCode("ADD R6, R5, #0", 1, 1, "Calcular offset donde viene el param");
                     //this.stackPointer -= 4;
+                  
+                    asm.insertCode("bl initStack",1, 2, "aumentar stack pointer");
                     lastMethod = "printNum";
-                   
+                    
                 }
                 else{
                     asm.insertCode(etiqueta, 0, 1);
                    // asm.insertCode("LDR R5, =offset",1,1);
                    // asm.insertCode("LDR R5, [R5]", 1,1, "Cargar offset actual");
                     if (method){
-                        asm.insertCode("PUSH {LR} ",1,2);
+                        asm.insertCode("PUSH {R4-R12, LR} ",1,2);
+                      
+                     
+                        asm.insertCode("bl initStack",1, 2, "aumentar stack pointer");
+                        
+                      
+                        
                         lastMethod = etiqueta;
                    // asm.insertCode("ADD R6, R5, #0", 1, 1, "Calcular offset donde viene el param");
                     }
@@ -100,8 +112,10 @@ public class PreCompilation {
                 if (stackPointer >=0){
                   
                     stackPointer+=4;
+                    
                    
-                    asm.insertCode("ADD SP, SP, #"+stackPointer, 1, 2, "Mover StackPointer para olvidar variables");
+                    //asm.insertCode("bl currentSP", 1, 1, "Get current SP");
+                    asm.insertCode("ADD SP, SP, R8", 1, 2, "Mover StackPointer para olvidar variables");
                     this.stackPointer = -4;
                 }
                 if (lastMethod.equals("main")){
@@ -113,7 +127,7 @@ public class PreCompilation {
                 }
                 else {
                     //AL FINALIZAR UNA SUBRUTINA
-                    asm.insertCode("POP {pc}", 1,2);
+                    asm.insertCode("POP {R4-R12, pc}", 1,2);
                     paramsCounter = 0;
                 }
             }
@@ -121,7 +135,7 @@ public class PreCompilation {
             else if (dir1 != null && dir2 != null && op == null && res == null){
                 //DIR1 LITERAL PARAM
                 //DIR2 VALUE PARAM
-              
+                 this.sendParams+=1;
                  String param = this.registers.revisarRegistros(dir2);
                  boolean cambia = false;
                  if (param.isEmpty()){
@@ -135,9 +149,16 @@ public class PreCompilation {
                     asm.insertCode(output, 1, 1);
                     String push = "PUSH {"+ param+ "}";
                     asm.insertCode(push, 1, 2, "push param");
+                    
+                  
+                    //asm.insertCode("bl stack",1, 2, "aumentar stack pointer");
+                    
+                    //this.stackPointer += 4;
                 }catch(Exception e){
+                    
                     //aqui entra si el param no es un número
                     if (!dir2.contains("global")){
+                        System.out.println(dir2);
                         int num = Integer.parseInt(dir2.substring(dir2.indexOf("[")+1, dir2.indexOf("]")));
                         String instruccion = "LDR " + param+", " + "[sp , #"+(this.stackPointer-num)+"]";
                         
@@ -145,6 +166,9 @@ public class PreCompilation {
                             asm.insertCode(instruccion, 1, 1, "Set value param " + dir2);
                         String push = "PUSH {"+ param+ "}";
                         asm.insertCode(push, 1, 2, "push param localStack");
+                        
+                     
+                        //asm.insertCode("bl stack",1, 2, "aumentar stack pointer");
                     }else{
                         int num = Integer.parseInt(dir2.substring(dir2.indexOf("[")+1, dir2.indexOf("]")));
                         String loadGlobal = "LDR " + param + ", =global";
@@ -154,8 +178,11 @@ public class PreCompilation {
                         asm.insertCode(instruccion, 1, 1, "Set value param " + dir2);
                         String push = "PUSH {"+ param+ "}";
                         asm.insertCode(push, 1, 2, "push param localStack");
+                        
+                        
+                        //asm.insertCode("bl stack",1, 2, "aumentar stack pointer");
                     }
-                    this.stackPointer += 4;
+                    //this.stackPointer += 4;
                 }
                
             }
@@ -171,8 +198,20 @@ public class PreCompilation {
                 //asm.insertCode(saveOffset, 1, 1);
                 //asm.insertCode(save, 1, 1);
                // asm.insertCode(off, 1, 2, "Guardar offset actual");
+                //reservar espacio para el valor de retorno
+               
                 asm.insertCode("bl " + dir2, 1, 2);
+                //eliminar params
+                String dropParams = "ADD SP, SP, #"+sendParams*4;
+                asm.insertCode(dropParams, 1,2, "Drop params from Stack");
+                this.registers.resetAll();
+                Registro returnRegistro = this.registers.agregarRegistro(res);
+                System.out.println("AQUI ESTA RES " + res);
+                String returnInstruccion = "MOV " + returnRegistro.getRegistro() + ", R0";
+                asm.insertCode(returnInstruccion, 1, 1, "get return value");
+                
                 paramsCounter = 0;
+                sendParams = 0;
               
             }
             else if (stIF){
@@ -183,6 +222,25 @@ public class PreCompilation {
             else if (dir1 == null && op != null && dir2 != null){
                 String goTo = "b " + dir2;
                 asm.insertCode(goTo, 1, 2, "Goto " + dir2);
+            }
+            //codigo para un return statement
+            else if (inter.isReturnStatement()){
+                //cargar valor en un registro
+                //hacerle push
+                String registerDescription = this.registers.revisarRegistros(res);
+                if (registerDescription.isEmpty()){
+                    Registro rg2 = this.registers.agregarRegistro(res);
+                    int num = Integer.parseInt(res.substring(res.indexOf("[")+1, res.indexOf("]")));
+                    //String offSet = "ADD R6, R5, #" + (this.stackPointer-num);
+                   // asm.insertCode(offSet, 1, 1, "Cargar offset a un registro");
+                    String instruccion = "LDR " + rg2.getRegistro()+", " + "[sp , #"+ (this.stackPointer-num)+"]";
+                    asm.insertCode(instruccion, 1, 1, "Get value " + res);
+                    registerDescription = rg2.getRegistro();
+                }
+                String outputReturn = "MOV R0" + ", " + registerDescription;
+                this.registers.setRegistroValor("R0", res);
+                asm.insertCode(outputReturn, 1, 1, "Retrun value is alwasy on R0");
+                
             }
             else {
                  System.out.println("Caso no contemplado" + inter);
@@ -203,15 +261,20 @@ public class PreCompilation {
         if (registerDescriptionR1.isEmpty()){
             Registro rg = this.registers.agregarRegistro(dir1);
             System.out.println(rg);
+            registerDescriptionR1 = rg.getRegistro();
+        
+          
             String instruccion="";
             //int num1 = Integer.parseInt(dir1.substring(dir1.indexOf("[")+1, dir1.indexOf("]")));
             //String instruccion = "LDR " + rg.getRegistro()+", " + "[sp , #"+(this.stackPointer-num1)+"]";
             try {
                 int num = Integer.parseInt(dir1);
                 if (op.equals("/")){
-                    instruccion = "MOV " +"R0" + ", #"+ num; 
+                    instruccion = "MOV " +"R0" + ", #"+ num;
+                    this.registers.setRegistroValor("R0", num+"");
                 }else{
-                    instruccion = "MOV " + rg.getRegistro()+", #"+num;
+                    instruccion = "MOV " + registerDescriptionR1+", #"+num;
+                 
                 }
             }        
             catch(Exception e){
@@ -220,10 +283,10 @@ public class PreCompilation {
                 //use R4 as offset
                 //String offSet = "ADD R6, R5, #" + (this.stackPointer-num1);
                // asm.insertCode(offSet, 1, 1, "Cargar offset a un registro");
-                instruccion = "LDR " + rg.getRegistro()+", " + "[sp ,#"+(this.stackPointer-num1)+"]";
+                instruccion = "LDR " +registerDescriptionR1+", " + "[sp ,#"+(this.stackPointer-num1)+"]";
             }
             asm.insertCode(instruccion, 1, 1);  
-            registerDescriptionR1 = rg.getRegistro();
+           
         }
      
         
@@ -231,50 +294,55 @@ public class PreCompilation {
         try {
             int num = Integer.parseInt(dir2);
             if (!op.equals("*")&&!op.equals("/")){
-                Registro rRes = this.registers.buscarRegistroMenor();
+                String rRes = this.registers.revisarRegistros(res);
+                if (rRes.isEmpty()){
+                    Registro resR = this.registers.agregarRegistro(res);
+                    rRes = resR.getRegistro();
+                }
+                
                 //modificar descriptor de registros;
-                this.registers.setRegistroValor(rRes, res);
+                //this.registers.setRegistroValor(rRes, res);
                 if (op.equals("+")){
-                    output = "ADD "+ rRes.getRegistro() +", "+ registerDescriptionR1 + ", #"+dir2;
+                    output = "ADD "+ rRes +", "+ registerDescriptionR1 + ", #"+dir2;
                 }
                 if (op.equals("-")){
-                    output = "SUB "+ rRes.getRegistro() +", "+ registerDescriptionR1 + ", #"+dir2;
+                    output = "SUB "+ rRes +", "+ registerDescriptionR1 + ", #"+dir2;
                 }
                 if (op.equals("==")){
-                    lastOp = ">";
-                    String preOutPut = "MOV " + rRes.getRegistro()+ ", #" +dir2;
+                    lastOp = "==";
+                    String preOutPut = "MOV " + rRes+ ", #" +dir2;
                     asm.insertCode(preOutPut, 1, 1, "Cargar valor literal");
-                    output = "CMP " + registerDescriptionR1 + ", " + rRes.getRegistro();
+                    output = "CMP " + registerDescriptionR1 + ", " + rRes;
                 }
                 if (op.equals("<=")){
-                    lastOp = ">";
-                    String preOutPut = "MOV " + rRes.getRegistro()+ ", #" +dir2;
+                    lastOp = "<=";
+                    String preOutPut = "MOV " + rRes+ ", #" +dir2;
                     asm.insertCode(preOutPut, 1, 1, "Cargar valor literal");
-                    output = "CMP " + registerDescriptionR1 + ", " + rRes.getRegistro();
+                    output = "CMP " + registerDescriptionR1 + ", " + rRes;
                 }
                 if (op.equals("<")){
-                  lastOp = ">";
-                    String preOutPut = "MOV " + rRes.getRegistro()+ ", #" +dir2;
+                  lastOp = "<";
+                    String preOutPut = "MOV " + rRes+ ", #" +dir2;
                     asm.insertCode(preOutPut, 1, 1, "Cargar valor literal");
-                    output = "CMP " + registerDescriptionR1 + ", " + rRes.getRegistro();
+                    output = "CMP " + registerDescriptionR1 + ", " + rRes;
                 }
                   if (op.equals(">=")){
-                    lastOp = ">";
-                    String preOutPut = "MOV " + rRes.getRegistro()+ ", #" +dir2;
+                    lastOp = ">=";
+                    String preOutPut = "MOV " + rRes+ ", #" +dir2;
                     asm.insertCode(preOutPut, 1, 1, "Cargar valor literal");
-                    output = "CMP " + registerDescriptionR1 + ", " + rRes.getRegistro();
+                    output = "CMP " + registerDescriptionR1 + ", " +rRes;
                 }
                     if (op.equals(">")){
                     lastOp = ">";
-                    String preOutPut = "MOV " + rRes.getRegistro()+ ", #" +dir2;
+                    String preOutPut = "MOV " +rRes+ ", #" +dir2;
                     asm.insertCode(preOutPut, 1, 1, "Cargar valor literal");
-                    output = "CMP " + registerDescriptionR1 + ", " + rRes.getRegistro();
+                    output = "CMP " + registerDescriptionR1 + ", " + rRes;
                 }
                 if (op.equals("!=")||op.equals("<>")){
                     lastOp = ">";
-                    String preOutPut = "MOV " + rRes.getRegistro()+ ", #" +dir2;
+                    String preOutPut = "MOV " + rRes+ ", #" +dir2;
                     asm.insertCode(preOutPut, 1, 1, "Cargar valor literal");
-                    output = "CMP " + registerDescriptionR1 + ", " + rRes.getRegistro();
+                    output = "CMP " + registerDescriptionR1 + ", " + rRes;
                 }
 
                 System.out.println(output);
@@ -290,40 +358,46 @@ public class PreCompilation {
             
             String registerDescriptionR2 = this.registers.revisarRegistros(dir2);
             if (registerDescriptionR2.isEmpty()){
-              Registro rg2 = this.registers.agregarRegistro(dir2);
-              registerDescriptionR2 = rg2.getRegistro();
+                Registro rg2 = this.registers.agregarRegistro(dir2);
+                registerDescriptionR2 = rg2.getRegistro();
+            }
                 System.out.println(dir2);
                 if (dir2.contains("[")){
                     int num = Integer.parseInt(dir2.substring(dir2.indexOf("[")+1, dir2.indexOf("]")));
                     //String offSet = "ADD R6, R5, #" + (this.stackPointer-num);
                    // asm.insertCode(offSet, 1, 1, "Cargar offset a un registro");
-                    String instruccion = "LDR " + rg2.getRegistro()+", " + "[sp , #"+ (this.stackPointer-num)+"]";
-                    asm.insertCode(instruccion, 1, 1, "Set value " + dir2);
+                    String instruccion2 = "LDR " + registerDescriptionR2+", " + "[sp , #"+ (this.stackPointer-num)+"]";
+                    asm.insertCode(instruccion2, 1, 1, "Set value " + dir2);
               }
                 //es u numero
               else {
-                    String instruccion;
+                    String instruccion = "";
                     if (op.equals("/")){
                         instruccion = "MOV R1 , #"+dir2;
                     }
                     else {
-                        instruccion = "MOV " + rg2.getRegistro() + ", #" + dir2;
+                        instruccion = "MOV " + registerDescriptionR2 + ", #" + dir2;
                     }
                     asm.insertCode(instruccion, 1, 1, "Cargar valor literal");
                 }
-            }
             
-              Registro rRes = this.registers.buscarRegistroMenor();
+            
+             // Registro rRes = this.registers.buscarRegistroMenor();
                 //modificar descriptor de registros;
-                this.registers.setRegistroValor(rRes, res);
+                //this.registers.setRegistroValor(rRes, res);
+                String rRes = this.registers.revisarRegistros(res);
+                if (rRes.isEmpty()){
+                    Registro ResR = this.registers.agregarRegistro(res);
+                    rRes = ResR.getRegistro();
+                }
                 if (op.equals("+")){
-                    output = "ADD "+ rRes.getRegistro() +", "+ registerDescriptionR1 + ", " + registerDescriptionR2;
+                    output = "ADD "+ rRes +", "+ registerDescriptionR1 + ", " + registerDescriptionR2;
                 }
                 if (op.equals("-")){
-                    output = "SUB "+ rRes.getRegistro() +", "+ registerDescriptionR1 + ", " + registerDescriptionR2;
+                    output = "SUB "+ rRes +", "+ registerDescriptionR1 + ", " + registerDescriptionR2;
                 }
                 if (op.equals("*")){
-                    output = "MUL "+ rRes.getRegistro() +", "+ registerDescriptionR1 + ", " + registerDescriptionR2;
+                    output = "MUL "+ rRes +", "+ registerDescriptionR1 + ", " + registerDescriptionR2;
                 }
                 if (op.equals("/")){
                     //cargar valores en r0 y r1
@@ -367,15 +441,22 @@ public class PreCompilation {
            
             asm.insertCode("MOV R0, #0", 1, 1, "Valor default");
             asm.insertCode("push {r0}", 1, 2, "Reservar espacio para " + localStack.getIdentificador());
-            //modificar descriptor de registros
-            this.registers.setRegistroValor("R0", "0");
+           
+           
+            asm.insertCode("bl stack",1, 2, "aumentar stack pointer");
+            
+           
         }
         //si es  parametro se le pone el valor que trae y se le reserva el espacio en pila.
         else{
             //asm.insertCode("ADD R6, R5, #0", 1, 1, "Offset del param dentro la pila");
             paramsCounter += 1;
-            asm.insertCode("LDR R0, [SP, #"+(stackPointer+paramsCounter*4)+"]", 1, 1, "Valor del param se saca de la pila");
+            asm.insertCode("LDR R0, [SP, #"+(stackPointer+(36+paramsCounter*4))+"]", 1, 1, "Valor del param se saca de la pila");
             asm.insertCode("push {r0}", 1, 2, "Reservar espacio para param " + localStack.getIdentificador());
+            
+          
+            asm.insertCode("bl stack",1, 2, "aumentar stack pointer");
+            
             //this.stackPointer = this.stackPointer + 4;
             if (lastMethod.equals("printNum")){
                 //colocar instruccion de print después de reservar espacio para el param.
@@ -406,10 +487,16 @@ public class PreCompilation {
             }
             catch(Exception e){
                 //cargar desde memoria, stackpointer, etc.
-                int num = Integer.parseInt(dir1.substring(dir1.indexOf("[")+1, dir1.indexOf("]")));
-               // String offSet = "ADD R6, R5, #" + (this.stackPointer-num);
-               // asm.insertCode(offSet, 1, 1, "Cargar offset a un registro");
-                instruccion = "LDR " + rg.getRegistro() + ", [sp, #"+(this.stackPointer-num)+"]";
+                System.out.println(dir1);
+                if (dir1.contains("[")){
+                    int num = Integer.parseInt(dir1.substring(dir1.indexOf("[")+1, dir1.indexOf("]")));
+                   // String offSet = "ADD R6, R5, #" + (this.stackPointer-num);
+                   // asm.insertCode(offSet, 1, 1, "Cargar offset a un registro");
+                    instruccion = "LDR " + rg.getRegistro() + ", [sp, #"+(this.stackPointer-num)+"]";
+                }
+                else {
+                    instruccion = "MOV " + rg.getRegistro() + ", " + this.registers.revisarRegistros(dir1);
+                }
             }
             asm.insertCode(instruccion, 1, 1);  
             registerDescriptionR1 = rg.getRegistro();

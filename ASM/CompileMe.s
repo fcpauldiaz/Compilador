@@ -8,79 +8,32 @@
 .data
 .align 2
 
-salida_num:    .asciz "%d \n"
-salida_str:    .asciz "%f \n"
+salida_num:    .asciz "El resultado es: %d \n"
+salida_str:    .asciz "El character es: %s \n"
+input_num:     .asciz "Ingrese el input %s \n"
 global: .space
-offset: .space
+.global offset
+offset: .word 0
 
 .text
 .align 2
 
 .global main
 .type main, %function
-printNum:
-	PUSH {LR} 
-
-	LDR R0, [SP, #4]	//Valor del param se saca de la pila
-	push {r0}	//Reservar espacio para param x
-
-	LDR R1, [sp, #0]	//Cargar en offset
-	LDR R0, =salida_num
-	bl printf
-
-	ADD SP, SP, #4	//Mover StackPointer para olvidar variables
-
-	POP {pc}
-
-test:
-	PUSH {LR} 
-
-	LDR R0, [SP, #4]	//Valor del param se saca de la pila
-	push {r0}	//Reservar espacio para param d
-
-	LDR R0, [SP, #12]	//Valor del param se saca de la pila
-	push {r0}	//Reservar espacio para param c
-
-	MOV R0, #0	//Valor default
-	push {r0}	//Reservar espacio para c
-
-	MOV R0, #5
-	SUB R0, R0, #2	//temp0 = 5 - 2
-	STR R0, [sp, #4]	//LocalStack 4
-
-	LDR R1, [sp , #8]	//Set value param stack[0]
-	PUSH {R1}	//push param localStack
-
-	bl printNum
-
-	ADD SP, SP, #16	//Mover StackPointer para olvidar variables
-
-	POP {pc}
-
 main:
 	stmfd sp!, {fp, lr}
 
-	MOV R0, #0	//Valor default
-	push {r0}	//Reservar espacio para c
+	bl initStack	//aumentar stack pointer
 
 	MOV R0, #0	//Valor default
-	push {r0}	//Reservar espacio para d
+	push {r0}	//Reservar espacio para x
 
-	MOV R2, #10
-	STR R2, [sp, #4]	//LocalStack 4
+	bl stack	//aumentar stack pointer
 
-	MOV R3, #1
-	STR R3, [sp, #0]	//LocalStack 0
+	MOV R0, #2
+	STR R0, [sp, #0]	//LocalStack 0
 
-	LDR R1, [sp , #4]	//Set value param stack[0]
-	PUSH {R1}	//push param localStack
-
-	LDR R1, [sp , #4]	//Set value param stack[4]
-	PUSH {R1}	//push param localStack
-
-	bl test
-
-	ADD SP, SP, #16	//Mover StackPointer para olvidar variables
+	ADD SP, SP, R8	//Mover StackPointer para olvidar variables
 
 	MOV R0, #0	//Salida al SO
 	MOV R3, #0

@@ -77,15 +77,54 @@ public class InterCodeTable {
             if (dir1 != null && dir2 != null && op == null && res == null){
                 returnString += dir1 + " " + dir2 + "\n";           
             }
-            
+            if (this.arrayCode.get(i).isReturnStatement()){
+                returnString += "return " + res +"\n";
+            }
         }
         
        return returnString;
     }
     public void printTable(){
+        reorderCode();
         for (IntermediateCode arrayCode1 : this.arrayCode) {
-            System.out.println(arrayCode1.toString());
+            System.out.println(arrayCode1.completeString());
         }
+    }
+    
+    //método para re-ordenar la reserva del espacio
+    //este método es importante porque se tiene que reservar el espacio
+    //independientemente del bloque donde se encuentre la declaración.
+    public void reorderCode(){
+        int j = 0;
+        ArrayList<IntermediateCode> copyArray = this.arrayCode;
+        for (int i = 0; i < this.arrayCode.size(); i++){
+            boolean method = this.arrayCode.get(i).isMethod();
+            StackControl sp = this.arrayCode.get(i).getLocalStack();
+            boolean param = this.arrayCode.get(i).isParam();
+            String op = this.arrayCode.get(i).getOp();
+            String dir1 = this.arrayCode.get(i).getDir1();
+            String dir2 = this.arrayCode.get(i).getDir2();
+            String res = this.arrayCode.get(i).getRes();
+            if (method){
+               j = i;
+            }
+            
+            //revisar posición si es declaracion o call param
+            if (sp != null){
+                if (i != (j+1)){
+                    IntermediateCode c = copyArray.get(i);
+                    copyArray.remove(i);
+                    copyArray.add(j+1, c);
+                    j = j +1 ;
+                }else{
+                    j = i ;
+                }
+            }
+          
+            
+            
+        }
+        this.arrayCode = copyArray;
     }
     
     public IntermediateCode searchCodeGlobal(String nombreVar){

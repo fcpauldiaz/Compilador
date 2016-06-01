@@ -147,7 +147,7 @@ public class PreCompilation {
                   
                     //asm.insertCode("bl stack",1, 2, "aumentar stack pointer");
                     
-                    //this.stackPointer += 4;
+                    this.stackPointer += 4;
                 }catch(Exception e){
                     
                     //aqui entra si el param no es un número
@@ -176,7 +176,7 @@ public class PreCompilation {
                         
                         //asm.insertCode("bl stack",1, 2, "aumentar stack pointer");
                     }
-                    //this.stackPointer += 4;
+                    this.stackPointer += 4;
                 }
                
             }
@@ -204,8 +204,10 @@ public class PreCompilation {
                 String returnInstruccion = "MOV " + returnRegistro.getRegistro() + ", R0";
                 asm.insertCode(returnInstruccion, 1, 1, "get return value");
                 
+                this.stackPointer -= sendParams*4;
                 paramsCounter = 0;
                 sendParams = 0;
+               
               
             }
             else if (stIF){
@@ -579,16 +581,16 @@ public class PreCompilation {
              branch = "bne " + dir2;
         }
         if (res.contains("False")&&lastOp.equals("<")){
-            branch = "bgt " + dir2;
+            branch = "bge " + dir2;
         }
         if (res.contains("False")&&lastOp.equals("<=")){
-            branch = "bge " + dir2; 
+            branch = "bgt " + dir2; 
         }
         if (res.contains("False")&&lastOp.equals(">")){
-            branch = "blt " + dir2;
+            branch = "ble " + dir2;
         }
         if (res.contains("False")&&lastOp.equals(">=")){
-            branch = "ble " + dir2;
+            branch = "blt " + dir2;
         }
         if (res.contains("False")&&lastOp.equals("!=")){
             branch = "beq " + dir2;

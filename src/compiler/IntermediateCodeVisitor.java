@@ -723,12 +723,12 @@ public class IntermediateCodeVisitor <T> extends programBaseVisitor {
         IntermediateCode codigo = new IntermediateCode();
         if (scopeActual.getIdScope() == 0 || structValidation) {
            
-            this.globalStack.add(new GlobalStackControl(OFFSET*tamaño,identificador, tipo));
+            this.globalStack.add(new GlobalStackControl(OFFSET*tamaño, tamaño,identificador, tipo));
             return super.visitVarDeclarationArray(ctx);
         }
        
      
-        StackControl stackC = new StackControl((OFFSET*tamaño), identificador, tipo, this.scopeActual);
+        StackControl stackC = new StackControl((OFFSET*tamaño), tamaño, identificador, tipo+"array", this.scopeActual);
         this.stackControl.add(stackC);
         codigo.setLocalStack(stackC);
         this.tablaCodigo.addCode(codigo);

@@ -977,7 +977,7 @@ public class Visitor<T> extends programBaseVisitor {
             }
            
             
-        return (T)compare;
+        return (T)tipoArray.getLiteralTipo();
     }
     
     

@@ -18,6 +18,7 @@ public class StackControl {
     private String tipo;
     public static int staticPos = 0;
     public Scope scope;
+    private int size;
 
   
     public StackControl(String valor, Scope scope) {
@@ -27,7 +28,15 @@ public class StackControl {
     }
     public StackControl(int posicion, String identificador, String tipo, Scope scope) {
          this.posicion = StackControl.staticPos;
-         
+         this.size = posicion;
+         StackControl.staticPos = this.posicion + posicion;
+         this.identificador = identificador;
+         this.tipo = tipo;
+         this.scope = scope;
+    }
+    public StackControl(int posicion,int size,  String identificador, String tipo, Scope scope) {
+         this.posicion = StackControl.staticPos;
+         this.size = size;
          StackControl.staticPos = this.posicion + posicion;
          this.identificador = identificador;
          this.tipo = tipo;
@@ -86,6 +95,14 @@ public class StackControl {
 
     public void setScope(Scope scope) {
         this.scope = scope;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
     
     

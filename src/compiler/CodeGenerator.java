@@ -24,8 +24,9 @@ public class CodeGenerator {
                 ".data"+"\n"+
                 ".align 2"+"\n"+"\n"+
                 "salida_num:    .asciz \"El resultado es: %d \\n\""+"\n"+
-                "salida_str:    .asciz \"El character es: %s \\n\""+"\n"+
-                "input_num:     .asciz \"Ingrese el input %s \\n\""+"\n"+
+                "salida_char:    .asciz \"El character es: %c \\n\""+"\n"+
+                "input_num:     .asciz \"Ingrese el input %d \\n\""+"\n"+
+                "input_char:     .asciz \"Ingrese el input character: %c \\n\""+"\n"+
                 "global: .space"+"\n"+
                 ".global offset" + "\n"+
                 "offset: .word 0"+"\n"+"\n"+

@@ -17,10 +17,18 @@ public class GlobalStackControl {
     private String identificador;
     private String tipo;
     public static int staticPos = 0;
+    private int size;
    
     public GlobalStackControl(int posicion, String identificador, String tipo) {
          this.posicion = GlobalStackControl.staticPos;
          
+         GlobalStackControl.staticPos = this.posicion + posicion;
+         this.identificador = identificador;
+         this.tipo = tipo;
+    }
+     public GlobalStackControl(int posicion, int size, String identificador, String tipo) {
+         this.posicion = GlobalStackControl.staticPos;
+         this.size = size;
          GlobalStackControl.staticPos = this.posicion + posicion;
          this.identificador = identificador;
          this.tipo = tipo;
@@ -57,6 +65,16 @@ public class GlobalStackControl {
     public static void setStaticPos(int staticPos) {
         GlobalStackControl.staticPos = staticPos;
     }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+    
+    
 
     @Override
     public String toString() {

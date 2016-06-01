@@ -87,6 +87,12 @@ public class PreCompilation {
                         lastMethod = etiqueta;
                    // asm.insertCode("ADD R6, R5, #0", 1, 1, "Calcular offset donde viene el param");
                     }
+                    else {
+                        //es mejor reiniciar descriptor de registros
+                        //en etiquetas condicionales
+                        //para estar seguros (se comprobó que a veces falla si no se reinicia)
+                        this.registers.resetAll();
+                    }
                     
                 }
                 

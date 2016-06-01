@@ -119,6 +119,18 @@ public class PreCompilation {
                     asm.insertCode("ldmfd sp!, {fp, pc}", 1, 1);
                     asm.insertCode("bx lr", 1, 1);
                 }
+                if (lastMethod.equals("input:")){
+                   
+                    asm.insertCode("LDR R0,=mensaje_ingreso", 1, 1);
+                    asm.insertCode("bl puts", 1, 1);
+                    
+                    asm.insertCode("LDR R0, =input_num", 1, 1);
+                    asm.insertCode("LDR R1, =input_literal", 1, 1);
+                    asm.insertCode("bl scanf", 1,2);
+                    asm.insertCode("LDR R1, =input_literal", 1, 1);
+                    asm.insertCode("LDR R0, [R1]", 1, 1, "Devoler valor de retorno");
+                    asm.insertCode("POP {R4-R12, pc}", 1,2);
+                }
                 else {
                     //AL FINALIZAR UNA SUBRUTINA
                     asm.insertCode("POP {R4-R12, pc}", 1,2);
@@ -479,6 +491,7 @@ public class PreCompilation {
                 asm.insertCode("LDR R0, =salida_char", 1,1);
                 asm.insertCode("bl printf", 1, 1);
             }
+          
           
         }
     }
